@@ -11,6 +11,7 @@
 		B5003D3C2AC875E400BB7BC5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B5003D3B2AC875E400BB7BC5 /* FirebaseFirestore */; };
 		B5003D3E2AC875E400BB7BC5 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B5003D3D2AC875E400BB7BC5 /* FirebaseFirestoreSwift */; };
 		B5003D402AC875E400BB7BC5 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B5003D3F2AC875E400BB7BC5 /* FirebaseStorage */; };
+		B50066ED2AC90514008826B7 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50066EC2AC90514008826B7 /* ImageUploader.swift */; };
 		B50341A52AC7952E0075FFF2 /* TCPasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50341A42AC7952E0075FFF2 /* TCPasswordResetView.swift */; };
 		B55B80042AC7CAD100640173 /* TCDeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */; };
 		B55B80062AC7CB9200640173 /* TCUpdateEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */; };
@@ -20,7 +21,7 @@
 		B58480A02AC76C43007A655D /* TCProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B584809F2AC76C43007A655D /* TCProfileView.swift */; };
 		B58480A52AC76EED007A655D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480A42AC76EED007A655D /* User.swift */; };
 		B58480A92AC774BF007A655D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B58480A82AC774BF007A655D /* GoogleService-Info.plist */; };
-		B58480E32AC77608007A655D /* TCAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480E22AC77608007A655D /* TCAuthManager.swift */; };
+		B58480E32AC77608007A655D /* TCAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480E22AC77608007A655D /* TCAuthViewModel.swift */; };
 		B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A14002AC520A20045D191 /* TakeCareApp.swift */; };
 		B58A14052AC520A30045D191 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14042AC520A30045D191 /* Assets.xcassets */; };
 		B58A14092AC520A30045D191 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14082AC520A30045D191 /* Preview Assets.xcassets */; };
@@ -30,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B50066EC2AC90514008826B7 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
+		B50066EE2AC90CD0008826B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B50341A42AC7952E0075FFF2 /* TCPasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPasswordResetView.swift; sourceTree = "<group>"; };
 		B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeleteAccountView.swift; sourceTree = "<group>"; };
 		B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCUpdateEmailView.swift; sourceTree = "<group>"; };
@@ -39,7 +42,7 @@
 		B584809F2AC76C43007A655D /* TCProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCProfileView.swift; sourceTree = "<group>"; };
 		B58480A42AC76EED007A655D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B58480A82AC774BF007A655D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		B58480E22AC77608007A655D /* TCAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAuthManager.swift; sourceTree = "<group>"; };
+		B58480E22AC77608007A655D /* TCAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAuthViewModel.swift; sourceTree = "<group>"; };
 		B58A13FD2AC520A20045D191 /* TakeCare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TakeCare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B58A14002AC520A20045D191 /* TakeCareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeCareApp.swift; sourceTree = "<group>"; };
 		B58A14042AC520A30045D191 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -65,6 +68,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B50066EB2AC9050C008826B7 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				B50066EC2AC90514008826B7 /* ImageUploader.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		B50341A62AC7A2750075FFF2 /* TabView */ = {
 			isa = PBXGroup;
 			children = (
@@ -76,7 +87,7 @@
 		B578AB272AC635AE008CEAE1 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				B58480E22AC77608007A655D /* TCAuthManager.swift */,
+				B58480E22AC77608007A655D /* TCAuthViewModel.swift */,
 				B58480962AC76625007A655D /* TCLoginView.swift */,
 				B584809B2AC76A39007A655D /* TCCreateAccountView.swift */,
 				B5E643C72AC7924B0056A111 /* TCAuthCheckView.swift */,
@@ -150,8 +161,10 @@
 		B58A13FF2AC520A20045D191 /* TakeCare */ = {
 			isa = PBXGroup;
 			children = (
+				B50066EE2AC90CD0008826B7 /* Info.plist */,
 				B58480A82AC774BF007A655D /* GoogleService-Info.plist */,
 				B58A14062AC520A30045D191 /* TakeCare.entitlements */,
+				B50066EB2AC9050C008826B7 /* Managers */,
 				B58A14072AC520A30045D191 /* Preview Content */,
 				B58480872AC6840E007A655D /* Other */,
 				B58480A32AC76EE6007A655D /* Model */,
@@ -255,8 +268,9 @@
 				B58480A02AC76C43007A655D /* TCProfileView.swift in Sources */,
 				B5E643C82AC7924B0056A111 /* TCAuthCheckView.swift in Sources */,
 				B584809C2AC76A39007A655D /* TCCreateAccountView.swift in Sources */,
+				B50066ED2AC90514008826B7 /* ImageUploader.swift in Sources */,
 				B55B80062AC7CB9200640173 /* TCUpdateEmailView.swift in Sources */,
-				B58480E32AC77608007A655D /* TCAuthManager.swift in Sources */,
+				B58480E32AC77608007A655D /* TCAuthViewModel.swift in Sources */,
 				B55B80042AC7CAD100640173 /* TCDeleteAccountView.swift in Sources */,
 				B584809A2AC7669C007A655D /* TCInputView.swift in Sources */,
 				B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */,
@@ -395,6 +409,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TakeCare/Info.plist;
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Please allow access to your photos.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -434,6 +450,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TakeCare/Info.plist;
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Please allow access to your photos.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

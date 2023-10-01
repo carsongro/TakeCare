@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct TCAuthCheckView: View {
-    @State private var authManager = TCAuthManager()
+    @State private var viewModel = TCAuthViewModel()
     
     var body: some View {
         Group {
-            if authManager.userSession == nil {
+            if viewModel.userSession == nil {
                 TCLoginView()
-                    .environment(authManager)
+                    .environment(viewModel)
             } else {
                 TCTabView()
-                    .environment(authManager)
+                    .environment(viewModel)
             }
         }
     }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TCPasswordResetView: View {
-    @Environment(TCAuthManager.self) private var authManager
+    @Environment(TCAuthViewModel.self) private var viewModel
     @Environment(\.dismiss) var dismiss
     
     @State private var showingAlert = false
@@ -18,36 +18,43 @@ struct TCPasswordResetView: View {
     @State private var email = ""
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text("You will receive a link to reset your password.")
+        List {
+            Section {
+                Text("You will receive a link to reset your password.")
+            }
+            .listRowBackground(Color(uiColor: .systemGroupedBackground))
+
             
-            TCInputView(
-                text: $email,
-                title: "Email address",
-                placeholder: "Please enter your email",
-                textFieldType: .email
-            )
+            Section {
+                TCInputView(
+                    text: $email,
+                    title: "Email address",
+                    placeholder: "Please enter your email",
+                    textFieldType: .email
+                )
+            }
             
-            Button("Send email") {
-                Task {
-                    do {
-                        try await authManager.sendPasswordResetEmail(withEmail: email)
-                        canDismiss = true
-                        alertText = "Successfully sent password reset email"
-                        showingAlert = true
-                    } catch {
-                        canDismiss = false
-                        alertText = "There was an error sending a password reset email"
-                        showingAlert = true
+            Section {
+                Button("Send email") {
+                    Task {
+                        do {
+                            try await viewModel.sendPasswordResetEmail(withEmail: email)
+                            canDismiss = true
+                            alertText = "Successfully sent password reset email"
+                            showingAlert = true
+                        } catch {
+                            canDismiss = false
+                            alertText = "There was an error sending a password reset email"
+                            showingAlert = true
+                        }
                     }
                 }
+                .buttonStyle(.borderedProminent)
+                .disabled(!textFieldsAreValid)
+                .frame(maxWidth: .infinity)
+                .listRowBackground(Color(uiColor: .systemGroupedBackground))
             }
-            .buttonStyle(.borderedProminent)
-            .disabled(!textFieldsAreValid)
-            
-            Spacer()
         }
-        .padding()
         .navigationTitle("Password Reset")
         .alert(alertText, isPresented: $showingAlert) {
             Button("OK", role: .cancel) { 
@@ -71,6 +78,6 @@ extension TCPasswordResetView: PasswordFieldProtocol {
 #Preview {
     NavigationStack {
         TCPasswordResetView()
-            .environment(TCAuthManager())
+            .environment(TCAuthViewModel())
     }
 }

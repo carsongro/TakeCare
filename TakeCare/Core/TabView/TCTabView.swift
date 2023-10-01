@@ -11,17 +11,15 @@ struct TCTabView: View {
     
     var body: some View {
         TabView {
-            NavigationStack {
-                TCProfileView()
-                    .tabItem {
-                        Label("Profile", systemImage: "person")
-                    }
-            }
+            TCProfileView()
+                .tabItem {
+                    Label("Profile", systemImage: "person")
+                }
         }
     }
 }
 
 #Preview {
     TCTabView()
-        .environment(TCAuthManager())
+        .environment(TCAuthViewModel())
 }

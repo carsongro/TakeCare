@@ -10,7 +10,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct TCDeleteAccountView: View {
-    @Environment(TCAuthManager.self) private var authManager
+    @Environment(TCAuthViewModel.self) private var viewModel
     
     @State private var email = ""
     @State private var password = ""
@@ -61,7 +61,7 @@ struct TCDeleteAccountView: View {
                 Button("Delete") {
                     Task {
                         do {
-                            try await authManager.reAuthenticateUser(
+                            try await viewModel.reAuthenticateUser(
                                 withEmail: email,
                                 password: password
                             )
@@ -86,11 +86,7 @@ struct TCDeleteAccountView: View {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
                 Task {
-                    do {
-                        try await authManager.deleteUser()
-                    } catch {
-                        showingErrorAlert = true
-                    }
+                    await viewModel.deleteUser()
                 }
             }
         }
@@ -112,6 +108,6 @@ extension TCDeleteAccountView: PasswordFieldProtocol {
 #Preview {
     NavigationStack {
         TCDeleteAccountView()
-            .environment(TCAuthManager())
+            .environment(TCAuthViewModel())
     }
 }

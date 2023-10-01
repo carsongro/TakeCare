@@ -12,7 +12,7 @@ struct TCCreateAccountView: View {
     @State private var name = ""
     @State private var password = ""
     @State private var confirmPassword = ""
-    @Environment(TCAuthManager.self) private var authManager
+    @Environment(TCAuthViewModel.self) private var viewModel
     
     var body: some View {
         List {
@@ -61,7 +61,7 @@ struct TCCreateAccountView: View {
             Section {
                 Button("Create Account") {
                     Task {
-                        try await authManager.createUser(
+                        await viewModel.createUser(
                             withEmail: email,
                             password: password,
                             name: name
@@ -96,6 +96,6 @@ extension TCCreateAccountView: PasswordFieldProtocol {
     
     NavigationStack {
         TCCreateAccountView()
-            .environment(TCAuthManager())
+            .environment(TCAuthViewModel())
     }
 }

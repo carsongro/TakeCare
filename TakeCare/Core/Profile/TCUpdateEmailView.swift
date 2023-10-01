@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct TCUpdateEmailView: View {
-    @Environment(TCAuthManager.self) private var authManager
+    @Environment(TCAuthViewModel.self) private var viewModel
     @Environment(\.dismiss) var dismiss
     
     
@@ -77,12 +77,12 @@ struct TCUpdateEmailView: View {
                 Button("Submit") {
                     Task {
                         do {
-                            try await authManager.reAuthenticateUser(
+                            try await viewModel.reAuthenticateUser(
                                 withEmail: email,
                                 password: password
                             )
                             
-                            try await authManager.updateEmail(to: newEmail)
+                            try await viewModel.updateEmail(to: newEmail)
                         } catch {
                             showingErrorAlert = true
                             print("ERROR: \(error.localizedDescription)")
@@ -120,6 +120,6 @@ extension TCUpdateEmailView: PasswordFieldProtocol {
 #Preview {
     NavigationStack {
         TCUpdateEmailView()
-            .environment(TCAuthManager())
+            .environment(TCAuthViewModel())
     }
 }

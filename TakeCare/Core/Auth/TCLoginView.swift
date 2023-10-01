@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TCLoginView: View, @unchecked Sendable {
-    @Environment(TCAuthManager.self) private var authManager
+    @Environment(TCAuthViewModel.self) private var viewModel
     
     @State var email = ""
     @State private var password = ""
@@ -25,13 +25,13 @@ struct TCLoginView: View, @unchecked Sendable {
                     textFieldType: .email
                 )
                 
-//                TCInputView(
-//                    text: $password,
-//                    title: "Password",
-//                    placeholder: "Please enter your password",
-//                    textFieldType: .password
-//                )
-//                .onSubmit { login() }
+                TCInputView(
+                    text: $password,
+                    title: "Password",
+                    placeholder: "Please enter your password",
+                    textFieldType: .password
+                )
+                .onSubmit { login() }
                 
                 
                 Section {
@@ -73,12 +73,7 @@ struct TCLoginView: View, @unchecked Sendable {
         guard textFieldsAreValid else { return }
         
         Task {
-            do {
-                try await authManager.signIn(withEmail: email, password: password)
-            } catch {
-                print(error.localizedDescription)
-                showingAlert = true
-            }
+            await viewModel.signIn(withEmail: email, password: password)
         }
     }
 }
@@ -96,5 +91,5 @@ extension TCLoginView: PasswordFieldProtocol {
 
 #Preview {
     TCLoginView()
-        .environment(TCAuthManager())
+        .environment(TCAuthViewModel())
 }

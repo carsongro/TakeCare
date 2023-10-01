@@ -6,52 +6,102 @@
 //
 
 import SwiftUI
+import PhotosUI
 import Kingfisher
 
 
 struct TCProfileView: View {
-    @Environment(TCAuthManager.self) private var authManager
+    @Environment(TCAuthViewModel.self) private var viewModel
+    
+    @State private var profileItem: PhotosPickerItem?
+    @State private var showOptions = false
+    @State private var showRemoveAlert = false
     
     var body: some View {
-        if let user = authManager.currentUser {
-            List {
-                KFImage(URL(string:authManager.currentUser?.photoURL ?? ""))
-                    .placeholder { _ in
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .profileImage()
+        if let user = viewModel.currentUser {
+            NavigationStack {
+                List {
+                    Section {
+                        PhotosPicker(
+                            selection: $profileItem,
+                            matching: .not(.videos)
+                        ) {
+                            KFImage(URL(string:viewModel.currentUser?.photoURL ?? ""))
+                                .placeholder { _ in
+                                    Image(systemName: "person.circle.fill")
+                                        .resizable()
+                                        .profileImage()
+                                        .foregroundStyle(Color.secondary)
+                                }
+                                .resizable()
+                                .profileImage()
+                        }
                     }
-                    .resizable()
-                    .profileImage()
-                
-                Section("Details") {
-                    Text(user.displayName)
-                        .fontWeight(.semibold)
+                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
                     
-//                    NavigationLink {
-//                        TCUpdateEmailView()
-//                    } label: {
-//                        Text(user.email)
-//                    }
-                    Text(user.email)
-                }
-                
-                Section("Actions") {
-                    Button("Sign out") {
-                        authManager.signOut()
+                    Section {
+                        if viewModel.currentUser?.photoURL != nil {
+                            Section {
+                                Button("Remove profile photo") {
+                                    showRemoveAlert = true
+                                }
+                            }
+                        }
+                    }
+                    
+                    Section("Details") {
+                        Text(user.displayName)
+                            .fontWeight(.semibold)
+                        
+    //                    NavigationLink {
+    //                        TCUpdateEmailView()
+    //                    } label: {
+    //                        Text(user.email)
+    //                    }
+                        Text(user.email)
+                    }
+                    
+                    Section("Actions") {
+                        Button("Sign out") {
+                            viewModel.signOut()
+                        }
+                    }
+                    
+                    Section {
+                        NavigationLink {
+                            TCDeleteAccountView()
+                        } label: {
+                            Text("Delete account")
+                                .foregroundStyle(.red)
+                        }
                     }
                 }
-                
-                Section {
-                    NavigationLink {
-                        TCDeleteAccountView()
-                    } label: {
-                        Text("Delete account")
-                            .foregroundStyle(.red)
+                .alert(
+                    "Are you sure you want to remove your profile photo?",
+                    isPresented: $showRemoveAlert
+                ) {
+                    Button("Cancel", role: .cancel) { }
+                    Button("Remove", role: .destructive) {
+                        Task {
+                            await viewModel.removeProfileImage()
+                        }
                     }
                 }
+                .onChange(of: profileItem) { _, _ in
+                    Task {
+                        if let data = try? await profileItem?.loadTransferable(type: Data.self) {
+                            if let uiImage = UIImage(data: data) {
+                                Task {
+                                    await viewModel.updateProfileImage(image: uiImage)
+                                }
+                            }
+                        }
+                        
+                        print("Failed")
+                    }
+                }
+                .navigationTitle("Profile")
             }
-            .navigationTitle("Profile")
         }
     }
 }
@@ -59,10 +109,9 @@ struct TCProfileView: View {
 struct ProfileImage: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .frame(width: 100, height: 100)
-            .clipShape(Circle())
+            .frame(width: 130, height: 130)
             .frame(maxWidth: .infinity)
-            .listRowBackground(Color.clear)
+            .clipShape(Circle())
     }
 }
 
@@ -73,8 +122,16 @@ extension View {
 }
 
 #Preview {
-    NavigationStack {
+    let viewModel = TCAuthViewModel()
+    viewModel.currentUser = User(
+        id: "",
+        displayName: "Carson Gross",
+        email: "example@example.com",
+        photoURL: nil // https://source.unsplash.com/random
+    )
+    
+    return NavigationStack {
         TCProfileView()
-            .environment(TCAuthManager())
+            .environment(viewModel)
     }
 }
