@@ -12,11 +12,15 @@ import FirebaseAuth
 struct TCDeleteAccountView: View {
     @Environment(TCAuthViewModel.self) private var viewModel
     
+    enum Field {
+        case email
+        case password
+    }
+    
+    @FocusState private var focusedField: Field?
+    
     @State private var email = ""
     @State private var password = ""
-    
-    @State private var showingErrorAlert = false
-    @State private var showingDeleteAlert = false
     
     var body: some View {
         List {
@@ -33,8 +37,10 @@ struct TCDeleteAccountView: View {
                     text: $email,
                     title: "Email address",
                     placeholder: "Please enter your email address",
-                    textFieldType: .email
+                    textFieldType: .emailAddress
                 )
+                .focused($focusedField, equals: .email)
+                .submitLabel(.next)
                 
                 TCInputView(
                     text: $password,
@@ -42,6 +48,16 @@ struct TCDeleteAccountView: View {
                     placeholder: "Please enter your password",
                     textFieldType: .password
                 )
+                .focused($focusedField, equals: .password)
+                .submitLabel(.return)
+            }
+            .onSubmit {
+                switch focusedField {
+                case .email:
+                    focusedField = .password
+                default:
+                    hideKeyboard()
+                }
             }
             
             Section {
@@ -60,15 +76,23 @@ struct TCDeleteAccountView: View {
             Section {
                 Button("Delete") {
                     Task {
-                        do {
-                            try await viewModel.reAuthenticateUser(
-                                withEmail: email,
-                                password: password
-                            )
-                            showingDeleteAlert = true
-                        } catch {
-                            showingErrorAlert = true
-                        }
+                        await viewModel.reAuthenticateUser(
+                            withEmail: email,
+                            password: password
+                        )
+                        
+                        AlertManager.shared.showAlert(
+                            title: "Are you sure you want to delete your accout? This action is irreversible.",
+                            primaryButtonText: "Delete",
+                            primaryButtonAction: {
+                                Task {
+                                    await viewModel.deleteCurrentUser()
+                                }
+                            },
+                            primaryButtonRole: .destructive,
+                            secondaryButtonText: "Cancel",
+                            secondaryButtonRole: .cancel
+                        )
                     }
                 }
                 .disabled(!textFieldsAreValid)
@@ -79,17 +103,6 @@ struct TCDeleteAccountView: View {
             }
         }
         .scrollDisabled(true)
-        .alert("There was an error completing your request", isPresented: $showingErrorAlert) {
-            Button("OK", role: .cancel) { }
-        }
-        .alert("Are you sure you want to delete your account?", isPresented: $showingDeleteAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
-                Task {
-                    await viewModel.deleteUser()
-                }
-            }
-        }
         .navigationTitle("Delete Account")
         .navigationBarTitleDisplayMode(.inline)
     }

@@ -8,65 +8,91 @@
 import SwiftUI
 
 struct TCCreateAccountView: View {
+    @Environment(TCAuthViewModel.self) private var viewModel
+
+    enum Field {
+        case email
+        case name
+        case password
+        case confirmPassword
+    }
+    
+    @FocusState private var focusedField: Field?
+    
     @State private var email = ""
     @State private var name = ""
     @State private var password = ""
     @State private var confirmPassword = ""
-    @Environment(TCAuthViewModel.self) private var viewModel
-    
+        
     var body: some View {
         List {
-            TCInputView(
-                text: $email,
-                title: "Email address",
-                placeholder: "Please enter your email address",
-                textFieldType: .email
-            )
-            
-            TCInputView(
-                text: $name,
-                title: "Name",
-                placeholder: "Please enter your name",
-                textFieldType: .plain
-            )
-            
-            TCInputView(
-                text: $password,
-                title: "Password",
-                placeholder: "Please enter your password",
-                textFieldType: .newPassword
-            )
-            
-            ZStack(alignment: .trailing) {
+            Section {
                 TCInputView(
-                    text: $confirmPassword,
-                    title: "Confirm password",
-                    placeholder: "Please confirm your password",
+                    text: $email,
+                    title: "Email address",
+                    placeholder: "Please enter your email address",
+                    textFieldType: .emailAddress
+                )
+                .focused($focusedField, equals: .email)
+                .submitLabel(.next)
+                
+                TCInputView(
+                    text: $name,
+                    title: "Name",
+                    placeholder: "Please enter your name",
+                    textFieldType: .name
+                )
+                .focused($focusedField, equals: .name)
+                .submitLabel(.next)
+                
+                TCInputView(
+                    text: $password,
+                    title: "Password",
+                    placeholder: "Please enter your password",
                     textFieldType: .newPassword
                 )
+                .focused($focusedField, equals: .password)
+                .submitLabel(.next)
                 
-                if !password.isEmpty && !confirmPassword.isEmpty {
-                    if password == confirmPassword {
-                        Image(systemName: "checkmark")
-                            .foregroundStyle(.green)
-                            .imageScale(.large)
-                    } else {
-                        Image(systemName: "xmark")
-                            .foregroundStyle(.red)
-                            .imageScale(.large)
+                ZStack(alignment: .trailing) {
+                    TCInputView(
+                        text: $confirmPassword,
+                        title: "Confirm password",
+                        placeholder: "Please confirm your password",
+                        textFieldType: .newPassword
+                    )
+                    .focused($focusedField, equals: .confirmPassword)
+                    .submitLabel(.join)
+                    
+                    if !password.isEmpty && !confirmPassword.isEmpty {
+                        if password == confirmPassword {
+                            Image(systemName: "checkmark")
+                                .foregroundStyle(.green)
+                                .imageScale(.large)
+                        } else {
+                            Image(systemName: "xmark")
+                                .foregroundStyle(.red)
+                                .imageScale(.large)
+                        }
                     }
+                }
+            }
+            .onSubmit {
+                switch focusedField {
+                case .email:
+                    focusedField = .name
+                case .name:
+                    focusedField = .password
+                case .password:
+                    focusedField = .confirmPassword
+                default:
+                    createAccount()
                 }
             }
             
             Section {
                 Button("Create Account") {
-                    Task {
-                        await viewModel.createUser(
-                            withEmail: email,
-                            password: password,
-                            name: name
-                        )
-                    }
+                    createAccount()
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(!textFieldsAreValid)
@@ -76,6 +102,20 @@ struct TCCreateAccountView: View {
         }
         .scrollDisabled(true)
         .navigationTitle("Create Account")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    @MainActor
+    private func createAccount() {
+        Task {
+            await viewModel.createUser(
+                withEmail: email,
+                password: password,
+                name: name
+            )
+            
+            hideKeyboard()
+        }
     }
 }
 

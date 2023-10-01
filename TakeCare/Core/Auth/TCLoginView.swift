@@ -10,29 +10,46 @@ import SwiftUI
 struct TCLoginView: View, @unchecked Sendable {
     @Environment(TCAuthViewModel.self) private var viewModel
     
+    enum Field {
+        case email
+        case password
+    }
+    
+    @FocusState private var focusedField: Field?
+    
     @State var email = ""
     @State private var password = ""
-    
-    @State private var showingAlert = false
     
     var body: some View {
         NavigationStack {
             List {
-                TCInputView(
-                    text: $email,
-                    title: "Email address",
-                    placeholder: "Please enter your email address",
-                    textFieldType: .email
-                )
-                
-                TCInputView(
-                    text: $password,
-                    title: "Password",
-                    placeholder: "Please enter your password",
-                    textFieldType: .password
-                )
-                .onSubmit { login() }
-                
+                Section {
+                    TCInputView(
+                        text: $email,
+                        title: "Email address",
+                        placeholder: "Please enter your email address",
+                        textFieldType: .emailAddress
+                    )
+                    .focused($focusedField, equals: .email)
+                    .submitLabel(.next)
+                    
+                    TCInputView(
+                        text: $password,
+                        title: "Password",
+                        placeholder: "Please enter your password",
+                        textFieldType: .password
+                    )
+                    .focused($focusedField, equals: .password)
+                    .submitLabel(.go)
+                }
+                .onSubmit {
+                    switch focusedField {
+                    case .email:
+                        focusedField = .password
+                    default:
+                        login()
+                    }
+                }
                 
                 Section {
                     NavigationLink {
@@ -63,9 +80,6 @@ struct TCLoginView: View, @unchecked Sendable {
                 .listRowBackground(Color(uiColor: .systemGroupedBackground))
             }
             .navigationTitle("Login")
-            .alert("There was an error logging in", isPresented: $showingAlert) {
-                Button("OK", role: .cancel) { }
-            }
         }
     }
     

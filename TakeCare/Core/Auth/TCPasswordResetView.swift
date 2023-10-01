@@ -7,20 +7,16 @@
 
 import SwiftUI
 
-struct TCPasswordResetView: View {
+struct TCPasswordResetView: View, @unchecked Sendable {
     @Environment(TCAuthViewModel.self) private var viewModel
     @Environment(\.dismiss) var dismiss
-    
-    @State private var showingAlert = false
-    @State private var alertText = ""
-    @State private var canDismiss = false
     
     @State private var email = ""
     
     var body: some View {
         List {
             Section {
-                Text("You will receive a link to reset your password.")
+                Text("You will receive a link to reset your password in your email.")
             }
             .listRowBackground(Color(uiColor: .systemGroupedBackground))
 
@@ -30,38 +26,41 @@ struct TCPasswordResetView: View {
                     text: $email,
                     title: "Email address",
                     placeholder: "Please enter your email",
-                    textFieldType: .email
+                    textFieldType: .emailAddress
                 )
+                .submitLabel(.send)
+            }
+            .onSubmit {
+                sendResetLink()
             }
             
             Section {
-                Button("Send email") {
-                    Task {
-                        do {
-                            try await viewModel.sendPasswordResetEmail(withEmail: email)
-                            canDismiss = true
-                            alertText = "Successfully sent password reset email"
-                            showingAlert = true
-                        } catch {
-                            canDismiss = false
-                            alertText = "There was an error sending a password reset email"
-                            showingAlert = true
-                        }
-                    }
-                }
+                Button(
+                    "Send reset link",
+                    action: sendResetLink
+                )
                 .buttonStyle(.borderedProminent)
                 .disabled(!textFieldsAreValid)
                 .frame(maxWidth: .infinity)
                 .listRowBackground(Color(uiColor: .systemGroupedBackground))
             }
         }
+        .scrollDisabled(true)
         .navigationTitle("Password Reset")
-        .alert(alertText, isPresented: $showingAlert) {
-            Button("OK", role: .cancel) { 
-                if canDismiss {
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private func sendResetLink() {
+        Task {
+            await viewModel.sendPasswordResetEmail(withEmail: email)
+            
+            AlertManager.shared.showAlert(
+                title: "Successfully sent password reset link.",
+                primaryButtonText: "OK",
+                primaryButtonAction: {
                     dismiss()
                 }
-            }
+            )
         }
     }
 }

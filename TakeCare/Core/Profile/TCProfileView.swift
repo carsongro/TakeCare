@@ -15,7 +15,6 @@ struct TCProfileView: View {
     
     @State private var profileItem: PhotosPickerItem?
     @State private var showOptions = false
-    @State private var showRemoveAlert = false
     
     var body: some View {
         if let user = viewModel.currentUser {
@@ -36,28 +35,37 @@ struct TCProfileView: View {
                                 .resizable()
                                 .profileImage()
                         }
-                    }
-                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
-                    
-                    Section {
+                        
                         if viewModel.currentUser?.photoURL != nil {
-                            Section {
-                                Button("Remove profile photo") {
-                                    showRemoveAlert = true
-                                }
+                            Button("Remove profile photo") {
+                                AlertManager.shared.showAlert(
+                                    title: "Are you sure you want to remove your profile photo?",
+                                    primaryButtonText: "Remove",
+                                    primaryButtonAction: {
+                                        Task {
+                                            await viewModel.removeProfileImage()
+                                        }
+                                    },
+                                    primaryButtonRole: .destructive,
+                                    secondaryButtonText: "Cancel",
+                                    secondaryButtonRole: .cancel
+                                )
                             }
+                            .frame(maxWidth: .infinity)
+                            .listRowSeparator(.hidden)
                         }
                     }
+                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
                     
                     Section("Details") {
                         Text(user.displayName)
                             .fontWeight(.semibold)
                         
-    //                    NavigationLink {
-    //                        TCUpdateEmailView()
-    //                    } label: {
-    //                        Text(user.email)
-    //                    }
+                        //                    NavigationLink {
+                        //                        TCUpdateEmailView()
+                        //                    } label: {
+                        //                        Text(user.email)
+                        //                    }
                         Text(user.email)
                     }
                     
@@ -76,17 +84,6 @@ struct TCProfileView: View {
                         }
                     }
                 }
-                .alert(
-                    "Are you sure you want to remove your profile photo?",
-                    isPresented: $showRemoveAlert
-                ) {
-                    Button("Cancel", role: .cancel) { }
-                    Button("Remove", role: .destructive) {
-                        Task {
-                            await viewModel.removeProfileImage()
-                        }
-                    }
-                }
                 .onChange(of: profileItem) { _, _ in
                     Task {
                         if let data = try? await profileItem?.loadTransferable(type: Data.self) {
@@ -102,6 +99,8 @@ struct TCProfileView: View {
                 }
                 .navigationTitle("Profile")
             }
+        } else {
+            ProgressView()
         }
     }
 }

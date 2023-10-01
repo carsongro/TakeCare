@@ -13,6 +13,8 @@
 		B5003D402AC875E400BB7BC5 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B5003D3F2AC875E400BB7BC5 /* FirebaseStorage */; };
 		B50066ED2AC90514008826B7 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50066EC2AC90514008826B7 /* ImageUploader.swift */; };
 		B50341A52AC7952E0075FFF2 /* TCPasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50341A42AC7952E0075FFF2 /* TCPasswordResetView.swift */; };
+		B54552862ACA11DE006135E8 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54552852ACA11DE006135E8 /* AlertManager.swift */; };
+		B54552892ACA37D2006135E8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54552882ACA37D2006135E8 /* Extensions.swift */; };
 		B55B80042AC7CAD100640173 /* TCDeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */; };
 		B55B80062AC7CB9200640173 /* TCUpdateEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */; };
 		B58480972AC76625007A655D /* TCLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480962AC76625007A655D /* TCLoginView.swift */; };
@@ -34,6 +36,8 @@
 		B50066EC2AC90514008826B7 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		B50066EE2AC90CD0008826B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B50341A42AC7952E0075FFF2 /* TCPasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPasswordResetView.swift; sourceTree = "<group>"; };
+		B54552852ACA11DE006135E8 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		B54552882ACA37D2006135E8 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeleteAccountView.swift; sourceTree = "<group>"; };
 		B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCUpdateEmailView.swift; sourceTree = "<group>"; };
 		B58480962AC76625007A655D /* TCLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCLoginView.swift; sourceTree = "<group>"; };
@@ -72,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				B50066EC2AC90514008826B7 /* ImageUploader.swift */,
+				B54552852ACA11DE006135E8 /* AlertManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -82,6 +87,14 @@
 				B5E643C92AC792ED0056A111 /* TCTabView.swift */,
 			);
 			path = TabView;
+			sourceTree = "<group>";
+		};
+		B54552872ACA37CC006135E8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B54552882ACA37D2006135E8 /* Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		B578AB272AC635AE008CEAE1 /* Auth */ = {
@@ -161,6 +174,7 @@
 		B58A13FF2AC520A20045D191 /* TakeCare */ = {
 			isa = PBXGroup;
 			children = (
+				B54552872ACA37CC006135E8 /* Extensions */,
 				B50066EE2AC90CD0008826B7 /* Info.plist */,
 				B58480A82AC774BF007A655D /* GoogleService-Info.plist */,
 				B58A14062AC520A30045D191 /* TakeCare.entitlements */,
@@ -273,8 +287,10 @@
 				B58480E32AC77608007A655D /* TCAuthViewModel.swift in Sources */,
 				B55B80042AC7CAD100640173 /* TCDeleteAccountView.swift in Sources */,
 				B584809A2AC7669C007A655D /* TCInputView.swift in Sources */,
+				B54552892ACA37D2006135E8 /* Extensions.swift in Sources */,
 				B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */,
 				B58480A52AC76EED007A655D /* User.swift in Sources */,
+				B54552862ACA11DE006135E8 /* AlertManager.swift in Sources */,
 				B5E643CA2AC792ED0056A111 /* TCTabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

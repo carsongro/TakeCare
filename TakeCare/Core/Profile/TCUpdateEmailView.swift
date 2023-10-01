@@ -12,10 +12,18 @@ struct TCUpdateEmailView: View {
     @Environment(TCAuthViewModel.self) private var viewModel
     @Environment(\.dismiss) var dismiss
     
+    enum Field {
+        case newEmail
+        case confirmNewEmail
+        case currentEmail
+        case password
+    }
+    
+    @FocusState private var focusedField: Field?
     
     @State private var newEmail = ""
     @State private var confirmNewEmail = ""
-    @State private var email = ""
+    @State private var currentEmail = ""
     @State private var password = ""
     
     @State private var showingErrorAlert = false
@@ -35,22 +43,28 @@ struct TCUpdateEmailView: View {
                     text: $newEmail,
                     title: "New email address",
                     placeholder: "Please enter your new email address",
-                    textFieldType: .email
+                    textFieldType: .emailAddress
                 )
+                .focused($focusedField, equals: .newEmail)
+                .submitLabel(.next)
                 
                 TCInputView(
                     text: $confirmNewEmail,
                     title: "Confirm new email address",
                     placeholder: "Please confirm your new email address",
-                    textFieldType: .email
+                    textFieldType: .emailAddress
                 )
+                .focused($focusedField, equals: .confirmNewEmail)
+                .submitLabel(.next)
                 
                 TCInputView(
-                    text: $email,
+                    text: $currentEmail,
                     title: "Current email address",
                     placeholder: "Please enter your current email address",
-                    textFieldType: .email
+                    textFieldType: .emailAddress
                 )
+                .focused($focusedField, equals: .currentEmail)
+                .submitLabel(.next)
                 
                 TCInputView(
                     text: $password,
@@ -58,6 +72,20 @@ struct TCUpdateEmailView: View {
                     placeholder: "Please enter your password",
                     textFieldType: .password
                 )
+                .focused($focusedField, equals: .password)
+                .submitLabel(.return)
+            }
+            .onSubmit {
+                switch focusedField {
+                case .newEmail:
+                    focusedField = .confirmNewEmail
+                case .confirmNewEmail:
+                    focusedField = .currentEmail
+                case .currentEmail:
+                    focusedField = .password
+                default:
+                    hideKeyboard()
+                }
             }
             
             Section {
@@ -76,17 +104,12 @@ struct TCUpdateEmailView: View {
             Section {
                 Button("Submit") {
                     Task {
-                        do {
-                            try await viewModel.reAuthenticateUser(
-                                withEmail: email,
-                                password: password
-                            )
-                            
-                            try await viewModel.updateEmail(to: newEmail)
-                        } catch {
-                            showingErrorAlert = true
-                            print("ERROR: \(error.localizedDescription)")
-                        }
+                        await viewModel.reAuthenticateUser(
+                            withEmail: currentEmail,
+                            password: password
+                        )
+                        
+                        await viewModel.updateEmail(to: newEmail)
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -96,9 +119,6 @@ struct TCUpdateEmailView: View {
             }
         }
         .scrollDisabled(true)
-        .alert("There was an error completing your request", isPresented: $showingErrorAlert) {
-            Button("OK", role: .cancel) { }
-        }
         .navigationTitle("Update Email Address")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -106,8 +126,8 @@ struct TCUpdateEmailView: View {
 
 extension TCUpdateEmailView: PasswordFieldProtocol {
     var textFieldsAreValid: Bool {
-        !email.isEmpty
-        && email.contains("@")
+        !currentEmail.isEmpty
+        && currentEmail.contains("@")
         && !password.isEmpty
         && password.count > 5
         && !newEmail.isEmpty

@@ -18,6 +18,12 @@ final class TCAuthViewModel: @unchecked Sendable {
     var userSession: FirebaseAuth.User?
     var currentUser: User?
     
+    var errorMessage = "" {
+        didSet {
+            AlertManager.shared.showAlert(title: errorMessage)
+        }
+    }
+    
     init() {
         self.userSession = Auth.auth().currentUser
         
@@ -29,10 +35,12 @@ final class TCAuthViewModel: @unchecked Sendable {
     func signIn(withEmail email: String, password: String) async {
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
-            self.userSession = result.user
+            withAnimation {
+                self.userSession = result.user
+            }
             await fetchCurrentUser()
         } catch {
-            print(error.localizedDescription)
+            errorMessage = "There was an error logging in."
         }
     }
     
@@ -40,7 +48,9 @@ final class TCAuthViewModel: @unchecked Sendable {
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
             Task { @MainActor in
-                self.userSession = result.user
+                withAnimation {
+                    self.userSession = result.user
+                }
             }
             let user = User(
                 id: result.user.uid,
@@ -50,50 +60,68 @@ final class TCAuthViewModel: @unchecked Sendable {
             )
             let encodedUser = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+            
             await fetchCurrentUser()
         } catch {
-            print("\n\nInTCAuthviewModel createUser: \(error)")
+            errorMessage = "There was an error creating a new account."
         }
     }
     
     func signOut() {
         do {
             try Auth.auth().signOut()
-            self.userSession = nil
-            self.currentUser = nil
+            withAnimation {
+                self.userSession = nil
+                self.currentUser = nil
+            }
         } catch {
-            print("Failed to sign out: \(error)")
+            errorMessage = "Failed to sign out."
         }
     }
     
-    func sendPasswordResetEmail(withEmail email: String) async throws  {
-        try await Auth.auth().sendPasswordReset(withEmail: email)
+    @discardableResult
+    func sendPasswordResetEmail(withEmail email: String) async -> Bool {
+        do {
+            try await Auth.auth().sendPasswordReset(withEmail: email)
+            return true
+        } catch {
+            errorMessage = "There was an error sending a password reset email."
+            return false
+        }
     }
     
-    func fetchCurrentUser() async {
+    private func fetchCurrentUser() async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
-        self.currentUser = try? snapshot.data(as: User.self)
+        withAnimation {
+            self.currentUser = try? snapshot.data(as: User.self)
+        }
     }
     
-    func reAuthenticateUser(withEmail email: String, password: String) async throws {
-        let authCredential = EmailAuthProvider.credential(withEmail: email, password: password)
-        
-        try await Auth.auth().currentUser?.reauthenticate(with: authCredential)
+    func reAuthenticateUser(withEmail email: String, password: String) async {
+        do {
+            let authCredential = EmailAuthProvider.credential(withEmail: email, password: password)
+            
+            try await Auth.auth().currentUser?.reauthenticate(with: authCredential)
+        } catch {
+            errorMessage = "There was an error verifying your credentials."
+        }
     }
     
     // MARK: Manage Users
     
-    func deleteUser() async {
+    func deleteCurrentUser() async {
         do {
             guard let uid = Auth.auth().currentUser?.uid else { return }
             try? await Firestore.firestore().collection("users").document(uid).delete()
             try await Auth.auth().currentUser?.delete()
-            self.userSession = nil
-            self.currentUser = nil
+            withAnimation {
+                self.userSession = nil
+                self.currentUser = nil
+            }
         } catch {
-            print(error.localizedDescription)
+            errorMessage = "There was an error deleting your account."
         }
     }
     
@@ -101,17 +129,15 @@ final class TCAuthViewModel: @unchecked Sendable {
         do {
             try await Auth.auth().currentUser?.updateEmail(to: email)
         } catch {
-            print(error.localizedDescription)
+            errorMessage = "There was an error updating your email."
         }
     }
     
     func updateName(to name: String) async {
         do {
-            let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-            changeRequest?.displayName = name
-            try await changeRequest?.commitChanges()
+            
         } catch {
-            print(error.localizedDescription)
+            errorMessage = "There was an error updating your account name"
         }
     }
     
@@ -129,7 +155,7 @@ final class TCAuthViewModel: @unchecked Sendable {
                 currentUser?.photoURL = photoURL
             }
         } catch {
-            print(error.localizedDescription)
+            errorMessage = "There was an error updating your profile image"
         }
     }
     
@@ -144,8 +170,10 @@ final class TCAuthViewModel: @unchecked Sendable {
             withAnimation {
                 currentUser?.photoURL = nil
             }
+            
+            try await Firestore.firestore().collection("images").document(uid).delete()
         } catch {
-            print(error.localizedDescription)
+            errorMessage = "There was an error removing your profile image"
         }
     }
 }

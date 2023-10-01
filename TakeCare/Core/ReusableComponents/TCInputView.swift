@@ -7,18 +7,11 @@
 
 import SwiftUI
 
-enum TextFieldType {
-    case email
-    case password
-    case newPassword
-    case plain
-}
-
 struct TCInputView: View {
     @Binding var text: String
     let title: String
     let placeholder: String
-    let textFieldType: TextFieldType
+    let textFieldType: UITextContentType
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -26,7 +19,7 @@ struct TCInputView: View {
                 .fontWeight(.semibold)
             
             switch textFieldType {
-            case .email:
+            case .emailAddress:
                 TextField(placeholder, text: $text)
                     .textContentType(.emailAddress)
                     .textInputAutocapitalization(.never)
@@ -39,7 +32,10 @@ struct TCInputView: View {
                 SecureField(placeholder, text: $text)
                     .textContentType(.newPassword)
                     .textInputAutocapitalization(.never)
-            case .plain:
+            case .name:
+                TextField(placeholder, text: $text)
+                    .textContentType(.name) 
+            default:
                 TextField(placeholder, text: $text)
             }
         }
@@ -53,6 +49,6 @@ struct TCInputView: View {
         ),
         title: "Email address",
         placeholder: "test@example.com",
-        textFieldType: .email
+        textFieldType: .emailAddress
     )
 }
