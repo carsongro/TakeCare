@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Firebase
+@preconcurrency import Firebase
 import FirebaseFirestoreSwift
 
 protocol PasswordFieldProtocol {
