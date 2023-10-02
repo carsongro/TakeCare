@@ -10,21 +10,25 @@ import FirebaseStorage
 import FirebaseFirestore
 import UIKit
 
+/// An object for uploading images to firebase
 final class ImageUploader {
+    
+    enum ImagePath {
+        case profile_images
+    }
+    
+    private enum ImageUploadError: Error {
+        case jpegConversionError
+        case urlError
+    }
     
     @discardableResult
     static func uploadImage(
-        uid: String = "",
+        name: String = UUID().uuidString,
         image: UIImage,
-        path: String
+        path: ImagePath
     ) async throws -> String {
-        guard let data = image.jpegData(compressionQuality: 0.7) else { throw ImageUploadError.jpegConversionError  }
-        
-        var name = NSUUID().uuidString
-        
-        if path == "profile_images" {
-            name = uid
-        }
+        guard let data = image.jpegData(compressionQuality: 0.7) else { throw ImageUploadError.jpegConversionError }
         
         let storageRef = Storage.storage().reference()
         
@@ -40,10 +44,5 @@ final class ImageUploader {
         let urlString = try await fileRef.downloadURL().absoluteString
         
         return urlString
-    }
-    
-    private enum ImageUploadError: Error {
-        case jpegConversionError
-        case urlError
     }
 }

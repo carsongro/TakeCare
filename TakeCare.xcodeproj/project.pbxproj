@@ -174,10 +174,10 @@
 		B58A13FF2AC520A20045D191 /* TakeCare */ = {
 			isa = PBXGroup;
 			children = (
-				B54552872ACA37CC006135E8 /* Extensions */,
 				B50066EE2AC90CD0008826B7 /* Info.plist */,
 				B58480A82AC774BF007A655D /* GoogleService-Info.plist */,
 				B58A14062AC520A30045D191 /* TakeCare.entitlements */,
+				B54552872ACA37CC006135E8 /* Extensions */,
 				B50066EB2AC9050C008826B7 /* Managers */,
 				B58A14072AC520A30045D191 /* Preview Content */,
 				B58480872AC6840E007A655D /* Other */,

@@ -37,7 +37,7 @@ struct TCProfileView: View {
                         }
                         
                         if viewModel.currentUser?.photoURL != nil {
-                            Button("Remove profile photo") {
+                            Button("Remove") {
                                 AlertManager.shared.showAlert(
                                     title: "Are you sure you want to remove your profile photo?",
                                     primaryButtonText: "Remove",
@@ -59,13 +59,7 @@ struct TCProfileView: View {
                     
                     Section("Details") {
                         Text(user.displayName)
-                            .fontWeight(.semibold)
                         
-                        //                    NavigationLink {
-                        //                        TCUpdateEmailView()
-                        //                    } label: {
-                        //                        Text(user.email)
-                        //                    }
                         Text(user.email)
                     }
                     
@@ -93,8 +87,6 @@ struct TCProfileView: View {
                                 }
                             }
                         }
-                        
-                        print("Failed")
                     }
                 }
                 .navigationTitle("Profile")

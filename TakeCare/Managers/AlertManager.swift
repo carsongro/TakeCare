@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// An observable singleton instance for showing alerts throughout the app
 @Observable final class AlertManager {
     static let shared = AlertManager()
     

@@ -46,18 +46,24 @@ final class TCAuthViewModel: @unchecked Sendable {
     
     func createUser(withEmail email: String, password: String, name: String) async {
         do {
-            let result = try await Auth.auth().createUser(withEmail: email, password: password)
+            let result = try await Auth.auth().createUser(
+                withEmail: email,
+                password: password
+            )
+            
             Task { @MainActor in
                 withAnimation {
                     self.userSession = result.user
                 }
             }
+            
             let user = User(
                 id: result.user.uid,
                 displayName: name,
                 email: email,
                 photoURL: nil
             )
+            
             let encodedUser = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
             
@@ -134,8 +140,14 @@ final class TCAuthViewModel: @unchecked Sendable {
     }
     
     func updateName(to name: String) async {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         do {
+            try await Firestore.firestore().collection("users").document(uid).updateData(
+                ["displayName": name]
+            )
             
+            await fetchCurrentUser()
         } catch {
             errorMessage = "There was an error updating your account name"
         }
@@ -145,15 +157,17 @@ final class TCAuthViewModel: @unchecked Sendable {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
-            let photoURL = try await ImageUploader.uploadImage(uid: uid, image: image, path: "profile_images")
+            let photoURL = try await ImageUploader.uploadImage(
+                name: uid,
+                image: image,
+                path: .profile_images
+            )
             
             try await Firestore.firestore().collection("users").document(uid).updateData(
                 ["photoURL": photoURL]
             )
             
-            withAnimation {
-                currentUser?.photoURL = photoURL
-            }
+            await fetchCurrentUser()
         } catch {
             errorMessage = "There was an error updating your profile image"
         }
@@ -167,9 +181,7 @@ final class TCAuthViewModel: @unchecked Sendable {
                 ["photoURL": FieldValue.delete()]
             )
             
-            withAnimation {
-                currentUser?.photoURL = nil
-            }
+            await fetchCurrentUser()
             
             try await Firestore.firestore().collection("images").document(uid).delete()
         } catch {

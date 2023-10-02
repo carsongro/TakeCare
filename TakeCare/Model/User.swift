@@ -11,7 +11,7 @@ struct User: Codable, Identifiable {
     let id: String
     let displayName: String
     let email: String
-    var photoURL: String?
+    let photoURL: String?
 }
 
 extension User {
