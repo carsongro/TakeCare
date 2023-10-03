@@ -23,33 +23,30 @@ struct TCDeleteAccountView: View {
     @State private var password = ""
     
     var body: some View {
-        List {
+        Form {
             Section {
-                Text("You need to enter your credentials to make changes to your account.")
-                    .font(.title3)
+                Text("You need to enter your credentials to delete your account.")
                     .fontWeight(.semibold)
                     .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
                     .listRowBackground(Color(uiColor: .systemGroupedBackground))
             }
             
-            Section {
-                TCInputView(
-                    text: $email,
-                    title: "Email address",
-                    placeholder: "Please enter your email address",
-                    textFieldType: .emailAddress
-                )
-                .focused($focusedField, equals: .email)
-                .submitLabel(.next)
-                
-                TCInputView(
-                    text: $password,
-                    title: "Password",
-                    placeholder: "Please enter your password",
-                    textFieldType: .password
-                )
-                .focused($focusedField, equals: .password)
-                .submitLabel(.return)
+            Section("Email") {
+                TextField("Enter your email address", text: $email)
+                    .textContentType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
+                    .focused($focusedField, equals: .email)
+                    .submitLabel(.next)
+            }
+            
+            Section("Password") {
+                SecureField("Enter your password", text: $password)
+                    .textContentType(.password)
+                    .textInputAutocapitalization(.never)
+                    .focused($focusedField, equals: .password)
+                    .submitLabel(.return)
             }
             .onSubmit {
                 switch focusedField {
@@ -68,7 +65,6 @@ struct TCDeleteAccountView: View {
                         TCPasswordResetView()
                     } label: {
                         Text("Forgot password")
-                            .foregroundStyle(.blue)
                     }
                 }
             }
@@ -102,7 +98,6 @@ struct TCDeleteAccountView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .scrollDisabled(true)
         .navigationTitle("Delete Account")
         .navigationBarTitleDisplayMode(.inline)
     }

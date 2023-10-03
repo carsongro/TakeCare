@@ -14,21 +14,18 @@ struct TCPasswordResetView: View, @unchecked Sendable {
     @State private var email = ""
     
     var body: some View {
-        List {
+        Form {
             Section {
                 Text("You will receive a link to reset your password in your email.")
+                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
             }
-            .listRowBackground(Color(uiColor: .systemGroupedBackground))
-
             
-            Section {
-                TCInputView(
-                    text: $email,
-                    title: "Email address",
-                    placeholder: "Please enter your email",
-                    textFieldType: .emailAddress
-                )
-                .submitLabel(.send)
+            Section("Email") {
+                TextField("Enter your email", text: $email)
+                    .textContentType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
+                    .submitLabel(.send)
             }
             .onSubmit {
                 sendResetLink()
@@ -45,7 +42,6 @@ struct TCPasswordResetView: View, @unchecked Sendable {
                 .listRowBackground(Color(uiColor: .systemGroupedBackground))
             }
         }
-        .scrollDisabled(true)
         .navigationTitle("Password Reset")
         .navigationBarTitleDisplayMode(.inline)
     }

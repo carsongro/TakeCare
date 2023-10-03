@@ -18,18 +18,25 @@
 		B55B80042AC7CAD100640173 /* TCDeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */; };
 		B55B80062AC7CB9200640173 /* TCUpdateEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */; };
 		B58480972AC76625007A655D /* TCLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480962AC76625007A655D /* TCLoginView.swift */; };
-		B584809A2AC7669C007A655D /* TCInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480992AC7669C007A655D /* TCInputView.swift */; };
 		B584809C2AC76A39007A655D /* TCCreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B584809B2AC76A39007A655D /* TCCreateAccountView.swift */; };
-		B58480A02AC76C43007A655D /* TCProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B584809F2AC76C43007A655D /* TCProfileView.swift */; };
+		B58480A02AC76C43007A655D /* TCAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B584809F2AC76C43007A655D /* TCAccountView.swift */; };
 		B58480A52AC76EED007A655D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480A42AC76EED007A655D /* User.swift */; };
 		B58480A92AC774BF007A655D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B58480A82AC774BF007A655D /* GoogleService-Info.plist */; };
 		B58480E32AC77608007A655D /* TCAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480E22AC77608007A655D /* TCAuthViewModel.swift */; };
 		B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A14002AC520A20045D191 /* TakeCareApp.swift */; };
 		B58A14052AC520A30045D191 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14042AC520A30045D191 /* Assets.xcassets */; };
 		B58A14092AC520A30045D191 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14082AC520A30045D191 /* Preview Assets.xcassets */; };
+		B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9D2ACB772A00D1F842 /* AppScreen.swift */; };
+		B5BC6CA02ACB7BF500D1F842 /* AccountNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */; };
+		B5BC6CA42ACB7CBF00D1F842 /* ListsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CA32ACB7CBF00D1F842 /* ListsNavigationStack.swift */; };
+		B5BC6CA62ACB7CDE00D1F842 /* TCListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CA52ACB7CDE00D1F842 /* TCListsView.swift */; };
+		B5BC6CA82ACB7CFD00D1F842 /* TodoNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CA72ACB7CFD00D1F842 /* TodoNavigationStack.swift */; };
+		B5BC6CAA2ACB7D1D00D1F842 /* TCTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CA92ACB7D1D00D1F842 /* TCTodoView.swift */; };
+		B5BC6CAC2ACB7E1000D1F842 /* AppSidebarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CAB2ACB7E1000D1F842 /* AppSidebarList.swift */; };
+		B5BC6CAE2ACB7E6700D1F842 /* AppDetailColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CAD2ACB7E6700D1F842 /* AppDetailColumn.swift */; };
 		B5E643C62AC7877A0056A111 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B5E643C52AC7877A0056A111 /* Kingfisher */; };
-		B5E643C82AC7924B0056A111 /* TCAuthCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C72AC7924B0056A111 /* TCAuthCheckView.swift */; };
-		B5E643CA2AC792ED0056A111 /* TCTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C92AC792ED0056A111 /* TCTabView.swift */; };
+		B5E643C82AC7924B0056A111 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C72AC7924B0056A111 /* ContentView.swift */; };
+		B5E643CA2AC792ED0056A111 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C92AC792ED0056A111 /* AppTabView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,9 +48,8 @@
 		B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeleteAccountView.swift; sourceTree = "<group>"; };
 		B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCUpdateEmailView.swift; sourceTree = "<group>"; };
 		B58480962AC76625007A655D /* TCLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCLoginView.swift; sourceTree = "<group>"; };
-		B58480992AC7669C007A655D /* TCInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCInputView.swift; sourceTree = "<group>"; };
 		B584809B2AC76A39007A655D /* TCCreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCCreateAccountView.swift; sourceTree = "<group>"; };
-		B584809F2AC76C43007A655D /* TCProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCProfileView.swift; sourceTree = "<group>"; };
+		B584809F2AC76C43007A655D /* TCAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAccountView.swift; sourceTree = "<group>"; };
 		B58480A42AC76EED007A655D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B58480A82AC774BF007A655D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B58480E22AC77608007A655D /* TCAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAuthViewModel.swift; sourceTree = "<group>"; };
@@ -52,8 +58,16 @@
 		B58A14042AC520A30045D191 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B58A14062AC520A30045D191 /* TakeCare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TakeCare.entitlements; sourceTree = "<group>"; };
 		B58A14082AC520A30045D191 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		B5E643C72AC7924B0056A111 /* TCAuthCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAuthCheckView.swift; sourceTree = "<group>"; };
-		B5E643C92AC792ED0056A111 /* TCTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCTabView.swift; sourceTree = "<group>"; };
+		B5BC6C9D2ACB772A00D1F842 /* AppScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreen.swift; sourceTree = "<group>"; };
+		B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNavigationStack.swift; sourceTree = "<group>"; };
+		B5BC6CA32ACB7CBF00D1F842 /* ListsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsNavigationStack.swift; sourceTree = "<group>"; };
+		B5BC6CA52ACB7CDE00D1F842 /* TCListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCListsView.swift; sourceTree = "<group>"; };
+		B5BC6CA72ACB7CFD00D1F842 /* TodoNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoNavigationStack.swift; sourceTree = "<group>"; };
+		B5BC6CA92ACB7D1D00D1F842 /* TCTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCTodoView.swift; sourceTree = "<group>"; };
+		B5BC6CAB2ACB7E1000D1F842 /* AppSidebarList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSidebarList.swift; sourceTree = "<group>"; };
+		B5BC6CAD2ACB7E6700D1F842 /* AppDetailColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailColumn.swift; sourceTree = "<group>"; };
+		B5E643C72AC7924B0056A111 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B5E643C92AC792ED0056A111 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,29 +86,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B50066EB2AC9050C008826B7 /* Managers */ = {
+		B54552872ACA37CC006135E8 /* General */ = {
 			isa = PBXGroup;
 			children = (
 				B50066EC2AC90514008826B7 /* ImageUploader.swift */,
+				B54552882ACA37D2006135E8 /* Extensions.swift */,
 				B54552852ACA11DE006135E8 /* AlertManager.swift */,
 			);
-			path = Managers;
-			sourceTree = "<group>";
-		};
-		B50341A62AC7A2750075FFF2 /* TabView */ = {
-			isa = PBXGroup;
-			children = (
-				B5E643C92AC792ED0056A111 /* TCTabView.swift */,
-			);
-			path = TabView;
-			sourceTree = "<group>";
-		};
-		B54552872ACA37CC006135E8 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				B54552882ACA37D2006135E8 /* Extensions.swift */,
-			);
-			path = Extensions;
+			path = General;
 			sourceTree = "<group>";
 		};
 		B578AB272AC635AE008CEAE1 /* Auth */ = {
@@ -103,48 +102,20 @@
 				B58480E22AC77608007A655D /* TCAuthViewModel.swift */,
 				B58480962AC76625007A655D /* TCLoginView.swift */,
 				B584809B2AC76A39007A655D /* TCCreateAccountView.swift */,
-				B5E643C72AC7924B0056A111 /* TCAuthCheckView.swift */,
 				B50341A42AC7952E0075FFF2 /* TCPasswordResetView.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		B58480872AC6840E007A655D /* Other */ = {
+		B584809D2AC76C24007A655D /* Account */ = {
 			isa = PBXGroup;
 			children = (
-				B58A14042AC520A30045D191 /* Assets.xcassets */,
-				B58A14002AC520A20045D191 /* TakeCareApp.swift */,
-			);
-			path = Other;
-			sourceTree = "<group>";
-		};
-		B58480952AC765D5007A655D /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				B58480982AC7668E007A655D /* ReusableComponents */,
-				B50341A62AC7A2750075FFF2 /* TabView */,
-				B584809D2AC76C24007A655D /* Profile */,
-				B578AB272AC635AE008CEAE1 /* Auth */,
-			);
-			path = Core;
-			sourceTree = "<group>";
-		};
-		B58480982AC7668E007A655D /* ReusableComponents */ = {
-			isa = PBXGroup;
-			children = (
-				B58480992AC7669C007A655D /* TCInputView.swift */,
-			);
-			path = ReusableComponents;
-			sourceTree = "<group>";
-		};
-		B584809D2AC76C24007A655D /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-				B584809F2AC76C43007A655D /* TCProfileView.swift */,
+				B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */,
+				B584809F2AC76C43007A655D /* TCAccountView.swift */,
 				B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */,
 				B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */,
 			);
-			path = Profile;
+			path = Account;
 			sourceTree = "<group>";
 		};
 		B58480A32AC76EE6007A655D /* Model */ = {
@@ -174,15 +145,20 @@
 		B58A13FF2AC520A20045D191 /* TakeCare */ = {
 			isa = PBXGroup;
 			children = (
+				B58A14042AC520A30045D191 /* Assets.xcassets */,
 				B50066EE2AC90CD0008826B7 /* Info.plist */,
 				B58480A82AC774BF007A655D /* GoogleService-Info.plist */,
 				B58A14062AC520A30045D191 /* TakeCare.entitlements */,
-				B54552872ACA37CC006135E8 /* Extensions */,
-				B50066EB2AC9050C008826B7 /* Managers */,
+				B58A14002AC520A20045D191 /* TakeCareApp.swift */,
+				B5E643C72AC7924B0056A111 /* ContentView.swift */,
 				B58A14072AC520A30045D191 /* Preview Content */,
-				B58480872AC6840E007A655D /* Other */,
+				B578AB272AC635AE008CEAE1 /* Auth */,
+				B5BC6CA12ACB7CA700D1F842 /* Lists */,
+				B5BC6CA22ACB7CAC00D1F842 /* Todo */,
+				B584809D2AC76C24007A655D /* Account */,
+				B5BC6C9A2ACB76F700D1F842 /* Navigation */,
+				B54552872ACA37CC006135E8 /* General */,
 				B58480A32AC76EE6007A655D /* Model */,
-				B58480952AC765D5007A655D /* Core */,
 			);
 			path = TakeCare;
 			sourceTree = "<group>";
@@ -193,6 +169,35 @@
 				B58A14082AC520A30045D191 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B5BC6C9A2ACB76F700D1F842 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				B5E643C92AC792ED0056A111 /* AppTabView.swift */,
+				B5BC6C9D2ACB772A00D1F842 /* AppScreen.swift */,
+				B5BC6CAB2ACB7E1000D1F842 /* AppSidebarList.swift */,
+				B5BC6CAD2ACB7E6700D1F842 /* AppDetailColumn.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		B5BC6CA12ACB7CA700D1F842 /* Lists */ = {
+			isa = PBXGroup;
+			children = (
+				B5BC6CA32ACB7CBF00D1F842 /* ListsNavigationStack.swift */,
+				B5BC6CA52ACB7CDE00D1F842 /* TCListsView.swift */,
+			);
+			path = Lists;
+			sourceTree = "<group>";
+		};
+		B5BC6CA22ACB7CAC00D1F842 /* Todo */ = {
+			isa = PBXGroup;
+			children = (
+				B5BC6CA72ACB7CFD00D1F842 /* TodoNavigationStack.swift */,
+				B5BC6CA92ACB7D1D00D1F842 /* TCTodoView.swift */,
+			);
+			path = Todo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,21 +282,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5BC6CAA2ACB7D1D00D1F842 /* TCTodoView.swift in Sources */,
+				B5BC6CA42ACB7CBF00D1F842 /* ListsNavigationStack.swift in Sources */,
 				B50341A52AC7952E0075FFF2 /* TCPasswordResetView.swift in Sources */,
 				B58480972AC76625007A655D /* TCLoginView.swift in Sources */,
-				B58480A02AC76C43007A655D /* TCProfileView.swift in Sources */,
-				B5E643C82AC7924B0056A111 /* TCAuthCheckView.swift in Sources */,
+				B5BC6CAC2ACB7E1000D1F842 /* AppSidebarList.swift in Sources */,
+				B58480A02AC76C43007A655D /* TCAccountView.swift in Sources */,
+				B5BC6CA62ACB7CDE00D1F842 /* TCListsView.swift in Sources */,
+				B5E643C82AC7924B0056A111 /* ContentView.swift in Sources */,
 				B584809C2AC76A39007A655D /* TCCreateAccountView.swift in Sources */,
 				B50066ED2AC90514008826B7 /* ImageUploader.swift in Sources */,
+				B5BC6CA82ACB7CFD00D1F842 /* TodoNavigationStack.swift in Sources */,
 				B55B80062AC7CB9200640173 /* TCUpdateEmailView.swift in Sources */,
 				B58480E32AC77608007A655D /* TCAuthViewModel.swift in Sources */,
+				B5BC6CAE2ACB7E6700D1F842 /* AppDetailColumn.swift in Sources */,
 				B55B80042AC7CAD100640173 /* TCDeleteAccountView.swift in Sources */,
-				B584809A2AC7669C007A655D /* TCInputView.swift in Sources */,
 				B54552892ACA37D2006135E8 /* Extensions.swift in Sources */,
+				B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */,
 				B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */,
 				B58480A52AC76EED007A655D /* User.swift in Sources */,
 				B54552862ACA11DE006135E8 /* AlertManager.swift in Sources */,
-				B5E643CA2AC792ED0056A111 /* TCTabView.swift in Sources */,
+				B5BC6CA02ACB7BF500D1F842 /* AccountNavigationStack.swift in Sources */,
+				B5E643CA2AC792ED0056A111 /* AppTabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -29,7 +29,7 @@ struct TCUpdateEmailView: View {
     @State private var showingErrorAlert = false
     
     var body: some View {
-        List {
+        Form {
             Section {
                 Text("You need to enter your credentials to make changes to your account.")
                     .font(.title3)
@@ -38,54 +38,37 @@ struct TCUpdateEmailView: View {
                     .listRowBackground(Color(uiColor: .systemGroupedBackground))
             }
             
-            Section {
-                TCInputView(
-                    text: $newEmail,
-                    title: "New email address",
-                    placeholder: "Please enter your new email address",
-                    textFieldType: .emailAddress
-                )
-                .focused($focusedField, equals: .newEmail)
-                .submitLabel(.next)
+            Section("New email") {
+                TextField("Enter your new email address", text: $newEmail)
+                    .textContentType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
+                    .focused($focusedField, equals: .newEmail)
+                    .submitLabel(.next)
                 
-                TCInputView(
-                    text: $confirmNewEmail,
-                    title: "Confirm new email address",
-                    placeholder: "Please confirm your new email address",
-                    textFieldType: .emailAddress
-                )
-                .focused($focusedField, equals: .confirmNewEmail)
-                .submitLabel(.next)
-                
-                TCInputView(
-                    text: $currentEmail,
-                    title: "Current email address",
-                    placeholder: "Please enter your current email address",
-                    textFieldType: .emailAddress
-                )
-                .focused($focusedField, equals: .currentEmail)
-                .submitLabel(.next)
-                
-                TCInputView(
-                    text: $password,
-                    title: "Password",
-                    placeholder: "Please enter your password",
-                    textFieldType: .password
-                )
-                .focused($focusedField, equals: .password)
-                .submitLabel(.return)
+                TextField("Confirm new email address", text: $confirmNewEmail)
+                    .textContentType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
+                    .focused($focusedField, equals: .confirmNewEmail)
+                    .submitLabel(.next)
             }
-            .onSubmit {
-                switch focusedField {
-                case .newEmail:
-                    focusedField = .confirmNewEmail
-                case .confirmNewEmail:
-                    focusedField = .currentEmail
-                case .currentEmail:
-                    focusedField = .password
-                default:
-                    hideKeyboard()
-                }
+            
+            Section("Current Email") {
+                TextField("Enter your current email address", text: $currentEmail)
+                    .textContentType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
+                    .focused($focusedField, equals: .currentEmail)
+                    .submitLabel(.next)
+            }
+            
+            Section("Password") {
+                SecureField("Enter your password", text: $password)
+                    .textContentType(.password)
+                    .textInputAutocapitalization(.never)
+                    .focused($focusedField, equals: .password)
+                    .submitLabel(.return)
             }
             
             Section {
@@ -118,7 +101,18 @@ struct TCUpdateEmailView: View {
                 .frame(maxWidth: .infinity)
             }
         }
-        .scrollDisabled(true)
+        .onSubmit {
+            switch focusedField {
+            case .newEmail:
+                focusedField = .confirmNewEmail
+            case .confirmNewEmail:
+                focusedField = .currentEmail
+            case .currentEmail:
+                focusedField = .password
+            default:
+                hideKeyboard()
+            }
+        }
         .navigationTitle("Update Email Address")
         .navigationBarTitleDisplayMode(.inline)
     }

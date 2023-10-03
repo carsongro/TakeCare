@@ -24,7 +24,7 @@ struct TakeCareApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TCAuthCheckView()
+            ContentView()
         }
     }
 }

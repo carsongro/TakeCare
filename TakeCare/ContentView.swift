@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-struct TCAuthCheckView: View {
+struct ContentView: View {
     @State private var viewModel = TCAuthViewModel()
+    @State private var selection: AppScreen? = .lists
+    @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     var body: some View {
         @Bindable var alertManager = AlertManager.shared
@@ -19,9 +21,18 @@ struct TCAuthCheckView: View {
                     .environment(viewModel)
                     .transition(.move(edge: .bottom))
             } else {
-                TCTabView()
+                if prefersTabNavigation {
+                    AppTabView(selection: $selection)
+                        .environment(viewModel)
+                        .transition(.move(edge: .bottom))
+                } else {
+                    NavigationSplitView {
+                        AppSidebarList(selection: $selection)
+                    } detail: {
+                        AppDetailColumn(screen: selection)
+                    }
                     .environment(viewModel)
-                    .transition(.move(edge: .bottom))
+                }
             }
         }
         .alert(
@@ -50,5 +61,5 @@ struct TCAuthCheckView: View {
 }
 
 #Preview {
-    TCAuthCheckView()
+    ContentView()
 }

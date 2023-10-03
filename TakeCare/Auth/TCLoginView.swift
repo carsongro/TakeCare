@@ -22,33 +22,22 @@ struct TCLoginView: View, @unchecked Sendable {
     
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    TCInputView(
-                        text: $email,
-                        title: "Email address",
-                        placeholder: "Please enter your email address",
-                        textFieldType: .emailAddress
-                    )
-                    .focused($focusedField, equals: .email)
-                    .submitLabel(.next)
-                    
-                    TCInputView(
-                        text: $password,
-                        title: "Password",
-                        placeholder: "Please enter your password",
-                        textFieldType: .password
-                    )
-                    .focused($focusedField, equals: .password)
-                    .submitLabel(.go)
+            Form {
+                Section("Email") {
+                    TextField("Enter your email address", text: $email)
+                        .textContentType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.emailAddress)
+                        .focused($focusedField, equals: .email)
+                        .submitLabel(.next)
                 }
-                .onSubmit {
-                    switch focusedField {
-                    case .email:
-                        focusedField = .password
-                    default:
-                        login()
-                    }
+                
+                Section("Password") {
+                    SecureField("Enter your password", text: $password)
+                        .textContentType(.password)
+                        .textInputAutocapitalization(.never)
+                        .focused($focusedField, equals: .password)
+                        .submitLabel(.go)
                 }
                 
                 Section {
@@ -56,7 +45,6 @@ struct TCLoginView: View, @unchecked Sendable {
                         TCPasswordResetView()
                     } label: {
                         Text("Forgot password")
-                            .foregroundStyle(.blue)
                     }
                     
                     NavigationLink {
@@ -64,7 +52,6 @@ struct TCLoginView: View, @unchecked Sendable {
                     } label: {
                         Text("Sign up")
                             .fontWeight(.semibold)
-                            .foregroundStyle(.blue)
                     }
                 }
                 
@@ -76,8 +63,16 @@ struct TCLoginView: View, @unchecked Sendable {
                     .buttonStyle(.borderedProminent)
                     .disabled(!textFieldsAreValid)
                     .frame(maxWidth: .infinity)
+                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
                 }
-                .listRowBackground(Color(uiColor: .systemGroupedBackground))
+            }
+            .onSubmit {
+                switch focusedField {
+                case .email:
+                    focusedField = .password
+                default:
+                    login()
+                }
             }
             .navigationTitle("Login")
         }

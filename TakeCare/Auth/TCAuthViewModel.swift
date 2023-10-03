@@ -153,14 +153,14 @@ final class TCAuthViewModel: @unchecked Sendable {
         }
     }
     
-    func updateProfileImage(image: UIImage) async {
+    func updateAccountImage(image: UIImage) async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
             let photoURL = try await ImageUploader.uploadImage(
                 name: uid,
                 image: image,
-                path: .profile_images
+                path: .account_images
             )
             
             try await Firestore.firestore().collection("users").document(uid).updateData(
@@ -169,11 +169,11 @@ final class TCAuthViewModel: @unchecked Sendable {
             
             await fetchCurrentUser()
         } catch {
-            errorMessage = "There was an error updating your profile image"
+            errorMessage = "There was an error updating your account image"
         }
     }
     
-    func removeProfileImage() async {
+    func removeAccountImage() async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
@@ -185,7 +185,7 @@ final class TCAuthViewModel: @unchecked Sendable {
             
             try await Firestore.firestore().collection("images").document(uid).delete()
         } catch {
-            errorMessage = "There was an error removing your profile image"
+            errorMessage = "There was an error removing your account image"
         }
     }
 }
