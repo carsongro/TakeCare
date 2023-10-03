@@ -24,13 +24,17 @@ struct AccountNavigationStack: View {
     @State private var showingErrorAlert = false
     @State private var showingSignOutConfirmation = false
     @State private var showingRemoveImageConfirmation = false
+    @State private var showingAccountImageConfirmation = false
+    @State private var showingPhotosPicker = false
     
     var body: some View {
         NavigationStack {
             if let user = viewModel.currentUser {
                 List {
                     Section {
-                        PhotosPicker(selection: $accountItem, matching: .not(.videos)) {
+                        Button {
+                            showingAccountImageConfirmation = true
+                        } label: {
                             KFImage(URL(string:viewModel.currentUser?.photoURL ?? ""))
                                 .placeholder { _ in
                                     Image(systemName: "person.circle.fill")
@@ -41,13 +45,17 @@ struct AccountNavigationStack: View {
                                 .resizable()
                                 .accountImage()
                         }
-                        
-                        if viewModel.currentUser?.photoURL != nil {
-                            Button("Remove") {
-                                showingRemoveImageConfirmation = true
+                        .accessibilityLabel("Modify account image")
+                        .confirmationDialog("Account Image", isPresented: $showingAccountImageConfirmation) {
+                            Button("Select account image") {
+                                showingPhotosPicker = true
                             }
-                            .frame(maxWidth: .infinity)
-                            .listRowSeparator(.hidden)
+                            
+                            if viewModel.currentUser?.photoURL != nil {
+                                Button("Remove account image") {
+                                    showingRemoveImageConfirmation = true
+                                }
+                            }
                         }
                     }
                     .listRowBackground(Color(uiColor: .systemGroupedBackground))
@@ -87,6 +95,7 @@ struct AccountNavigationStack: View {
                         }
                     }
                 }
+                .photosPicker(isPresented: $showingPhotosPicker, selection: $accountItem)
                 .sheet(isPresented: $presentingDeleteAccountSheet) {
                     DeleteAccountForm()
                 }
@@ -149,7 +158,7 @@ extension View {
         id: "",
         displayName: "Carson Gross",
         email: "example@example.com",
-        photoURL: nil // https://source.unsplash.com/random
+        photoURL: nil
     )
     
     return AccountNavigationStack()

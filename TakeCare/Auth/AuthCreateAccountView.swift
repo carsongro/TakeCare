@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AuthCreateAccountView: View {
+struct AuthCreateAccountView: View, @unchecked Sendable {
     @Environment(TCAuthViewModel.self) private var viewModel
     
     enum Field {
@@ -110,19 +110,18 @@ extension AuthCreateAccountView {
         }
     }
     
-    @MainActor
     private func createAccount() {
         guard textFieldsAreValid else { return }
         
         Task {
             do {
+                await hideKeyboard()
+                
                 try await viewModel.createUser(
                     withEmail: email,
                     password: password,
                     name: name
                 )
-                
-                hideKeyboard()
             } catch {
                 showingCreateAccountAlert = true
             }
@@ -144,7 +143,6 @@ extension AuthCreateAccountView: PasswordFieldProtocol {
 }
 
 #Preview {
-    
     NavigationStack {
         AuthCreateAccountView()
             .environment(TCAuthViewModel())

@@ -92,6 +92,7 @@ struct AuthLoginView: View, @unchecked Sendable {
         
         Task {
             do {
+                await hideKeyboard()
                 try await viewModel.signIn(withEmail: email, password: password)
             } catch {
                 showingSignInAlert = true
