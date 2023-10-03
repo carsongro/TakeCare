@@ -10,7 +10,7 @@ import FirebaseAuth
 
 struct UpdateEmailForm: View {
     @Environment(TCAuthViewModel.self) private var viewModel
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
     enum Field {
         case newEmail
@@ -27,6 +27,7 @@ struct UpdateEmailForm: View {
     @State private var password = ""
     
     @State private var showingErrorAlert = false
+    @State private var presentingResetPasswordForm = false
     
     var body: some View {
         NavigationStack {
@@ -73,15 +74,8 @@ struct UpdateEmailForm: View {
                 }
                 
                 Section {
-                    HStack {
-                        Spacer()
-                        
-                        NavigationLink {
-                            TCPasswordResetView()
-                        } label: {
-                            Text("Forgot password")
-                                .foregroundStyle(.blue)
-                        }
+                    Button("Forgot password") {
+                        presentingResetPasswordForm = true
                     }
                 }
                 
@@ -123,6 +117,9 @@ struct UpdateEmailForm: View {
             }
             .alert("There was an error updating your email.", isPresented: $showingErrorAlert) {
                 Button("OK") { }
+            }
+            .sheet(isPresented: $presentingResetPasswordForm) {
+                PasswordResetForm()
             }
         }
     }

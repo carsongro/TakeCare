@@ -1,5 +1,5 @@
 //
-//  TCCreateAccountView.swift
+//  AuthCreateAccountView.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 9/29/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TCCreateAccountView: View {
+struct AuthCreateAccountView: View {
     @Environment(TCAuthViewModel.self) private var viewModel
     
     enum Field {
@@ -93,7 +93,7 @@ struct TCCreateAccountView: View {
     }
 }
 
-extension TCCreateAccountView {
+extension AuthCreateAccountView {
     
     @ViewBuilder
     var passwordCheckView: some View {
@@ -132,7 +132,7 @@ extension TCCreateAccountView {
 
 // MARK: PasswordFieldProtocol
 
-extension TCCreateAccountView: PasswordFieldProtocol {
+extension AuthCreateAccountView: PasswordFieldProtocol {
     var textFieldsAreValid: Bool {
         !email.isEmpty
         && email.contains("@")
@@ -146,7 +146,7 @@ extension TCCreateAccountView: PasswordFieldProtocol {
 #Preview {
     
     NavigationStack {
-        TCCreateAccountView()
+        AuthCreateAccountView()
             .environment(TCAuthViewModel())
     }
 }

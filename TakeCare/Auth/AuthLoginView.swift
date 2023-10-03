@@ -1,5 +1,5 @@
 //
-//  TCLoginView.swift
+//  AuthLoginView.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 9/29/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TCLoginView: View, @unchecked Sendable {
+struct AuthLoginView: View, @unchecked Sendable {
     @Environment(TCAuthViewModel.self) private var viewModel
     
     enum Field {
@@ -20,6 +20,7 @@ struct TCLoginView: View, @unchecked Sendable {
     @State var email = ""
     @State private var password = ""
     @State private var showingSignInAlert = false
+    @State private var presentingResetPasswordForm = false
     
     var body: some View {
         NavigationStack {
@@ -42,14 +43,14 @@ struct TCLoginView: View, @unchecked Sendable {
                 }
                 
                 Section {
-                    NavigationLink {
-                        TCPasswordResetView()
-                    } label: {
-                        Text("Forgot password")
+                    Button("Forgot password") {
+                        presentingResetPasswordForm = true
                     }
-                    
+                }
+                
+                Section {
                     NavigationLink {
-                        TCCreateAccountView()
+                        AuthCreateAccountView()
                     } label: {
                         Text("Sign up")
                             .fontWeight(.semibold)
@@ -80,6 +81,9 @@ struct TCLoginView: View, @unchecked Sendable {
             .alert("There was an error signing in.", isPresented: $showingSignInAlert) {
                 Button("OK") { }
             }
+            .sheet(isPresented: $presentingResetPasswordForm) {
+                PasswordResetForm()
+            }
         }
     }
     
@@ -98,7 +102,7 @@ struct TCLoginView: View, @unchecked Sendable {
 
 // MARK: PasswordFieldProtocol
 
-extension TCLoginView: PasswordFieldProtocol {
+extension AuthLoginView: PasswordFieldProtocol {
     var textFieldsAreValid: Bool {
         !email.isEmpty
         && email.contains("@")
@@ -108,6 +112,6 @@ extension TCLoginView: PasswordFieldProtocol {
 }
 
 #Preview {
-    TCLoginView()
+    AuthLoginView()
         .environment(TCAuthViewModel())
 }

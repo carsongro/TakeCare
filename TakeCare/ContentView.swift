@@ -14,7 +14,7 @@ struct ContentView: View {
     
     var body: some View {
         if viewModel.userSession == nil {
-            TCLoginView()
+            AuthLoginView()
                 .environment(viewModel)
                 .transition(.move(edge: .bottom))
         } else {

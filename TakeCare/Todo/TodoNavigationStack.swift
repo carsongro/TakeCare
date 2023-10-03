@@ -10,7 +10,7 @@ import SwiftUI
 struct TodoNavigationStack: View {
     var body: some View {
         NavigationStack {
-            TCTodoView()
+            Text("Todo")
                 .navigationTitle("Todo")
         }
     }

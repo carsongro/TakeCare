@@ -25,6 +25,8 @@ struct DeleteAccountForm: View {
     @State private var showingDeleteAlert = false
     @State private var showingErrorAlert = false
     
+    @State private var presentingResetPasswordForm = false
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -62,14 +64,8 @@ struct DeleteAccountForm: View {
                 }
                 
                 Section {
-                    HStack {
-                        Spacer()
-                        
-                        NavigationLink {
-                            TCPasswordResetView()
-                        } label: {
-                            Text("Forgot password")
-                        }
+                    Button("Forgot password") {
+                        presentingResetPasswordForm = true
                     }
                 }
                 
@@ -93,6 +89,9 @@ struct DeleteAccountForm: View {
                         dismiss()
                     }
                 }
+            }
+            .sheet(isPresented: $presentingResetPasswordForm) {
+                PasswordResetForm()
             }
             .alert("There was an error deleting your account", isPresented: $showingErrorAlert) {
                 Button("OK") { }

@@ -10,7 +10,7 @@ import SwiftUI
 struct ListsNavigationStack: View {
     var body: some View {
         NavigationStack {
-            TCListsView()
+            Text("Lists")
                 .navigationTitle("Lists")
         }
     }
