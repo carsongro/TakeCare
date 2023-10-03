@@ -13,48 +13,22 @@ struct ContentView: View {
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     var body: some View {
-        @Bindable var alertManager = AlertManager.shared
-        
-        Group {
-            if viewModel.userSession == nil {
-                TCLoginView()
+        if viewModel.userSession == nil {
+            TCLoginView()
+                .environment(viewModel)
+                .transition(.move(edge: .bottom))
+        } else {
+            if prefersTabNavigation {
+                AppTabView(selection: $selection)
                     .environment(viewModel)
                     .transition(.move(edge: .bottom))
             } else {
-                if prefersTabNavigation {
-                    AppTabView(selection: $selection)
-                        .environment(viewModel)
-                        .transition(.move(edge: .bottom))
-                } else {
-                    NavigationSplitView {
-                        AppSidebarList(selection: $selection)
-                    } detail: {
-                        AppDetailColumn(screen: selection)
-                    }
-                    .environment(viewModel)
+                NavigationSplitView {
+                    AppSidebarList(selection: $selection)
+                } detail: {
+                    AppDetailColumn(screen: selection)
                 }
-            }
-        }
-        .alert(
-            alertManager.title,
-            isPresented: $alertManager.showingAlert
-        ) {
-            if let primaryButtonText = alertManager.primaryButtonText {
-                Button(
-                    primaryButtonText,
-                    role: alertManager.primaryButtonRole
-                ) {
-                    alertManager.primaryButtonAction?()
-                }
-            }
-            
-            if let secondaryButtonText = alertManager.secondaryButtonText {
-                Button(
-                    secondaryButtonText,
-                    role: alertManager.secondaryButtonRole
-                ) {
-                    alertManager.secondaryButtonAction?()
-                }
+                .environment(viewModel)
             }
         }
     }

@@ -1,5 +1,5 @@
 //
-//  ImageUploader.swift
+//  ImageManager.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 9/30/23.
@@ -11,7 +11,7 @@ import FirebaseFirestore
 import UIKit
 
 /// An object for uploading images to firebase
-final class ImageUploader {
+final class ImageManager {
     
     enum ImagePath {
         case account_images
@@ -44,5 +44,15 @@ final class ImageUploader {
         let urlString = try await fileRef.downloadURL().absoluteString
         
         return urlString
+    }
+    
+    static func deleteImage(
+        name: String,
+        path: ImagePath
+    ) async throws {
+        let storageRef = Storage.storage().reference()
+        let fileRef = storageRef.child("\(path)/\(name).jpg")
+        
+        try await fileRef.delete()
     }
 }

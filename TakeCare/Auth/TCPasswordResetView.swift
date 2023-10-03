@@ -12,6 +12,8 @@ struct TCPasswordResetView: View, @unchecked Sendable {
     @Environment(\.dismiss) var dismiss
     
     @State private var email = ""
+    @State private var showingSuccessAlert = false
+    @State private var showingErrorAlert = false
     
     var body: some View {
         Form {
@@ -21,7 +23,7 @@ struct TCPasswordResetView: View, @unchecked Sendable {
             }
             
             Section("Email") {
-                TextField("Enter your email", text: $email)
+                TextField("Enter your email address", text: $email)
                     .textContentType(.emailAddress)
                     .textInputAutocapitalization(.never)
                     .keyboardType(.emailAddress)
@@ -42,21 +44,27 @@ struct TCPasswordResetView: View, @unchecked Sendable {
                 .listRowBackground(Color(uiColor: .systemGroupedBackground))
             }
         }
+        .formStyle(.grouped)
         .navigationTitle("Password Reset")
         .navigationBarTitleDisplayMode(.inline)
+        .alert("Successfully sent password reset link.", isPresented: $showingSuccessAlert) {
+            Button("OK") {
+                dismiss()
+            }
+        }
+        .alert("There was an error sending the password reset link", isPresented: $showingErrorAlert) {
+            Button("OK") { }
+        }
     }
     
     private func sendResetLink() {
         Task {
-            await viewModel.sendPasswordResetEmail(withEmail: email)
-            
-            AlertManager.shared.showAlert(
-                title: "Successfully sent password reset link.",
-                primaryButtonText: "OK",
-                primaryButtonAction: {
-                    dismiss()
-                }
-            )
+            do {
+                try await viewModel.sendPasswordResetEmail(withEmail: email)
+                showingSuccessAlert = true
+            } catch {
+                showingErrorAlert = true
+            }
         }
     }
 }

@@ -11,18 +11,26 @@ import Kingfisher
 
 struct AccountNavigationStack: View {
     @Environment(TCAuthViewModel.self) private var viewModel
+    
     @State private var accountItem: PhotosPickerItem?
     @State private var showOptions = false
+    @State private var presentingDeleteAccountSheet = false
+    
+    @State private var errorAlertText = "" {
+        didSet {
+            showingErrorAlert = true
+        }
+    }
+    @State private var showingErrorAlert = false
+    @State private var showingSignOutConfirmation = false
+    @State private var showingRemoveImageConfirmation = false
     
     var body: some View {
         NavigationStack {
             if let user = viewModel.currentUser {
                 List {
                     Section {
-                        PhotosPicker(
-                            selection: $accountItem,
-                            matching: .not(.videos)
-                        ) {
+                        PhotosPicker(selection: $accountItem, matching: .not(.videos)) {
                             KFImage(URL(string:viewModel.currentUser?.photoURL ?? ""))
                                 .placeholder { _ in
                                     Image(systemName: "person.circle.fill")
@@ -35,7 +43,9 @@ struct AccountNavigationStack: View {
                         }
                         
                         if viewModel.currentUser?.photoURL != nil {
-                            Button("Remove", action: showRemoveImageAlert)
+                            Button("Remove") {
+                                showingRemoveImageConfirmation = true
+                            }
                             .frame(maxWidth: .infinity)
                             .listRowSeparator(.hidden)
                         }
@@ -49,15 +59,16 @@ struct AccountNavigationStack: View {
                     }
                     
                     Section {
-                        Button("Sign out", action: showSignOutAlert)
+                        Button("Sign out") {
+                            showingSignOutConfirmation = true
+                        }
                     }
                     
                     Section {
-                        NavigationLink {
-                            TCDeleteAccountView()
-                        } label: {
-                            Text("Delete account")
+                        Button("Delete Account") {
+                            presentingDeleteAccountSheet = true
                         }
+                        .foregroundStyle(.red)
                     }
                 }
                 .navigationTitle("Account")
@@ -66,8 +77,41 @@ struct AccountNavigationStack: View {
                         if let data = try? await accountItem?.loadTransferable(type: Data.self) {
                             if let uiImage = UIImage(data: data) {
                                 Task {
-                                    await viewModel.updateAccountImage(image: uiImage)
+                                    do {
+                                        try await viewModel.updateAccountImage(image: uiImage)
+                                    } catch {
+                                        errorAlertText = "There was an error updating your account image"
+                                    }
                                 }
+                            }
+                        }
+                    }
+                }
+                .sheet(isPresented: $presentingDeleteAccountSheet) {
+                    DeleteAccountForm()
+                }
+                .alert(errorAlertText, isPresented: $showingErrorAlert) {
+                    Button("OK") { }
+                }
+                .alert("Are you sure you want to sign out?", isPresented: $showingSignOutConfirmation) {
+                    Button("Cancel", role: .cancel) { }
+                    Button("Sign Out") {
+                        do {
+                            try viewModel.signOut()
+                        } catch {
+                            errorAlertText = "There was an error signing out."
+                        }
+                    }
+                }
+                .alert("Are you sure you want to remove your account photo?", isPresented: $showingRemoveImageConfirmation) {
+                    Button("Cancel", role: .cancel) { }
+                    Button("Remove", role: .destructive) {
+                        Task {
+                            do {
+                                try await viewModel.removeAccountImage()
+                            } catch {
+                                print(error.localizedDescription)
+                                errorAlertText = "There was an error remove your account image."
                             }
                         }
                     }
@@ -76,33 +120,6 @@ struct AccountNavigationStack: View {
                 ProgressView()
             }
         }
-    }
-    
-    private func showRemoveImageAlert() {
-        AlertManager.shared.showAlert(
-            title: "Are you sure you want to remove your account photo?",
-            primaryButtonText: "Remove",
-            primaryButtonAction: {
-                Task {
-                    await viewModel.removeAccountImage()
-                }
-            },
-            primaryButtonRole: .destructive,
-            secondaryButtonText: "Cancel",
-            secondaryButtonRole: .cancel
-        )
-    }
-    
-    private func showSignOutAlert() {
-        AlertManager.shared.showAlert(
-            title: "Are you sure you want to sign out?",
-            primaryButtonText: "Sign Out",
-            primaryButtonAction: {
-                viewModel.signOut()
-            },
-            secondaryButtonText: "Cancel",
-            secondaryButtonRole: .cancel
-        )
     }
 }
 

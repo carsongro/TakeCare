@@ -23,6 +23,7 @@ struct TCCreateAccountView: View {
     @State private var name = ""
     @State private var password = ""
     @State private var confirmPassword = ""
+    @State private var showingCreateAccountAlert = false
     
     var body: some View {
         Form {
@@ -71,6 +72,9 @@ struct TCCreateAccountView: View {
             }
             
         }
+        .formStyle(.grouped)
+        .navigationTitle("Create Account")
+        .navigationBarTitleDisplayMode(.inline)
         .onSubmit {
             switch focusedField {
             case .email:
@@ -83,8 +87,9 @@ struct TCCreateAccountView: View {
                 hideKeyboard()
             }
         }
-        .navigationTitle("Create Account")
-        .navigationBarTitleDisplayMode(.inline)
+        .alert("There was an error creating an account.", isPresented: $showingCreateAccountAlert) {
+            Button("OK") { }
+        }
     }
 }
 
@@ -110,13 +115,17 @@ extension TCCreateAccountView {
         guard textFieldsAreValid else { return }
         
         Task {
-            await viewModel.createUser(
-                withEmail: email,
-                password: password,
-                name: name
-            )
-            
-            hideKeyboard()
+            do {
+                try await viewModel.createUser(
+                    withEmail: email,
+                    password: password,
+                    name: name
+                )
+                
+                hideKeyboard()
+            } catch {
+                showingCreateAccountAlert = true
+            }
         }
     }
 }

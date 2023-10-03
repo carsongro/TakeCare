@@ -11,12 +11,11 @@
 		B5003D3C2AC875E400BB7BC5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B5003D3B2AC875E400BB7BC5 /* FirebaseFirestore */; };
 		B5003D3E2AC875E400BB7BC5 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B5003D3D2AC875E400BB7BC5 /* FirebaseFirestoreSwift */; };
 		B5003D402AC875E400BB7BC5 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B5003D3F2AC875E400BB7BC5 /* FirebaseStorage */; };
-		B50066ED2AC90514008826B7 /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50066EC2AC90514008826B7 /* ImageUploader.swift */; };
+		B50066ED2AC90514008826B7 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50066EC2AC90514008826B7 /* ImageManager.swift */; };
 		B50341A52AC7952E0075FFF2 /* TCPasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50341A42AC7952E0075FFF2 /* TCPasswordResetView.swift */; };
-		B54552862ACA11DE006135E8 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54552852ACA11DE006135E8 /* AlertManager.swift */; };
 		B54552892ACA37D2006135E8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54552882ACA37D2006135E8 /* Extensions.swift */; };
-		B55B80042AC7CAD100640173 /* TCDeleteAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */; };
-		B55B80062AC7CB9200640173 /* TCUpdateEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */; };
+		B55B80042AC7CAD100640173 /* DeleteAccountForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80032AC7CAD100640173 /* DeleteAccountForm.swift */; };
+		B55B80062AC7CB9200640173 /* UpdateEmailForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80052AC7CB9200640173 /* UpdateEmailForm.swift */; };
 		B58480972AC76625007A655D /* TCLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480962AC76625007A655D /* TCLoginView.swift */; };
 		B584809C2AC76A39007A655D /* TCCreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B584809B2AC76A39007A655D /* TCCreateAccountView.swift */; };
 		B58480A52AC76EED007A655D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480A42AC76EED007A655D /* User.swift */; };
@@ -39,13 +38,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B50066EC2AC90514008826B7 /* ImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
+		B50066EC2AC90514008826B7 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 		B50066EE2AC90CD0008826B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B50341A42AC7952E0075FFF2 /* TCPasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCPasswordResetView.swift; sourceTree = "<group>"; };
-		B54552852ACA11DE006135E8 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		B54552882ACA37D2006135E8 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCDeleteAccountView.swift; sourceTree = "<group>"; };
-		B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCUpdateEmailView.swift; sourceTree = "<group>"; };
+		B55B80032AC7CAD100640173 /* DeleteAccountForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountForm.swift; sourceTree = "<group>"; };
+		B55B80052AC7CB9200640173 /* UpdateEmailForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailForm.swift; sourceTree = "<group>"; };
 		B58480962AC76625007A655D /* TCLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCLoginView.swift; sourceTree = "<group>"; };
 		B584809B2AC76A39007A655D /* TCCreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCCreateAccountView.swift; sourceTree = "<group>"; };
 		B58480A42AC76EED007A655D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -87,9 +85,8 @@
 		B54552872ACA37CC006135E8 /* General */ = {
 			isa = PBXGroup;
 			children = (
-				B50066EC2AC90514008826B7 /* ImageUploader.swift */,
+				B50066EC2AC90514008826B7 /* ImageManager.swift */,
 				B54552882ACA37D2006135E8 /* Extensions.swift */,
-				B54552852ACA11DE006135E8 /* AlertManager.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -109,8 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */,
-				B55B80052AC7CB9200640173 /* TCUpdateEmailView.swift */,
-				B55B80032AC7CAD100640173 /* TCDeleteAccountView.swift */,
+				B55B80052AC7CB9200640173 /* UpdateEmailForm.swift */,
+				B55B80032AC7CAD100640173 /* DeleteAccountForm.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -287,17 +284,16 @@
 				B5BC6CA62ACB7CDE00D1F842 /* TCListsView.swift in Sources */,
 				B5E643C82AC7924B0056A111 /* ContentView.swift in Sources */,
 				B584809C2AC76A39007A655D /* TCCreateAccountView.swift in Sources */,
-				B50066ED2AC90514008826B7 /* ImageUploader.swift in Sources */,
+				B50066ED2AC90514008826B7 /* ImageManager.swift in Sources */,
 				B5BC6CA82ACB7CFD00D1F842 /* TodoNavigationStack.swift in Sources */,
-				B55B80062AC7CB9200640173 /* TCUpdateEmailView.swift in Sources */,
+				B55B80062AC7CB9200640173 /* UpdateEmailForm.swift in Sources */,
 				B58480E32AC77608007A655D /* TCAuthViewModel.swift in Sources */,
 				B5BC6CAE2ACB7E6700D1F842 /* AppDetailColumn.swift in Sources */,
-				B55B80042AC7CAD100640173 /* TCDeleteAccountView.swift in Sources */,
+				B55B80042AC7CAD100640173 /* DeleteAccountForm.swift in Sources */,
 				B54552892ACA37D2006135E8 /* Extensions.swift in Sources */,
 				B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */,
 				B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */,
 				B58480A52AC76EED007A655D /* User.swift in Sources */,
-				B54552862ACA11DE006135E8 /* AlertManager.swift in Sources */,
 				B5BC6CA02ACB7BF500D1F842 /* AccountNavigationStack.swift in Sources */,
 				B5E643CA2AC792ED0056A111 /* AppTabView.swift in Sources */,
 			);

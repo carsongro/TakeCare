@@ -19,6 +19,7 @@ struct TCLoginView: View, @unchecked Sendable {
     
     @State var email = ""
     @State private var password = ""
+    @State private var showingSignInAlert = false
     
     var body: some View {
         NavigationStack {
@@ -66,6 +67,8 @@ struct TCLoginView: View, @unchecked Sendable {
                     .listRowBackground(Color(uiColor: .systemGroupedBackground))
                 }
             }
+            .formStyle(.grouped)
+            .navigationTitle("Login")
             .onSubmit {
                 switch focusedField {
                 case .email:
@@ -74,7 +77,9 @@ struct TCLoginView: View, @unchecked Sendable {
                     login()
                 }
             }
-            .navigationTitle("Login")
+            .alert("There was an error signing in.", isPresented: $showingSignInAlert) {
+                Button("OK") { }
+            }
         }
     }
     
@@ -82,7 +87,11 @@ struct TCLoginView: View, @unchecked Sendable {
         guard textFieldsAreValid else { return }
         
         Task {
-            await viewModel.signIn(withEmail: email, password: password)
+            do {
+                try await viewModel.signIn(withEmail: email, password: password)
+            } catch {
+                showingSignInAlert = true
+            }
         }
     }
 }
