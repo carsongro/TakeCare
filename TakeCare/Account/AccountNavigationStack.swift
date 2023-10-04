@@ -104,6 +104,7 @@ struct AccountNavigationStack: View {
                                         isUploadingImage = true
                                     }
                                     try await viewModel.updateAccountImage(image: uiImage)
+                                    accountItem = nil
                                 } catch {
                                     errorAlertText = "There was an error updating your account image"
                                 }
