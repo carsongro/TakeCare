@@ -90,6 +90,11 @@ final class TCAuthViewModel: @unchecked Sendable {
     
     func deleteCurrentUser() async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        if currentUser?.photoURL != nil {
+            try await removeAccountImage()
+        }
+        
         try? await Firestore.firestore().collection("users").document(uid).delete()
         try await Auth.auth().currentUser?.delete()
         withAnimation {

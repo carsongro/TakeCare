@@ -26,6 +26,7 @@ struct AccountNavigationStack: View {
     @State private var showingRemoveImageConfirmation = false
     @State private var showingAccountImageConfirmation = false
     @State private var showingPhotosPicker = false
+    @State private var isUploadingImage = false
     
     var body: some View {
         NavigationStack {
@@ -35,17 +36,26 @@ struct AccountNavigationStack: View {
                         Button {
                             showingAccountImageConfirmation = true
                         } label: {
-                            KFImage(URL(string:viewModel.currentUser?.photoURL ?? ""))
-                                .placeholder { _ in
-                                    Image(systemName: "person.circle.fill")
-                                        .resizable()
-                                        .accountImage()
-                                        .foregroundStyle(Color.secondary)
+                            ZStack {
+                                KFImage(URL(string:viewModel.currentUser?.photoURL ?? ""))
+                                    .placeholder { _ in
+                                        Image(systemName: "person.circle.fill")
+                                            .resizable()
+                                            .accountImage()
+                                            .foregroundStyle(Color.secondary)
+                                    }
+                                    .resizable()
+                                    .accountImage()
+                                    .blur(radius: isUploadingImage ? 4 : 0)
+                                    .opacity(isUploadingImage ? 0.6 : 1)
+                                
+                                if isUploadingImage {
+                                    ProgressView()
                                 }
-                                .resizable()
-                                .accountImage()
+                            }
+                            
                         }
-                        .accessibilityLabel("Modify account image")
+                        .accessibilityLabel("Change account image")
                         .confirmationDialog("Account Image", isPresented: $showingAccountImageConfirmation) {
                             Button("Select account image") {
                                 showingPhotosPicker = true
@@ -84,12 +94,18 @@ struct AccountNavigationStack: View {
                     Task {
                         if let data = try? await accountItem?.loadTransferable(type: Data.self) {
                             if let uiImage = UIImage(data: data) {
-                                Task {
-                                    do {
-                                        try await viewModel.updateAccountImage(image: uiImage)
-                                    } catch {
-                                        errorAlertText = "There was an error updating your account image"
+                                defer {
+                                    withAnimation {
+                                        isUploadingImage = false
                                     }
+                                }
+                                do {
+                                    withAnimation {
+                                        isUploadingImage = true
+                                    }
+                                    try await viewModel.updateAccountImage(image: uiImage)
+                                } catch {
+                                    errorAlertText = "There was an error updating your account image"
                                 }
                             }
                         }
@@ -116,8 +132,17 @@ struct AccountNavigationStack: View {
                     Button("Cancel", role: .cancel) { }
                     Button("Remove", role: .destructive) {
                         Task {
+                            defer {
+                                withAnimation {
+                                    isUploadingImage = false
+                                }
+                            }
                             do {
+                                withAnimation {
+                                    isUploadingImage = true
+                                }
                                 try await viewModel.removeAccountImage()
+                                accountItem = nil
                             } catch {
                                 print(error.localizedDescription)
                                 errorAlertText = "There was an error remove your account image."
@@ -138,11 +163,6 @@ struct AccountImage: ViewModifier {
             .frame(width: 130, height: 130)
             .frame(maxWidth: .infinity)
             .clipShape(Circle())
-            .overlay {
-                ContainerRelativeShape().strokeBorder(.tertiary)
-            }
-            .containerShape(.circle)
-            .compositingGroup()
     }
 }
 

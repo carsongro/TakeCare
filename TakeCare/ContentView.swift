@@ -28,6 +28,7 @@ struct ContentView: View {
                 } detail: {
                     AppDetailColumn(screen: selection)
                 }
+                .transition(.move(edge: .bottom))
                 .environment(viewModel)
             }
         }
