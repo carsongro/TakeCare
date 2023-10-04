@@ -25,7 +25,7 @@
 		B58A14052AC520A30045D191 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14042AC520A30045D191 /* Assets.xcassets */; };
 		B58A14092AC520A30045D191 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14082AC520A30045D191 /* Preview Assets.xcassets */; };
 		B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9D2ACB772A00D1F842 /* AppScreen.swift */; };
-		B5BC6CA02ACB7BF500D1F842 /* AccountNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */; };
+		B5BC6CA02ACB7BF500D1F842 /* ProfileNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9F2ACB7BF500D1F842 /* ProfileNavigationStack.swift */; };
 		B5BC6CA42ACB7CBF00D1F842 /* ListsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CA32ACB7CBF00D1F842 /* ListsNavigationStack.swift */; };
 		B5BC6CA82ACB7CFD00D1F842 /* TodoNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CA72ACB7CFD00D1F842 /* TodoNavigationStack.swift */; };
 		B5BC6CAC2ACB7E1000D1F842 /* AppSidebarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CAB2ACB7E1000D1F842 /* AppSidebarList.swift */; };
@@ -53,7 +53,7 @@
 		B58A14062AC520A30045D191 /* TakeCare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TakeCare.entitlements; sourceTree = "<group>"; };
 		B58A14082AC520A30045D191 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B5BC6C9D2ACB772A00D1F842 /* AppScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreen.swift; sourceTree = "<group>"; };
-		B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNavigationStack.swift; sourceTree = "<group>"; };
+		B5BC6C9F2ACB7BF500D1F842 /* ProfileNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNavigationStack.swift; sourceTree = "<group>"; };
 		B5BC6CA32ACB7CBF00D1F842 /* ListsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsNavigationStack.swift; sourceTree = "<group>"; };
 		B5BC6CA72ACB7CFD00D1F842 /* TodoNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoNavigationStack.swift; sourceTree = "<group>"; };
 		B5BC6CAB2ACB7E1000D1F842 /* AppSidebarList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSidebarList.swift; sourceTree = "<group>"; };
@@ -98,14 +98,14 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		B584809D2AC76C24007A655D /* Account */ = {
+		B584809D2AC76C24007A655D /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */,
+				B5BC6C9F2ACB7BF500D1F842 /* ProfileNavigationStack.swift */,
 				B55B80052AC7CB9200640173 /* UpdateEmailForm.swift */,
 				B55B80032AC7CAD100640173 /* DeleteAccountForm.swift */,
 			);
-			path = Account;
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		B58480A32AC76EE6007A655D /* Model */ = {
@@ -145,7 +145,7 @@
 				B578AB272AC635AE008CEAE1 /* Auth */,
 				B5BC6CA12ACB7CA700D1F842 /* Lists */,
 				B5BC6CA22ACB7CAC00D1F842 /* Todo */,
-				B584809D2AC76C24007A655D /* Account */,
+				B584809D2AC76C24007A655D /* Profile */,
 				B5BC6C9A2ACB76F700D1F842 /* Navigation */,
 				B54552872ACA37CC006135E8 /* General */,
 				B58480A32AC76EE6007A655D /* Model */,
@@ -286,7 +286,7 @@
 				B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */,
 				B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */,
 				B58480A52AC76EED007A655D /* User.swift in Sources */,
-				B5BC6CA02ACB7BF500D1F842 /* AccountNavigationStack.swift in Sources */,
+				B5BC6CA02ACB7BF500D1F842 /* ProfileNavigationStack.swift in Sources */,
 				B5E643CA2AC792ED0056A111 /* AppTabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

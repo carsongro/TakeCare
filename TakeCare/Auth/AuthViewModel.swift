@@ -61,6 +61,7 @@ final class TCAuthViewModel: @unchecked Sendable {
     
     func signOut() throws {
         try Auth.auth().signOut()
+        
         withAnimation {
             self.userSession = nil
             self.currentUser = nil
@@ -74,9 +75,21 @@ final class TCAuthViewModel: @unchecked Sendable {
     private func fetchCurrentUser() async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
-        withAnimation {
-            self.currentUser = try? snapshot.data(as: User.self)
+        do {
+            let snapshot = try await Firestore.firestore().collection("users").document(uid).getDocument()
+        
+            try withAnimation {
+                self.currentUser = try snapshot.data(as: User.self)
+            }
+        } catch {
+            do {
+                /// If the user is here, they have likely deleted an account they are logged into from another device
+                try signOut()
+            } catch {
+                /// This should not be possible but if it is it may be dangerous
+                /// for the app to operate in this state so we force crash
+                fatalError()
+            }
         }
     }
     
@@ -92,7 +105,7 @@ final class TCAuthViewModel: @unchecked Sendable {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         if currentUser?.photoURL != nil {
-            try await removeAccountImage()
+            try await removeProfileImage()
         }
         
         try? await Firestore.firestore().collection("users").document(uid).delete()
@@ -117,13 +130,13 @@ final class TCAuthViewModel: @unchecked Sendable {
         await fetchCurrentUser()
     }
     
-    func updateAccountImage(image: UIImage) async throws {
+    func updateProfileImage(image: UIImage) async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let photoURL = try await ImageManager.uploadImage(
             name: uid,
             image: image,
-            path: .account_images
+            path: .profile_images
         )
         
         try await Firestore.firestore().collection("users").document(uid).updateData(
@@ -133,7 +146,7 @@ final class TCAuthViewModel: @unchecked Sendable {
         await fetchCurrentUser()
     }
     
-    func removeAccountImage() async throws {
+    func removeProfileImage() async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         try await Firestore.firestore().collection("users").document(uid).updateData(
@@ -142,7 +155,7 @@ final class TCAuthViewModel: @unchecked Sendable {
         
         try await Firestore.firestore().collection("images").document(uid).delete()
         
-        try await ImageManager.deleteImage(name: uid, path: .account_images)
+        try await ImageManager.deleteImage(name: uid, path: .profile_images)
         
         await fetchCurrentUser()
         

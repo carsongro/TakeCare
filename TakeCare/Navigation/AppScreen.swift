@@ -10,7 +10,7 @@ import SwiftUI
 enum AppScreen: Codable, Hashable, Identifiable, CaseIterable {
     case lists
     case todo
-    case account
+    case profile
     
     var id: AppScreen { self }
 }
@@ -23,8 +23,8 @@ extension AppScreen {
             Label("Lists", systemImage: "list.bullet")
         case .todo:
             Label("To-Do", systemImage: "text.badge.checkmark")
-        case .account:
-            Label("Account", systemImage: "person")
+        case .profile:
+            Label("Profile", systemImage: "person")
         }
     }
     
@@ -35,8 +35,8 @@ extension AppScreen {
             ListsNavigationStack()
         case .todo:
             TodoNavigationStack()
-        case .account:
-            AccountNavigationStack()
+        case .profile:
+            ProfileNavigationStack()
         }
     }
 }

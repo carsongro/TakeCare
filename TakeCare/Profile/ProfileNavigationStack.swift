@@ -1,5 +1,5 @@
 //
-//  AccountNavigationStack.swift
+//  ProfileNavigationStack.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 10/2/23.
@@ -9,10 +9,10 @@ import SwiftUI
 import PhotosUI
 import Kingfisher
 
-struct AccountNavigationStack: View {
+struct ProfileNavigationStack: View {
     @Environment(TCAuthViewModel.self) private var viewModel
     
-    @State private var accountItem: PhotosPickerItem?
+    @State private var profileImageItem: PhotosPickerItem?
     @State private var showOptions = false
     @State private var presentingDeleteAccountSheet = false
     
@@ -24,7 +24,7 @@ struct AccountNavigationStack: View {
     @State private var showingErrorAlert = false
     @State private var showingSignOutConfirmation = false
     @State private var showingRemoveImageConfirmation = false
-    @State private var showingAccountImageConfirmation = false
+    @State private var showingProfileImageConfirmation = false
     @State private var showingPhotosPicker = false
     @State private var isUploadingImage = false
     
@@ -34,7 +34,7 @@ struct AccountNavigationStack: View {
                 List {
                     Section {
                         Button {
-                            showingAccountImageConfirmation = true
+                            showingProfileImageConfirmation = true
                         } label: {
                             ZStack {
                                 KFImage(URL(string:viewModel.currentUser?.photoURL ?? ""))
@@ -55,14 +55,14 @@ struct AccountNavigationStack: View {
                             }
                             
                         }
-                        .accessibilityLabel("Change account image")
-                        .confirmationDialog("Account Image", isPresented: $showingAccountImageConfirmation) {
-                            Button("Select account image") {
+                        .accessibilityLabel("Change profile image")
+                        .confirmationDialog("Profile Image", isPresented: $showingProfileImageConfirmation) {
+                            Button("Select profile image") {
                                 showingPhotosPicker = true
                             }
                             
                             if viewModel.currentUser?.photoURL != nil {
-                                Button("Remove account image") {
+                                Button("Remove profile image") {
                                     showingRemoveImageConfirmation = true
                                 }
                             }
@@ -89,10 +89,10 @@ struct AccountNavigationStack: View {
                         .foregroundStyle(.red)
                     }
                 }
-                .navigationTitle("Account")
-                .onChange(of: accountItem) { _, _ in
+                .navigationTitle("Profile")
+                .onChange(of: profileImageItem) { _, _ in
                     Task {
-                        if let data = try? await accountItem?.loadTransferable(type: Data.self) {
+                        if let data = try? await profileImageItem?.loadTransferable(type: Data.self) {
                             if let uiImage = UIImage(data: data) {
                                 defer {
                                     withAnimation {
@@ -103,16 +103,16 @@ struct AccountNavigationStack: View {
                                     withAnimation {
                                         isUploadingImage = true
                                     }
-                                    try await viewModel.updateAccountImage(image: uiImage)
-                                    accountItem = nil
+                                    try await viewModel.updateProfileImage(image: uiImage)
+                                    profileImageItem = nil
                                 } catch {
-                                    errorAlertText = "There was an error updating your account image"
+                                    errorAlertText = "There was an error updating your profile image"
                                 }
                             }
                         }
                     }
                 }
-                .photosPicker(isPresented: $showingPhotosPicker, selection: $accountItem)
+                .photosPicker(isPresented: $showingPhotosPicker, selection: $profileImageItem)
                 .sheet(isPresented: $presentingDeleteAccountSheet) {
                     DeleteAccountForm()
                 }
@@ -129,7 +129,7 @@ struct AccountNavigationStack: View {
                         }
                     }
                 }
-                .alert("Are you sure you want to remove your account photo?", isPresented: $showingRemoveImageConfirmation) {
+                .alert("Are you sure you want to remove your profile photo?", isPresented: $showingRemoveImageConfirmation) {
                     Button("Cancel", role: .cancel) { }
                     Button("Remove", role: .destructive) {
                         Task {
@@ -142,11 +142,11 @@ struct AccountNavigationStack: View {
                                 withAnimation {
                                     isUploadingImage = true
                                 }
-                                try await viewModel.removeAccountImage()
-                                accountItem = nil
+                                try await viewModel.removeProfileImage()
+                                profileImageItem = nil
                             } catch {
                                 print(error.localizedDescription)
-                                errorAlertText = "There was an error remove your account image."
+                                errorAlertText = "There was an error remove your profile image."
                             }
                         }
                     }
@@ -182,6 +182,6 @@ extension View {
         photoURL: nil
     )
     
-    return AccountNavigationStack()
+    return ProfileNavigationStack()
         .environment(viewModel)
 }

@@ -14,7 +14,7 @@ import UIKit
 final class ImageManager {
     
     enum ImagePath {
-        case account_images
+        case profile_images
     }
     
     private enum ImageUploadError: Error {
