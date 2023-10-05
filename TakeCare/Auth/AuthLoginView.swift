@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AuthLoginView: View, @unchecked Sendable {
-    @Environment(TCAuthViewModel.self) private var viewModel
+    @Environment(AuthModel.self) private var authModel
     
     enum Field {
         case email
@@ -93,7 +93,7 @@ struct AuthLoginView: View, @unchecked Sendable {
         Task {
             do {
                 await hideKeyboard()
-                try await viewModel.signIn(withEmail: email, password: password)
+                try await authModel.signIn(withEmail: email, password: password)
             } catch {
                 showingSignInAlert = true
             }
@@ -103,7 +103,7 @@ struct AuthLoginView: View, @unchecked Sendable {
 
 // MARK: PasswordFieldProtocol
 
-extension AuthLoginView: PasswordFieldProtocol {
+extension AuthLoginView: TextFieldProtocol {
     var textFieldsAreValid: Bool {
         !email.isEmpty
         && email.contains("@")
@@ -114,5 +114,5 @@ extension AuthLoginView: PasswordFieldProtocol {
 
 #Preview {
     AuthLoginView()
-        .environment(TCAuthViewModel())
+        .environment(AuthModel())
 }

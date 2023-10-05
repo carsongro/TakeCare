@@ -1,5 +1,5 @@
 //
-//  TCviewModel.swift
+//  TCauthModel.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 9/29/23.
@@ -9,12 +9,13 @@ import SwiftUI
 @preconcurrency import Firebase
 import FirebaseFirestoreSwift
 
-protocol PasswordFieldProtocol {
+protocol TextFieldProtocol {
     var textFieldsAreValid: Bool { get }
 }
 
 @Observable
-final class TCAuthViewModel: @unchecked Sendable {
+/// A authModel representing providing everything to manage users account, profile, and authentication
+final class AuthModel: @unchecked Sendable {
     var userSession: FirebaseAuth.User?
     var currentUser: User?
     
@@ -25,6 +26,8 @@ final class TCAuthViewModel: @unchecked Sendable {
             await fetchCurrentUser()
         }
     }
+    
+    // MARK: Authentication
     
     func signIn(withEmail email: String, password: String) async throws {
         let result = try await Auth.auth().signIn(withEmail: email, password: password)

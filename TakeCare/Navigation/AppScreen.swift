@@ -32,7 +32,7 @@ extension AppScreen {
     var destination: some View {
         switch self {
         case .lists:
-            ListsNavigationStack()
+            ListNavigationStack()
         case .todo:
             TodoNavigationStack()
         case .profile:

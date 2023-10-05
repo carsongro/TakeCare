@@ -10,7 +10,7 @@ import PhotosUI
 import Kingfisher
 
 struct ProfileNavigationStack: View {
-    @Environment(TCAuthViewModel.self) private var viewModel
+    @Environment(AuthModel.self) private var authModel
     
     @State private var profileImageItem: PhotosPickerItem?
     @State private var showOptions = false
@@ -30,14 +30,14 @@ struct ProfileNavigationStack: View {
     
     var body: some View {
         NavigationStack {
-            if let user = viewModel.currentUser {
+            if let user = authModel.currentUser {
                 List {
                     Section {
                         Button {
                             showingProfileImageConfirmation = true
                         } label: {
                             ZStack {
-                                KFImage(URL(string:viewModel.currentUser?.photoURL ?? ""))
+                                KFImage(URL(string:authModel.currentUser?.photoURL ?? ""))
                                     .placeholder { _ in
                                         Image(systemName: "person.circle.fill")
                                             .resizable()
@@ -61,7 +61,7 @@ struct ProfileNavigationStack: View {
                                 showingPhotosPicker = true
                             }
                             
-                            if viewModel.currentUser?.photoURL != nil {
+                            if authModel.currentUser?.photoURL != nil {
                                 Button("Remove profile image") {
                                     showingRemoveImageConfirmation = true
                                 }
@@ -103,7 +103,7 @@ struct ProfileNavigationStack: View {
                                     withAnimation {
                                         isUploadingImage = true
                                     }
-                                    try await viewModel.updateProfileImage(image: uiImage)
+                                    try await authModel.updateProfileImage(image: uiImage)
                                     profileImageItem = nil
                                 } catch {
                                     errorAlertText = "There was an error updating your profile image"
@@ -123,7 +123,7 @@ struct ProfileNavigationStack: View {
                     Button("Cancel", role: .cancel) { }
                     Button("Sign Out") {
                         do {
-                            try viewModel.signOut()
+                            try authModel.signOut()
                         } catch {
                             errorAlertText = "There was an error signing out."
                         }
@@ -142,7 +142,7 @@ struct ProfileNavigationStack: View {
                                 withAnimation {
                                     isUploadingImage = true
                                 }
-                                try await viewModel.removeProfileImage()
+                                try await authModel.removeProfileImage()
                                 profileImageItem = nil
                             } catch {
                                 print(error.localizedDescription)
@@ -174,8 +174,8 @@ extension View {
 }
 
 #Preview {
-    let viewModel = TCAuthViewModel()
-    viewModel.currentUser = User(
+    let authModel = AuthModel()
+    authModel.currentUser = User(
         id: "",
         displayName: "Carson Gross",
         email: "example@example.com",
@@ -183,5 +183,5 @@ extension View {
     )
     
     return ProfileNavigationStack()
-        .environment(viewModel)
+        .environment(authModel)
 }

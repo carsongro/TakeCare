@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PasswordResetForm: View, @unchecked Sendable {
-    @Environment(TCAuthViewModel.self) private var viewModel
+    @Environment(AuthModel.self) private var authModel
     @Environment(\.dismiss) private var dismiss
     
     @State private var email = ""
@@ -69,7 +69,7 @@ struct PasswordResetForm: View, @unchecked Sendable {
     private func sendResetLink() {
         Task {
             do {
-                try await viewModel.sendPasswordResetEmail(withEmail: email)
+                try await authModel.sendPasswordResetEmail(withEmail: email)
                 showingSuccessAlert = true
             } catch {
                 showingErrorAlert = true
@@ -80,7 +80,7 @@ struct PasswordResetForm: View, @unchecked Sendable {
 
 // MARK: PasswordFieldProtocol
 
-extension PasswordResetForm: PasswordFieldProtocol {
+extension PasswordResetForm: TextFieldProtocol {
     var textFieldsAreValid: Bool {
         !email.isEmpty
         && email.contains("@")
@@ -90,6 +90,6 @@ extension PasswordResetForm: PasswordFieldProtocol {
 #Preview {
     NavigationStack {
         PasswordResetForm()
-            .environment(TCAuthViewModel())
+            .environment(AuthModel())
     }
 }

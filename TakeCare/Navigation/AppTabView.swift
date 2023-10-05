@@ -9,7 +9,8 @@ import SwiftUI
 
 struct AppTabView: View {
     @Binding var selection: AppScreen?
-    @Environment(TCAuthViewModel.self) private var viewModel
+    @Environment(AuthModel.self) private var authModel
+    @Environment(ListsModel.self) private var listsModel
     
     var body: some View {
         TabView(selection: $selection) {
@@ -19,11 +20,12 @@ struct AppTabView: View {
                     .tabItem { screen.label }
             }
         }
-        .environment(viewModel)
+        .environment(authModel)
+        .environment(listsModel)
     }
 }
 
 #Preview {
     AppTabView(selection: .constant(.lists))
-        .environment(TCAuthViewModel())
+        .environment(AuthModel())
 }

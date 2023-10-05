@@ -8,19 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var viewModel = TCAuthViewModel()
+    @State private var authModel = AuthModel()
+    @State private var listsModel = ListsModel()
     @State private var selection: AppScreen? = .lists
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     var body: some View {
-        if viewModel.userSession == nil {
+        if authModel.userSession == nil {
             AuthLoginView()
-                .environment(viewModel)
+                .environment(authModel)
+                .environment(listsModel)
                 .transition(.move(edge: .bottom))
         } else {
             if prefersTabNavigation {
                 AppTabView(selection: $selection)
-                    .environment(viewModel)
+                    .environment(authModel)
+                    .environment(listsModel)
                     .transition(.move(edge: .bottom))
             } else {
                 NavigationSplitView {
@@ -29,7 +32,8 @@ struct ContentView: View {
                     AppDetailColumn(screen: selection)
                 }
                 .transition(.move(edge: .bottom))
-                .environment(viewModel)
+                .environment(authModel)
+                .environment(listsModel)
             }
         }
     }

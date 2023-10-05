@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct UpdateEmailForm: View {
-    @Environment(TCAuthViewModel.self) private var viewModel
+    @Environment(AuthModel.self) private var authModel
     @Environment(\.dismiss) private var dismiss
     
     enum Field {
@@ -83,12 +83,12 @@ struct UpdateEmailForm: View {
                     Button("Submit") {
                         Task {
                             do {
-                                try await viewModel.reAuthenticateUser(
+                                try await authModel.reAuthenticateUser(
                                     withEmail: currentEmail,
                                     password: password
                                 )
                                 
-                                try await viewModel.updateEmail(to: newEmail)
+                                try await authModel.updateEmail(to: newEmail)
                             } catch {
                                 showingErrorAlert = true
                             }
@@ -125,7 +125,7 @@ struct UpdateEmailForm: View {
     }
 }
 
-extension UpdateEmailForm: PasswordFieldProtocol {
+extension UpdateEmailForm: TextFieldProtocol {
     var textFieldsAreValid: Bool {
         !currentEmail.isEmpty
         && currentEmail.contains("@")
@@ -141,6 +141,6 @@ extension UpdateEmailForm: PasswordFieldProtocol {
 #Preview {
     NavigationStack {
         UpdateEmailForm()
-            .environment(TCAuthViewModel())
+            .environment(AuthModel())
     }
 }

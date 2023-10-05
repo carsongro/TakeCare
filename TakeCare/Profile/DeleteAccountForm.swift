@@ -10,7 +10,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct DeleteAccountForm: View {
-    @Environment(TCAuthViewModel.self) private var viewModel
+    @Environment(AuthModel.self) private var authModel
     @Environment(\.dismiss) private var dismiss
     
     enum Field {
@@ -101,12 +101,12 @@ struct DeleteAccountForm: View {
                 Button("Delete", role: .destructive) {
                     Task {
                         do {
-                            try await viewModel.reAuthenticateUser(
+                            try await authModel.reAuthenticateUser(
                                 withEmail: email,
                                 password: password
                             )
                             
-                            try await viewModel.deleteCurrentUser()
+                            try await authModel.deleteCurrentUser()
                         } catch {
                             showingErrorAlert = true
                         }
@@ -117,7 +117,7 @@ struct DeleteAccountForm: View {
     }
 }
 
-extension DeleteAccountForm: PasswordFieldProtocol {
+extension DeleteAccountForm: TextFieldProtocol {
     var textFieldsAreValid: Bool {
         !email.isEmpty
         && email.contains("@")
@@ -130,6 +130,6 @@ extension DeleteAccountForm: PasswordFieldProtocol {
 #Preview {
     NavigationStack {
         DeleteAccountForm()
-            .environment(TCAuthViewModel())
+            .environment(AuthModel())
     }
 }
