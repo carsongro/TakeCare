@@ -15,6 +15,7 @@ final class ImageManager {
     
     enum ImagePath {
         case profile_images
+        case list_images
     }
     
     private enum ImageUploadError: Error {

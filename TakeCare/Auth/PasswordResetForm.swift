@@ -20,7 +20,7 @@ struct PasswordResetForm: View, @unchecked Sendable {
             Form {
                 Section {
                     Text("You will receive a link to reset your password in your email.")
-                        .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                        .listRowBackground(Color(.systemGroupedBackground))
                 }
                 
                 Section("Email") {
@@ -42,7 +42,7 @@ struct PasswordResetForm: View, @unchecked Sendable {
                     .buttonStyle(.borderedProminent)
                     .disabled(!textFieldsAreValid)
                     .frame(maxWidth: .infinity)
-                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                    .listRowBackground(Color(.systemGroupedBackground))
                 }
             }
             .toolbar {

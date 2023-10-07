@@ -67,7 +67,7 @@ struct AuthCreateAccountView: View, @unchecked Sendable {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(!textFieldsAreValid)
-                .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                .listRowBackground(Color(.systemGroupedBackground))
                 .frame(maxWidth: .infinity)
             }
             

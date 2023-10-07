@@ -5,7 +5,7 @@
 //  Created by Carson Gross on 10/4/23.
 //
 
-import Foundation
+import SwiftUI
 import Firebase
 import FirebaseFirestoreSwift
 
@@ -15,6 +15,7 @@ import FirebaseFirestoreSwift
     
     init() {
         Task {
+            
             await fetchLists()
         }
     }
@@ -28,34 +29,35 @@ import FirebaseFirestoreSwift
         }
     }
     
-    func createList(list: TakeCareList) async throws {
+    func createList(name: String, description: String?, recipients: [User], tasks: [ListTask], listImage: UIImage?) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        var photoURL: String? = nil
+        if let image = listImage {
+            photoURL = try await ImageManager.uploadImage(image: image, path: .list_images)
+        }
+        
+        let list = TakeCareList(
+            ownerID: uid,
+            name: name,
+            description: description,
+            recipients: recipients,
+            tasks: tasks,
+            photoURL: photoURL
+        )
+        
         let docRef = Firestore.firestore().collection("lists").document()
-        
-//        let id = docRef.documentID // Reference showing how to get id from document
-        
         try docRef.setData(from: list)
         
-        // TODO: If there is a recipient on the list, send them an invite
+        for recipient in list.recipients {
+            try await sendListInvite(to: recipient)
+        }
+        
+        await fetchLists()
     }
     
-    func addTask(_ task: ListTask) async throws {
-        
-    }
-    
-    func updateTask() async throws {
-        
-    }
-    
-    func removeTask(_ task: ListTask) async throws {
-        
-    }
-    
-    func updateListName(to name: String) async throws {
-        
-    }
-    
-    func updateListRecipient(to userID: String) async throws {
-        
+    func updateList(to list: TakeCareList) async throws {
+        // TODO: Implement this
     }
     
     func deleteList(_ list: TakeCareList) async throws {
@@ -63,5 +65,9 @@ import FirebaseFirestoreSwift
         
         let docRef = Firestore.firestore().collection("lists").document(id)
         try await docRef.delete()
+    }
+    
+    private func sendListInvite(to recipient: User) async throws {
+        // TODO: Implement this
     }
 }

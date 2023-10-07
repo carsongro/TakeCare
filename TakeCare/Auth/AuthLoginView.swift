@@ -65,7 +65,7 @@ struct AuthLoginView: View, @unchecked Sendable {
                     .buttonStyle(.borderedProminent)
                     .disabled(!textFieldsAreValid)
                     .frame(maxWidth: .infinity)
-                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                    .listRowBackground(Color(.systemGroupedBackground))
                 }
             }
             .formStyle(.grouped)

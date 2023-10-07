@@ -37,7 +37,7 @@ struct UpdateEmailForm: View {
                         .font(.title3)
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.center)
-                        .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                        .listRowBackground(Color(.systemGroupedBackground))
                 }
                 
                 Section("New email") {
@@ -96,7 +96,7 @@ struct UpdateEmailForm: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(!textFieldsAreValid)
-                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                    .listRowBackground(Color(.systemGroupedBackground))
                     .frame(maxWidth: .infinity)
                 }
             }

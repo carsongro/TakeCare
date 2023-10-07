@@ -35,7 +35,7 @@ struct DeleteAccountForm: View {
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
-                        .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                        .listRowBackground(Color(.systemGroupedBackground))
                 }
                 
                 Section("Email") {
@@ -76,7 +76,7 @@ struct DeleteAccountForm: View {
                     .disabled(!textFieldsAreValid)
                     .buttonStyle(.bordered)
                     .foregroundStyle(.red)
-                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                    .listRowBackground(Color(.systemGroupedBackground))
                     .frame(maxWidth: .infinity)
                 }
             }

@@ -53,11 +53,10 @@ struct ProfileNavigationStack: View {
                                     ProgressView()
                                 }
                             }
-                            
                         }
                         .accessibilityLabel("Change profile image")
                         .confirmationDialog("Profile Image", isPresented: $showingProfileImageConfirmation) {
-                            Button("Select profile image") {
+                            Button("Choose Photo") {
                                 showingPhotosPicker = true
                             }
                             
@@ -68,7 +67,7 @@ struct ProfileNavigationStack: View {
                             }
                         }
                     }
-                    .listRowBackground(Color(uiColor: .systemGroupedBackground))
+                    .listRowBackground(Color(.systemGroupedBackground))
                     
                     Section("Details") {
                         Text(user.displayName)
@@ -90,6 +89,7 @@ struct ProfileNavigationStack: View {
                     }
                 }
                 .navigationTitle("Profile")
+                .photosPicker(isPresented: $showingPhotosPicker, selection: $profileImageItem)
                 .onChange(of: profileImageItem) { _, _ in
                     Task {
                         if let data = try? await profileImageItem?.loadTransferable(type: Data.self) {
@@ -112,7 +112,6 @@ struct ProfileNavigationStack: View {
                         }
                     }
                 }
-                .photosPicker(isPresented: $showingPhotosPicker, selection: $profileImageItem)
                 .sheet(isPresented: $presentingDeleteAccountSheet) {
                     DeleteAccountForm()
                 }

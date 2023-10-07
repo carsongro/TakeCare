@@ -10,12 +10,14 @@ import FirebaseFirestoreSwift
 import Foundation
 
 
-struct TakeCareList: Codable, Hashable, Equatable, Identifiable {
+struct TakeCareList: Codable, Hashable, Equatable, Identifiable, @unchecked Sendable {
     @DocumentID var id: String?
     let ownerID: String
     let name: String
-    let recipientID: String?
+    let description: String?
+    let recipients: [User]
     let tasks: [ListTask]
+    let photoURL: String?
     
     static func == (lhs: TakeCareList, rhs: TakeCareList) -> Bool {
         lhs.id == rhs.id

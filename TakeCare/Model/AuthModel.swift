@@ -111,6 +111,15 @@ final class AuthModel: @unchecked Sendable {
             try await removeProfileImage()
         }
         
+        // Delete their lists
+        let listsids = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self).id }
+        
+        for id in listsids {
+            let docRef = Firestore.firestore().collection("lists").document(id)
+            try await docRef.delete()
+        }
+
+        
         try? await Firestore.firestore().collection("users").document(uid).delete()
         try await Auth.auth().currentUser?.delete()
         withAnimation {

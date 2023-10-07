@@ -17,17 +17,21 @@ struct ListNavigationStack: View {
         @Bindable var listsModel = listsModel
         NavigationStack {
             List {
-                newListRow
-                    .listRowSeparator(.hidden, edges: .top)
-                
-                ForEach(listsModel.lists, id:\.self) { list in
-                    NavigationLink {
-                        ListView(list: list)
-                    } label: {
-                        ListRow(list: list)
+                Section {
+                    newListRow
+                        .listRowSeparator(.hidden, edges: .top)    
+                        .listRowBackground(Color(.systemBackground))
+                    
+                    ForEach(listsModel.lists, id:\.self) { list in
+                        NavigationLink {
+                            ListView(list: list)
+                        } label: {
+                            ListRow(list: list)
+                        }
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
             .navigationTitle("Lists")
             .listStyle(.grouped)
             .searchable(text: $searchText) // TODO: Implement this

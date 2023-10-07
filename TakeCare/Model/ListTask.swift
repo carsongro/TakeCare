@@ -9,7 +9,7 @@ import Firebase
 import FirebaseFirestoreSwift
 import Foundation
 
-struct ListTask: Codable {
+struct ListTask: Codable, Hashable {
     let name: String
     let notes: String?
     let completionDate: Date?

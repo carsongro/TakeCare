@@ -21,14 +21,16 @@ struct ListView: View {
             id: nil,
             ownerID: "",
             name: "Carson's list",
-            recipientID: "",
+            description: "Description for list here",
+            recipients: [],
             tasks: [
                 ListTask(
                     name: "Go for walk",
                     notes: "Walk around outside?",
                     completionDate: nil
                 )
-            ]
+            ],
+            photoURL: nil
         )
     )
 }

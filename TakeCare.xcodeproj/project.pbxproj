@@ -30,6 +30,13 @@
 		B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A14002AC520A20045D191 /* TakeCareApp.swift */; };
 		B58A14052AC520A30045D191 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14042AC520A30045D191 /* Assets.xcassets */; };
 		B58A14092AC520A30045D191 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14082AC520A30045D191 /* Preview Assets.xcassets */; };
+		B595D6E32AD0B18400B022E0 /* ListCreateTaskForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6E22AD0B18400B022E0 /* ListCreateTaskForm.swift */; };
+		B595D6E52AD0B3D300B022E0 /* ListChooseListImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6E42AD0B3D300B022E0 /* ListChooseListImageView.swift */; };
+		B595D6E72AD0B47000B022E0 /* ListAddTasksButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6E62AD0B47000B022E0 /* ListAddTasksButton.swift */; };
+		B595D6E92AD0B67100B022E0 /* ListTaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6E82AD0B67100B022E0 /* ListTaskRow.swift */; };
+		B595D6EB2AD0BF0900B022E0 /* ListAddRecipientButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6EA2AD0BF0900B022E0 /* ListAddRecipientButton.swift */; };
+		B595D6ED2AD0BF7800B022E0 /* ListAddRecipientForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6EC2AD0BF7800B022E0 /* ListAddRecipientForm.swift */; };
+		B595D6EF2AD0C70000B022E0 /* ListRecipientRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6EE2AD0C70000B022E0 /* ListRecipientRow.swift */; };
 		B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9D2ACB772A00D1F842 /* AppScreen.swift */; };
 		B5BC6CA02ACB7BF500D1F842 /* ProfileNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9F2ACB7BF500D1F842 /* ProfileNavigationStack.swift */; };
 		B5BC6CA42ACB7CBF00D1F842 /* ListNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CA32ACB7CBF00D1F842 /* ListNavigationStack.swift */; };
@@ -64,6 +71,13 @@
 		B58A14042AC520A30045D191 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B58A14062AC520A30045D191 /* TakeCare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TakeCare.entitlements; sourceTree = "<group>"; };
 		B58A14082AC520A30045D191 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B595D6E22AD0B18400B022E0 /* ListCreateTaskForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCreateTaskForm.swift; sourceTree = "<group>"; };
+		B595D6E42AD0B3D300B022E0 /* ListChooseListImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListChooseListImageView.swift; sourceTree = "<group>"; };
+		B595D6E62AD0B47000B022E0 /* ListAddTasksButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAddTasksButton.swift; sourceTree = "<group>"; };
+		B595D6E82AD0B67100B022E0 /* ListTaskRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTaskRow.swift; sourceTree = "<group>"; };
+		B595D6EA2AD0BF0900B022E0 /* ListAddRecipientButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAddRecipientButton.swift; sourceTree = "<group>"; };
+		B595D6EC2AD0BF7800B022E0 /* ListAddRecipientForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAddRecipientForm.swift; sourceTree = "<group>"; };
+		B595D6EE2AD0C70000B022E0 /* ListRecipientRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRecipientRow.swift; sourceTree = "<group>"; };
 		B5BC6C9D2ACB772A00D1F842 /* AppScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreen.swift; sourceTree = "<group>"; };
 		B5BC6C9F2ACB7BF500D1F842 /* ProfileNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNavigationStack.swift; sourceTree = "<group>"; };
 		B5BC6CA32ACB7CBF00D1F842 /* ListNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListNavigationStack.swift; sourceTree = "<group>"; };
@@ -192,6 +206,13 @@
 			children = (
 				B5BC6CA32ACB7CBF00D1F842 /* ListNavigationStack.swift */,
 				B52D1CC02ACE5FE60024F6A7 /* ListCreateListForm.swift */,
+				B595D6EA2AD0BF0900B022E0 /* ListAddRecipientButton.swift */,
+				B595D6EC2AD0BF7800B022E0 /* ListAddRecipientForm.swift */,
+				B595D6E62AD0B47000B022E0 /* ListAddTasksButton.swift */,
+				B595D6EE2AD0C70000B022E0 /* ListRecipientRow.swift */,
+				B595D6E42AD0B3D300B022E0 /* ListChooseListImageView.swift */,
+				B595D6E22AD0B18400B022E0 /* ListCreateTaskForm.swift */,
+				B595D6E82AD0B67100B022E0 /* ListTaskRow.swift */,
 				B52D1CC22ACE60510024F6A7 /* ListRow.swift */,
 				B52D1CC42ACE63850024F6A7 /* ListView.swift */,
 			);
@@ -292,6 +313,7 @@
 				B50341A52AC7952E0075FFF2 /* PasswordResetForm.swift in Sources */,
 				B52D1CC32ACE60510024F6A7 /* ListRow.swift in Sources */,
 				B58480972AC76625007A655D /* AuthLoginView.swift in Sources */,
+				B595D6ED2AD0BF7800B022E0 /* ListAddRecipientForm.swift in Sources */,
 				B52D1CC52ACE63850024F6A7 /* ListView.swift in Sources */,
 				B5BC6CAC2ACB7E1000D1F842 /* AppSidebarList.swift in Sources */,
 				B5E643C82AC7924B0056A111 /* ContentView.swift in Sources */,
@@ -300,10 +322,13 @@
 				B5BC6CA82ACB7CFD00D1F842 /* TodoNavigationStack.swift in Sources */,
 				B55B80062AC7CB9200640173 /* UpdateEmailForm.swift in Sources */,
 				B58480E32AC77608007A655D /* AuthModel.swift in Sources */,
+				B595D6EF2AD0C70000B022E0 /* ListRecipientRow.swift in Sources */,
 				B5BC6CAE2ACB7E6700D1F842 /* AppDetailColumn.swift in Sources */,
 				B55B80042AC7CAD100640173 /* DeleteAccountForm.swift in Sources */,
+				B595D6E32AD0B18400B022E0 /* ListCreateTaskForm.swift in Sources */,
 				B54552892ACA37D2006135E8 /* Extensions.swift in Sources */,
 				B52D1CC12ACE5FE60024F6A7 /* ListCreateListForm.swift in Sources */,
+				B595D6EB2AD0BF0900B022E0 /* ListAddRecipientButton.swift in Sources */,
 				B52D1CBD2ACE3A480024F6A7 /* TakeCareList.swift in Sources */,
 				B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */,
 				B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */,
@@ -311,7 +336,10 @@
 				B5BC6CA02ACB7BF500D1F842 /* ProfileNavigationStack.swift in Sources */,
 				B52D1CBB2ACE38E40024F6A7 /* ListsModel.swift in Sources */,
 				B52D1CBF2ACE3B1C0024F6A7 /* ListTask.swift in Sources */,
+				B595D6E72AD0B47000B022E0 /* ListAddTasksButton.swift in Sources */,
 				B5E643CA2AC792ED0056A111 /* AppTabView.swift in Sources */,
+				B595D6E52AD0B3D300B022E0 /* ListChooseListImageView.swift in Sources */,
+				B595D6E92AD0B67100B022E0 /* ListTaskRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +472,7 @@
 				DEVELOPMENT_TEAM = HV69QD4SV2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TakeCare/Info.plist;
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Please allow access to your photos.";
@@ -485,6 +514,7 @@
 				DEVELOPMENT_TEAM = HV69QD4SV2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TakeCare/Info.plist;
 				INFOPLIST_KEY_NSAppleMusicUsageDescription = "Please allow access to your photos.";
