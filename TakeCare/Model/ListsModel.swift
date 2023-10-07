@@ -15,7 +15,6 @@ import FirebaseFirestoreSwift
     
     init() {
         Task {
-            
             await fetchLists()
         }
     }
@@ -23,7 +22,11 @@ import FirebaseFirestoreSwift
     func fetchLists() async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         do {
-            lists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
+            let lists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
+            
+            withAnimation {
+                self.lists = lists
+            }
         } catch {
             print(error.localizedDescription)
         }
