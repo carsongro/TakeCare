@@ -10,7 +10,16 @@ import FirebaseFirestoreSwift
 import Foundation
 
 struct ListTask: Codable, Hashable {
-    let name: String
+    let id: String
+    let title: String
     let notes: String?
     let completionDate: Date?
+    let repeatInterval: TaskRepeatInterval
+}
+
+enum TaskRepeatInterval: String, CaseIterable, Codable {
+    case never = "Never"
+    case daily = "Daily"
+    case weekly = "Weekly"
+    case everyOtherDay = "Every other day"
 }

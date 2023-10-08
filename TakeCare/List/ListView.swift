@@ -16,21 +16,5 @@ struct ListView: View {
 }
 
 #Preview {
-    ListView(
-        list: TakeCareList(
-            id: nil,
-            ownerID: "",
-            name: "Carson's list",
-            description: "Description for list here",
-            recipients: [],
-            tasks: [
-                ListTask(
-                    name: "Go for walk",
-                    notes: "Walk around outside?",
-                    completionDate: nil
-                )
-            ],
-            photoURL: nil
-        )
-    )
+    ListView(list: PreviewData.previewTakeCareList)
 }

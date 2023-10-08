@@ -8,20 +8,29 @@
 import SwiftUI
 
 struct ListAddRecipientButton: View {
-    @Binding var recipients: [User]
+    @Binding var recipient: User?
     
     @State private var showingAddPeopleForm = false
     
     var body: some View {
-        Button("Add People", systemImage: "person.2") {
+        Button(recipient == nil ? "Add Recipient" : "Change Recipient", systemImage: "person") {
             showingAddPeopleForm = true
         }
         .sheet(isPresented: $showingAddPeopleForm) {
-            ListAddRecipientForm(recipients: $recipients)
+            ListAddRecipientForm(recipient: $recipient)
         }
     }
 }
 
 #Preview {
-    ListAddRecipientButton(recipients: .constant([]))
+    ListAddRecipientButton(
+        recipient: .constant(
+            User(
+                id: "",
+                displayName: "",
+                email: "",
+                photoURL: nil
+            )
+        )
+    )
 }

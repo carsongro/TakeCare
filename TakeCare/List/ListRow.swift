@@ -31,24 +31,19 @@ struct ListRow: View {
                         .lineLimit(1)
                 }
                 
-                Text(listedRecipients)
-                    .lineLimit(1)
-                    .accessibility(label: Text("Recipients: \(listedRecipients).",
-                                               comment: "Accessibility label containing the full list of list recipients"))
-                    .foregroundStyle(.secondary)
+                if let recipientName = list.recipient?.displayName {
+                    Text(recipientName)
+                        .lineLimit(1)
+                        .accessibility(label: Text("Recipient: \(recipientName).",
+                                                   comment: "Accessibility label containing the recipient"))
+                        .foregroundStyle(.secondary)
+                }
             }
             
             Spacer(minLength: 0)
                 
         }
         .font(.subheadline)
-    }
-    
-    var listedRecipients: String {
-        guard !list.recipients.isEmpty else { return "" }
-        var recipientsList = [String]()
-        recipientsList.append(contentsOf: list.recipients.compactMap { $0.displayName.localizedCapitalized })
-        return ListFormatter.localizedString(byJoining: recipientsList)
     }
 }
 
@@ -78,34 +73,5 @@ extension View {
 }
 
 #Preview {
-    ListRow(
-        list: TakeCareList(
-            id: nil,
-            ownerID: "",
-            name: "Carson's list",
-            description: "Description for this list.",
-            recipients: [
-                User(
-                    id: UUID().uuidString,
-                    displayName: "Carson Gross",
-                    email: "test@test.com",
-                    photoURL: nil
-                ),
-                User(
-                    id: UUID().uuidString,
-                    displayName: "Test Testing",
-                    email: "test@test.com",
-                    photoURL: nil
-                )
-            ],
-            tasks: [
-                ListTask(
-                    name: "Go for walk",
-                    notes: "Walk around outside?",
-                    completionDate: nil
-                )
-            ],
-            photoURL: nil
-        )
-    )
+    ListRow(list: PreviewData.previewTakeCareList)
 }

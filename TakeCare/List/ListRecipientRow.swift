@@ -46,6 +46,7 @@ struct RecipientRowImage: ViewModifier {
     func body(content: Content) -> some View {
         content
             .contentShape(Circle())
+            .clipShape(Circle())
             .aspectRatio(contentMode: .fill)
             .frame(width: 60, height: 60)
             .accessibilityHidden(true)

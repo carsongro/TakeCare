@@ -22,6 +22,7 @@
 		B54552892ACA37D2006135E8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54552882ACA37D2006135E8 /* Extensions.swift */; };
 		B55B80042AC7CAD100640173 /* DeleteAccountForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80032AC7CAD100640173 /* DeleteAccountForm.swift */; };
 		B55B80062AC7CB9200640173 /* UpdateEmailForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B55B80052AC7CB9200640173 /* UpdateEmailForm.swift */; };
+		B568B1AA2AD35CA900E389BD /* PreviewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B568B1A92AD35CA900E389BD /* PreviewData.swift */; };
 		B58480972AC76625007A655D /* AuthLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480962AC76625007A655D /* AuthLoginView.swift */; };
 		B584809C2AC76A39007A655D /* AuthCreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B584809B2AC76A39007A655D /* AuthCreateAccountView.swift */; };
 		B58480A52AC76EED007A655D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58480A42AC76EED007A655D /* User.swift */; };
@@ -61,6 +62,7 @@
 		B54552882ACA37D2006135E8 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B55B80032AC7CAD100640173 /* DeleteAccountForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountForm.swift; sourceTree = "<group>"; };
 		B55B80052AC7CB9200640173 /* UpdateEmailForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateEmailForm.swift; sourceTree = "<group>"; };
+		B568B1A92AD35CA900E389BD /* PreviewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewData.swift; sourceTree = "<group>"; };
 		B58480962AC76625007A655D /* AuthLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthLoginView.swift; sourceTree = "<group>"; };
 		B584809B2AC76A39007A655D /* AuthCreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCreateAccountView.swift; sourceTree = "<group>"; };
 		B58480A42AC76EED007A655D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 			children = (
 				B50066EC2AC90514008826B7 /* ImageManager.swift */,
 				B54552882ACA37D2006135E8 /* Extensions.swift */,
+				B568B1A92AD35CA900E389BD /* PreviewData.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				B55B80062AC7CB9200640173 /* UpdateEmailForm.swift in Sources */,
 				B58480E32AC77608007A655D /* AuthModel.swift in Sources */,
 				B595D6EF2AD0C70000B022E0 /* ListRecipientRow.swift in Sources */,
+				B568B1AA2AD35CA900E389BD /* PreviewData.swift in Sources */,
 				B5BC6CAE2ACB7E6700D1F842 /* AppDetailColumn.swift in Sources */,
 				B55B80042AC7CAD100640173 /* DeleteAccountForm.swift in Sources */,
 				B595D6E32AD0B18400B022E0 /* ListCreateTaskForm.swift in Sources */,

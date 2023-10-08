@@ -15,9 +15,10 @@ struct TakeCareList: Codable, Hashable, Equatable, Identifiable, @unchecked Send
     let ownerID: String
     let name: String
     let description: String?
-    let recipients: [User]
+    let recipient: User?
     let tasks: [ListTask]
     let photoURL: String?
+    let isActive: Bool
     
     static func == (lhs: TakeCareList, rhs: TakeCareList) -> Bool {
         lhs.id == rhs.id

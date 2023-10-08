@@ -32,7 +32,7 @@ import FirebaseFirestoreSwift
         }
     }
     
-    func createList(name: String, description: String?, recipients: [User], tasks: [ListTask], listImage: UIImage?) async throws {
+    func createList(name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: UIImage?) async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         var photoURL: String? = nil
@@ -44,15 +44,16 @@ import FirebaseFirestoreSwift
             ownerID: uid,
             name: name,
             description: description,
-            recipients: recipients,
+            recipient: recipient,
             tasks: tasks,
-            photoURL: photoURL
+            photoURL: photoURL,
+            isActive: false
         )
         
         let docRef = Firestore.firestore().collection("lists").document()
         try docRef.setData(from: list)
         
-        for recipient in list.recipients {
+        if let recipient = recipient {
             try await sendListInvite(to: recipient)
         }
         
@@ -68,6 +69,11 @@ import FirebaseFirestoreSwift
         
         let docRef = Firestore.firestore().collection("lists").document(id)
         try await docRef.delete()
+    }
+    
+    func searchUser(email: String) async throws -> [User] {
+        let users = try await Firestore.firestore().collection("users").whereField("email", isEqualTo: email.lowercased()).getDocuments().documents.compactMap { try $0.data(as: User.self) }
+        return users
     }
     
     private func sendListInvite(to recipient: User) async throws {

@@ -14,7 +14,7 @@ struct ListTaskRow: View {
     var body: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading) {
-                Text(task.name)
+                Text(task.title)
                     .font(.headline)
                 
                 if let notes = task.notes {
@@ -22,10 +22,11 @@ struct ListTaskRow: View {
                         .lineLimit(2)
                         .accessibility(label: Text("Task notes: \(notes)", comment: "Accessibility label containing the full task notes"))
                 }
-                
-                Text(task.completionDate?.formatted(date: .abbreviated, time: .shortened) ?? "")
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
+                if let completionDate = task.completionDate {
+                    Text("\(completionDate.formatted(date: .abbreviated, time: .shortened)), Repeats: \(task.repeatInterval.rawValue)")
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
             }
             
             Spacer(minLength: 0)
@@ -36,11 +37,5 @@ struct ListTaskRow: View {
 }
 
 #Preview {
-    ListTaskRow(
-        task: ListTask(
-            name: "Feed Cat",
-            notes: "Make sure to give her the right amount of food",
-            completionDate: Date.now
-        )
-    )
+    ListTaskRow(task: PreviewData.previewListTask)
 }

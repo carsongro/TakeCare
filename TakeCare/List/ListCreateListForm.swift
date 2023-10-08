@@ -14,7 +14,7 @@ struct ListCreateListForm: View, @unchecked Sendable {
     
     @State private var name = ""
     @State private var description = ""
-    @State private var recipients = [User]()
+    @State private var recipient: User?
     @State private var tasks = [ListTask]()
     @State private var listImage: UIImage?
     
@@ -35,13 +35,11 @@ struct ListCreateListForm: View, @unchecked Sendable {
                     TextField("Description", text: $description)
                         .padding(.bottom)
                     
-                    ListAddRecipientButton(recipients: $recipients)
+                    ListAddRecipientButton(recipient: $recipient)
                     
-                    ForEach(recipients, id:\.self) { user in
-                        ListRecipientRow(user: user)
+                    if let recipient = recipient {
+                        ListRecipientRow(user: recipient)
                     }
-                    .onDelete(perform: deleteRecipient)
-                    .onMove(perform: moveRecipient)
                     
                     ListAddTasksButton(tasks: $tasks)
                     
@@ -72,7 +70,7 @@ struct ListCreateListForm: View, @unchecked Sendable {
                                 try await listsModel.createList(
                                     name: name,
                                     description: description,
-                                    recipients: recipients,
+                                    recipient: recipient,
                                     tasks: tasks,
                                     listImage: listImage
                                 )
@@ -102,14 +100,6 @@ struct ListCreateListForm: View, @unchecked Sendable {
     
     private func moveTask(fromOffsets: IndexSet, toOffset: Int) {
         tasks.move(fromOffsets: fromOffsets, toOffset: toOffset)
-    }
-    
-    private func deleteRecipient(at offsets: IndexSet) {
-        recipients.remove(atOffsets: offsets)
-    }
-    
-    private func moveRecipient(fromOffsets: IndexSet, toOffset: Int) {
-        recipients.move(fromOffsets: fromOffsets, toOffset: toOffset)
     }
 }
 

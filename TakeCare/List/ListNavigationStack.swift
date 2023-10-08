@@ -18,11 +18,14 @@ struct ListNavigationStack: View {
         NavigationStack {
             List {
                 Section {
-                    newListRow
-                        .listRowSeparator(.hidden, edges: .top)    
-                        .listRowBackground(Color(.systemBackground))
+                    Button("New List...", systemImage: "plus") {
+                        showingCreateListForm = true
+                    }
+                    .frame(height: 60)
+                    .listRowSeparator(.hidden, edges: .top)
+                    .listRowBackground(Color(.systemBackground))
                     
-                    ForEach(listsModel.lists, id:\.self) { list in
+                    ForEach(listsModel.lists, id: \.self) { list in
                         NavigationLink {
                             ListView(list: list)
                         } label: {
@@ -40,13 +43,6 @@ struct ListNavigationStack: View {
                     .environment(listsModel)
             }
         }
-    }
-    
-    var newListRow: some View {
-        Button("New List...", systemImage: "plus") {
-            showingCreateListForm = true
-        }
-        .frame(height: 60)
     }
 }
 

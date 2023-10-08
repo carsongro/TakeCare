@@ -39,6 +39,7 @@ struct ListChooseListImageView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)
+                        .foregroundStyle(.secondary)
                 }
                 Circle()
                     .foregroundStyle(Color(.secondarySystemBackground))
