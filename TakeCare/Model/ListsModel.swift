@@ -106,9 +106,7 @@ import FirebaseFirestoreSwift
         let docRef = Firestore.firestore().collection("lists").document(id)
         try await docRef.delete()
         
-        if let indexToRemove = lists.firstIndex(of: list) {
-            lists.remove(at: indexToRemove)
-        }
+        await fetchLists()
     }
     
     func searchUser(email: String) async throws -> [User] {
