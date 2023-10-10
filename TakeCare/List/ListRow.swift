@@ -9,17 +9,31 @@ import SwiftUI
 import Kingfisher
 
 struct ListRow: View {
-    var list: TakeCareList
+    var list: TakeCareList {
+        didSet {
+            dump(list)
+        }
+    }
     
     var body: some View {
-        HStack(alignment: .top) {
+        HStack {
             KFImage(URL(string: list.photoURL ?? ""))
-                .placeholder {
-                    Image(systemName: "photo.fill")
-                        .resizable()
-                        .listRowImage()
-                }
                 .resizable()
+                .fade(duration: 0.25)
+                .placeholder {
+                    ZStack {
+                        Rectangle()
+                            .listRowImage()
+                            .foregroundStyle(Color(.secondarySystemBackground))
+                        
+                        Image(systemName: "list.bullet")
+                            .resizable()
+                            .padding()
+                            .fontWeight(.light)
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(.secondary)
+                    }
+                }
                 .listRowImage()
             
             VStack(alignment: .leading) {
@@ -41,9 +55,13 @@ struct ListRow: View {
             }
             
             Spacer(minLength: 0)
+            
+            Image(systemName: "info.circle")
+                .foregroundStyle(.accent)
                 
         }
         .font(.subheadline)
+        .contentShape(Rectangle())
     }
 }
 

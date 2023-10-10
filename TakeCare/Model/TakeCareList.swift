@@ -28,3 +28,10 @@ struct TakeCareList: Codable, Hashable, Equatable, Identifiable, @unchecked Send
         hasher.combine(id)
     }
 }
+
+extension TakeCareList {
+    func matches(_ string: String) -> Bool {
+        string.isEmpty ||
+        name.localizedCaseInsensitiveContains(string)
+    }
+}

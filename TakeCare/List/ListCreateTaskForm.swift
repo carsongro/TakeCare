@@ -89,9 +89,7 @@ struct ListCreateTaskForm: View {
                     .fontWeight(.semibold)
                 }
             }
-            .alert("You have already added this task to the list", isPresented: $showingDuplicateTaskAlert) {
-                Button("OK") { }
-            }
+            .alert("You have already added this task to the list", isPresented: $showingDuplicateTaskAlert) { }
         }
     }
 }

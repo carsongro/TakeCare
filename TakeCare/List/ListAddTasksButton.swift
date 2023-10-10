@@ -13,7 +13,7 @@ struct ListAddTasksButton: View {
     @State private var showingCreateTaskForm = false
     
     var body: some View {
-        Button("Add Tasks", systemImage: "plus.circle.fill") {
+        Button("Add Task", systemImage: "plus.circle.fill") {
             showingCreateTaskForm = true
         }
         .sheet(isPresented: $showingCreateTaskForm) {

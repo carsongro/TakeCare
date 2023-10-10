@@ -1,5 +1,5 @@
 //
-//  ListAddRecipientButton.swift
+//  ListUpdateRecipientButton.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 10/6/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListAddRecipientButton: View {
+struct ListUpdateRecipientButton: View {
     @Binding var recipient: User?
     
     @State private var showingAddPeopleForm = false
@@ -17,13 +17,13 @@ struct ListAddRecipientButton: View {
             showingAddPeopleForm = true
         }
         .sheet(isPresented: $showingAddPeopleForm) {
-            ListAddRecipientForm(recipient: $recipient)
+            ListUpdateRecipientForm(recipient: $recipient)
         }
     }
 }
 
 #Preview {
-    ListAddRecipientButton(
+    ListUpdateRecipientButton(
         recipient: .constant(
             User(
                 id: "",

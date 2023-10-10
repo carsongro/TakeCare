@@ -115,9 +115,7 @@ struct UpdateEmailForm: View {
                     hideKeyboard()
                 }
             }
-            .alert("There was an error updating your email.", isPresented: $showingErrorAlert) {
-                Button("OK") { }
-            }
+            .alert("There was an error updating your email.", isPresented: $showingErrorAlert) { }
             .sheet(isPresented: $presentingResetPasswordForm) {
                 PasswordResetForm()
             }

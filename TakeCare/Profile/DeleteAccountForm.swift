@@ -70,12 +70,11 @@ struct DeleteAccountForm: View {
                 }
                 
                 Section {
-                    Button("Delete") {
+                    Button("Delete", role: .destructive) {
                         showingDeleteAlert = true
                     }
                     .disabled(!textFieldsAreValid)
                     .buttonStyle(.bordered)
-                    .foregroundStyle(.red)
                     .listRowBackground(Color(.systemGroupedBackground))
                     .frame(maxWidth: .infinity)
                 }
@@ -93,9 +92,7 @@ struct DeleteAccountForm: View {
             .sheet(isPresented: $presentingResetPasswordForm) {
                 PasswordResetForm()
             }
-            .alert("There was an error deleting your account", isPresented: $showingErrorAlert) {
-                Button("OK") { }
-            }
+            .alert("There was an error deleting your account", isPresented: $showingErrorAlert) { }
             .alert("Are you sure you want to delete your accout? This action is irreversible.", isPresented: $showingDeleteAlert) {
                 Button("Cancel", role: .cancel) { }
                 Button("Delete", role: .destructive) {

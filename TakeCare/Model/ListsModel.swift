@@ -12,7 +12,8 @@ import FirebaseFirestoreSwift
 @Observable final class ListsModel: @unchecked Sendable {
     var lists = [TakeCareList]()
     var currentList: TakeCareList?
-    
+    var searchText = ""
+
     init() {
         Task {
             await fetchLists()
@@ -21,12 +22,16 @@ import FirebaseFirestoreSwift
     
     func fetchLists() async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         do {
-            let lists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
-            
-            withAnimation {
-                self.lists = lists
+            let updatedLists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
+
+            Task { @MainActor in
+                withAnimation {
+                    self.lists = updatedLists
+                }
             }
+            
         } catch {
             print(error.localizedDescription)
         }
@@ -35,9 +40,11 @@ import FirebaseFirestoreSwift
     func createList(name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: UIImage?) async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
+        let docRef = Firestore.firestore().collection("lists").document()
+        
         var photoURL: String? = nil
         if let image = listImage {
-            photoURL = try await ImageManager.uploadImage(image: image, path: .list_images)
+            photoURL = try await ImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
         }
         
         let list = TakeCareList(
@@ -50,7 +57,6 @@ import FirebaseFirestoreSwift
             isActive: false
         )
         
-        let docRef = Firestore.firestore().collection("lists").document()
         try docRef.setData(from: list)
         
         if let recipient = recipient {
@@ -60,15 +66,49 @@ import FirebaseFirestoreSwift
         await fetchLists()
     }
     
-    func updateList(to list: TakeCareList) async throws {
-        // TODO: Implement this
+    func updateList(id: String, name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: UIImage?, isActive: Bool, sendInvites: Bool) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let docRef = Firestore.firestore().collection("lists").document(id)
+        
+        var photoURL: String? = nil
+        if let image = listImage {
+            photoURL = try await ImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
+        }
+        
+        let list = TakeCareList(
+            ownerID: uid,
+            name: name,
+            description: description,
+            recipient: recipient,
+            tasks: tasks,
+            photoURL: photoURL,
+            isActive: isActive
+        )
+        
+        try docRef.setData(from: list)
+        
+        if let recipient = recipient,
+           sendInvites {
+            try await sendListInvite(to: recipient)
+        }
+        
+        await fetchLists()
     }
     
     func deleteList(_ list: TakeCareList) async throws {
         guard let id = list.id else { return }
         
+        if list.photoURL != nil {
+            try await ImageManager.deleteImage(name: id, path: .list_images)
+        }
+        
         let docRef = Firestore.firestore().collection("lists").document(id)
         try await docRef.delete()
+        
+        if let indexToRemove = lists.firstIndex(of: list) {
+            lists.remove(at: indexToRemove)
+        }
     }
     
     func searchUser(email: String) async throws -> [User] {

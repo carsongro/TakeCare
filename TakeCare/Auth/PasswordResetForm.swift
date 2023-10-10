@@ -60,9 +60,7 @@ struct PasswordResetForm: View, @unchecked Sendable {
                     dismiss()
                 }
             }
-            .alert("There was an error sending the password reset link", isPresented: $showingErrorAlert) {
-                Button("OK") { }
-            }
+            .alert("There was an error sending the password reset link", isPresented: $showingErrorAlert) { }
         }
     }
     

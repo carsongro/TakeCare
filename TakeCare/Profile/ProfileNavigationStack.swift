@@ -115,9 +115,7 @@ struct ProfileNavigationStack: View {
                 .sheet(isPresented: $presentingDeleteAccountSheet) {
                     DeleteAccountForm()
                 }
-                .alert(errorAlertText, isPresented: $showingErrorAlert) {
-                    Button("OK") { }
-                }
+                .alert(errorAlertText, isPresented: $showingErrorAlert) { }
                 .alert("Are you sure you want to sign out?", isPresented: $showingSignOutConfirmation) {
                     Button("Cancel", role: .cancel) { }
                     Button("Sign Out") {

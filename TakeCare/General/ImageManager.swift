@@ -25,7 +25,7 @@ final class ImageManager {
     
     @discardableResult
     static func uploadImage(
-        name: String = UUID().uuidString,
+        name: String,
         image: UIImage,
         path: ImagePath
     ) async throws -> String {
@@ -38,9 +38,6 @@ final class ImageManager {
         let fileRef = storageRef.child(path)
         
         let _ = try await fileRef.putDataAsync(data)
-        
-        let db = Firestore.firestore()
-        try await db.collection("images").document(name).setData(["url": path])
         
         let urlString = try await fileRef.downloadURL().absoluteString
         

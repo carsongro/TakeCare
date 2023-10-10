@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AuthLoginView: View, @unchecked Sendable {
     @Environment(AuthModel.self) private var authModel
+    @Environment(ListsModel.self) private var listsModel
     
     enum Field {
         case email
@@ -78,9 +79,7 @@ struct AuthLoginView: View, @unchecked Sendable {
                     login()
                 }
             }
-            .alert("There was an error signing in.", isPresented: $showingSignInAlert) {
-                Button("OK") { }
-            }
+            .alert("There was an error signing in.", isPresented: $showingSignInAlert) { }
             .sheet(isPresented: $presentingResetPasswordForm) {
                 PasswordResetForm()
             }
@@ -94,6 +93,7 @@ struct AuthLoginView: View, @unchecked Sendable {
             do {
                 await hideKeyboard()
                 try await authModel.signIn(withEmail: email, password: password)
+                await listsModel.fetchLists()
             } catch {
                 showingSignInAlert = true
             }
@@ -115,4 +115,5 @@ extension AuthLoginView: TextFieldProtocol {
 #Preview {
     AuthLoginView()
         .environment(AuthModel())
+        .environment(ListsModel())
 }

@@ -15,7 +15,7 @@ struct AppDetailColumn: View {
             if let screen {
                 screen.destination
             } else {
-                ContentUnavailableView("Select an item", systemImage: "list.bullet", description: Text("Pick something from the list"))
+                ContentUnavailableView("Select an list", systemImage: "list.bullet", description: Text("Pick something from the list"))
             }
         }
     }

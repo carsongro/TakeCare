@@ -1,5 +1,5 @@
 //
-//  ListAddRecipientForm.swift
+//  ListUpdateRecipientForm.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 10/6/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListAddRecipientForm: View, @unchecked Sendable {
+struct ListUpdateRecipientForm: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
     @Environment(\.dismiss) private var dismiss
 
@@ -50,9 +50,7 @@ struct ListAddRecipientForm: View, @unchecked Sendable {
             }
             .alert(
                 "No users found",
-                isPresented: $showingSearchAlert) {
-                    Button("OK") { }
-                }
+                isPresented: $showingSearchAlert) { }
         }
     }
     
@@ -75,7 +73,7 @@ struct ListAddRecipientForm: View, @unchecked Sendable {
 }
 
 #Preview {
-    ListAddRecipientForm(
+    ListUpdateRecipientForm(
         recipient: .constant(
             User(
                 id: "",

@@ -56,8 +56,7 @@ final class AuthModel: @unchecked Sendable {
             photoURL: nil
         )
         
-        let encodedUser = try Firestore.Encoder().encode(user)
-        try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+        try Firestore.firestore().collection("users").document(user.id).setData(from: user)
         
         await fetchCurrentUser()
     }
@@ -118,7 +117,6 @@ final class AuthModel: @unchecked Sendable {
             let docRef = Firestore.firestore().collection("lists").document(id)
             try await docRef.delete()
         }
-
         
         try? await Firestore.firestore().collection("users").document(uid).delete()
         try await Auth.auth().currentUser?.delete()
@@ -164,8 +162,6 @@ final class AuthModel: @unchecked Sendable {
         try await Firestore.firestore().collection("users").document(uid).updateData(
             ["photoURL": FieldValue.delete()]
         )
-        
-        try await Firestore.firestore().collection("images").document(uid).delete()
         
         try await ImageManager.deleteImage(name: uid, path: .profile_images)
         

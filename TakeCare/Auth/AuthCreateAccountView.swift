@@ -87,9 +87,7 @@ struct AuthCreateAccountView: View, @unchecked Sendable {
                 hideKeyboard()
             }
         }
-        .alert("There was an error creating an account.", isPresented: $showingCreateAccountAlert) {
-            Button("OK") { }
-        }
+        .alert("There was an error creating an account.", isPresented: $showingCreateAccountAlert) { }
     }
 }
 
