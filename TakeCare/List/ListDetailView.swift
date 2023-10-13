@@ -38,12 +38,15 @@ struct ListDetailView: View, @unchecked Sendable {
     @State private var showingErrorAlert = false
     @State private var showingDeleteAlert = false
     @State private var showingModifyTaskForm = false
+    @State private var didChangeImage = false
     
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    ListChooseListImageView(listImage: $listImage)
+                    ListChooseListImageView(listImage: $listImage) {
+                        didChangeImage = true
+                    }
                         .listRowSeparator(.hidden, edges: [.bottom, .top])
                     
                     TextField("List Name", text: $name)
@@ -107,7 +110,11 @@ struct ListDetailView: View, @unchecked Sendable {
             .sheet(isPresented: $showingModifyTaskForm, onDismiss: {
                 selectedTask = nil
             }) {
-                ListTaskDetailView(tasks: $tasks, selectedTask: $selectedTask)
+                ListTaskDetailView(
+                    tasks: $tasks,
+                    selectedTask: $selectedTask,
+                    mode: .edit
+                )
             }
             .onAppear(perform: getList)
             .environment(\.editMode, .constant(.active))
@@ -146,7 +153,8 @@ struct ListDetailView: View, @unchecked Sendable {
                                         tasks: tasks,
                                         listImage: listImage,
                                         isActive: list?.isActive ?? false,
-                                        sendInvites: list?.recipient != recipient
+                                        sendInvites: list?.recipient != recipient,
+                                        shouldUpdateImage: didChangeImage
                                     )
                                 }
                             } catch {

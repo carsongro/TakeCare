@@ -20,29 +20,29 @@ struct ListSearchResults: View, @unchecked Sendable {
     }
     
     var body: some View {
-        if !listedLists.isEmpty {
-            ForEach(listedLists) { list in
-                Button {
-                    selectedList = list
-                } label: {
-                    ListRow(list: list)
-                }
-                .buttonStyle(.plain)
+        ForEach(listedLists) { list in
+            Button {
+                selectedList = list
+            } label: {
+                ListRow(list: list)
             }
-            /// This needs to be here for the list to properly update after modifying individual lists:
-            /// https://www.hackingwithswift.com/articles/210/how-to-fix-slow-list-updates-in-swiftui
-            .id(UUID())
-            .onChange(of: selectedList) { oldValue, newValue in
-                if newValue != nil {
-                    showingListDetail = true
-                }
+            .buttonStyle(.plain)
+        }
+        /// This needs to be here for the list to properly update after modifying individual lists:
+        /// https://www.hackingwithswift.com/articles/210/how-to-fix-slow-list-updates-in-swiftui
+        .id(UUID())
+        .onChange(of: selectedList) { oldValue, newValue in
+            if newValue != nil {
+                showingListDetail = true
             }
-            .sheet(isPresented: $showingListDetail, onDismiss: {
-                selectedList = nil
-            }) {
-                ListDetailView(mode: .edit, list: selectedList)
-            }
-        } else if !listsModel.searchText.isEmpty {
+        }
+        .sheet(isPresented: $showingListDetail, onDismiss: {
+            selectedList = nil
+        }) {
+            ListDetailView(mode: .edit, list: selectedList)
+        }
+        
+        if listedLists.isEmpty && !listsModel.searchText.isEmpty {
             ContentUnavailableView("No lists found", systemImage: "magnifyingglass")
                 .listRowSeparator(.hidden)
                 .listRowBackground(Color(.systemBackground))

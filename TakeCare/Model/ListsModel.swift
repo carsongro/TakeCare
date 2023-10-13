@@ -66,13 +66,18 @@ import FirebaseFirestoreSwift
         await fetchLists()
     }
     
-    func updateList(id: String, name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: UIImage?, isActive: Bool, sendInvites: Bool) async throws {
+    func updateList(id: String, name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: UIImage?, isActive: Bool, sendInvites: Bool, shouldUpdateImage: Bool = true) async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let docRef = Firestore.firestore().collection("lists").document(id)
         
-        var photoURL: String? = nil
-        if let image = listImage {
+        var photoURL: String? = if let originalPhotoURL = lists.first(where: { $0.id == id })?.photoURL {
+            originalPhotoURL
+        } else {
+            nil
+        }
+        
+        if shouldUpdateImage, let image = listImage {
             photoURL = try await ImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
         }
         

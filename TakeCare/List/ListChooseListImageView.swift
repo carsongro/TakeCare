@@ -16,6 +16,8 @@ struct ListChooseListImageView: View {
     @State private var showingPhotosPicker = false
     @State private var showingListImagePopover = false
     
+    var didChangeImageHandler: (() -> Void)? = nil
+    
     var body: some View {
         Button {
             showingListImagePopover = true
@@ -69,6 +71,7 @@ struct ListChooseListImageView: View {
                         withAnimation {
                             listImage = uiImage
                         }
+                        didChangeImageHandler?()
                         listImageItem = nil
                     }
                 }

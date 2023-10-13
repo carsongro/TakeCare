@@ -14,6 +14,13 @@ struct ListTaskDetailView: View {
     
     @Binding var selectedTask: ListTask?
     
+    enum Mode {
+        case edit
+        case create
+    }
+    
+    var mode: Mode
+    
     enum Field {
         case title
         case notes
@@ -74,7 +81,7 @@ struct ListTaskDetailView: View {
                 }
             }
             .onAppear {
-                if let selectedTask = selectedTask {
+                if mode == .edit, let selectedTask = selectedTask {
                     title = selectedTask.title
                     notes = selectedTask.notes ?? ""
                     
@@ -92,7 +99,7 @@ struct ListTaskDetailView: View {
                     showingDatePickerAnimated = showingDatePicker
                 }
             }
-            .navigationTitle("New Task")
+            .navigationTitle(mode == .create ? "New Task" : "Edit Task")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -103,7 +110,9 @@ struct ListTaskDetailView: View {
                 
                 ToolbarItem(placement: .primaryAction) {
                     Button("Done") {
-                        if let id = selectedTask?.id, let idx = tasks.firstIndex(where: { $0.id == id }) {
+                        if mode == .edit,
+                           let id = selectedTask?.id,
+                           let idx = tasks.firstIndex(where: { $0.id == id }) {
                             tasks[idx] = ListTask(
                                 id: id,
                                 title: title,
@@ -141,6 +150,7 @@ struct ListTaskDetailView: View {
 #Preview {
     ListTaskDetailView(
         tasks: .constant([]),
-        selectedTask: .constant(PreviewData.previewListTask)
+        selectedTask: .constant(PreviewData.previewListTask),
+        mode: .edit
     )
 }
