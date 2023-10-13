@@ -1,5 +1,5 @@
 //
-//  ListCreateTaskForm.swift
+//  ListTaskDetailView.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 10/6/23.
@@ -7,10 +7,19 @@
 
 import SwiftUI
 
-struct ListCreateTaskForm: View {
+struct ListTaskDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     @Binding var tasks: [ListTask]
+    
+    @Binding var selectedTask: ListTask?
+    
+    enum Field {
+        case title
+        case notes
+    }
+    
+    @FocusState private var focusedField: Field?
     
     @State private var showingDuplicateTaskAlert = false
     @State private var showingDatePicker = false
@@ -26,7 +35,11 @@ struct ListCreateTaskForm: View {
             Form {
                 Section {
                     TextField("Title", text: $title)
+                        .focused($focusedField, equals: .title)
+                        .submitLabel(.next)
                     TextField("Notes", text: $notes)
+                        .focused($focusedField, equals: .notes)
+                        .submitLabel(.return)
                 }
                 
                 Section {
@@ -52,6 +65,27 @@ struct ListCreateTaskForm: View {
                     .listRowBackground(Color(.systemGroupedBackground))
                 }
             }
+            .onSubmit {
+                switch focusedField {
+                case .title:
+                    focusedField = .notes
+                default:
+                    break
+                }
+            }
+            .onAppear {
+                if let selectedTask = selectedTask {
+                    title = selectedTask.title
+                    notes = selectedTask.notes ?? ""
+                    
+                    if let completionDate = selectedTask.completionDate {
+                        self.completionDate = completionDate
+                        showingDatePicker = true
+                        showingDatePickerAnimated = true
+                        taskRepeatInterval = selectedTask.repeatInterval
+                    }
+                }
+            }
             .scrollContentBackground(.visible)
             .onChange(of: showingDatePicker) { oldValue, newValue in
                 withAnimation {
@@ -69,20 +103,30 @@ struct ListCreateTaskForm: View {
                 
                 ToolbarItem(placement: .primaryAction) {
                     Button("Done") {
-                        let newTask = ListTask(
-                            id: UUID().uuidString,
-                            title: title,
-                            notes: notes.isEmpty ? nil : notes,
-                            completionDate: showingDatePicker ? completionDate : nil,
-                            repeatInterval: taskRepeatInterval
-                        )
-                        
-                        guard !tasks.contains(newTask) else {
-                            showingDuplicateTaskAlert = true
-                            return
+                        if let id = selectedTask?.id, let idx = tasks.firstIndex(where: { $0.id == id }) {
+                            tasks[idx] = ListTask(
+                                id: id,
+                                title: title,
+                                notes: notes.isEmpty ? nil : notes,
+                                completionDate: showingDatePicker ? completionDate : nil,
+                                repeatInterval: taskRepeatInterval
+                            )
+                        } else {
+                            let newTask = ListTask(
+                                id: UUID().uuidString,
+                                title: title,
+                                notes: notes.isEmpty ? nil : notes,
+                                completionDate: showingDatePicker ? completionDate : nil,
+                                repeatInterval: taskRepeatInterval
+                            )
+                            
+                            guard !tasks.contains(newTask) else {
+                                showingDuplicateTaskAlert = true
+                                return
+                            }
+                            
+                            tasks.append(newTask)
                         }
-                        
-                        tasks.append(newTask)
                         dismiss()
                     }
                     .disabled(title.isEmpty)
@@ -95,5 +139,8 @@ struct ListCreateTaskForm: View {
 }
 
 #Preview {
-    ListCreateTaskForm(tasks: .constant([]))
+    ListTaskDetailView(
+        tasks: .constant([]),
+        selectedTask: .constant(PreviewData.previewListTask)
+    )
 }

@@ -33,7 +33,7 @@
 		B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58A14002AC520A20045D191 /* TakeCareApp.swift */; };
 		B58A14052AC520A30045D191 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14042AC520A30045D191 /* Assets.xcassets */; };
 		B58A14092AC520A30045D191 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58A14082AC520A30045D191 /* Preview Assets.xcassets */; };
-		B595D6E32AD0B18400B022E0 /* ListCreateTaskForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6E22AD0B18400B022E0 /* ListCreateTaskForm.swift */; };
+		B595D6E32AD0B18400B022E0 /* ListTaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6E22AD0B18400B022E0 /* ListTaskDetailView.swift */; };
 		B595D6E52AD0B3D300B022E0 /* ListChooseListImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6E42AD0B3D300B022E0 /* ListChooseListImageView.swift */; };
 		B595D6E72AD0B47000B022E0 /* ListAddTasksButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6E62AD0B47000B022E0 /* ListAddTasksButton.swift */; };
 		B595D6E92AD0B67100B022E0 /* ListTaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6E82AD0B67100B022E0 /* ListTaskRow.swift */; };
@@ -77,7 +77,7 @@
 		B58A14042AC520A30045D191 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B58A14062AC520A30045D191 /* TakeCare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TakeCare.entitlements; sourceTree = "<group>"; };
 		B58A14082AC520A30045D191 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		B595D6E22AD0B18400B022E0 /* ListCreateTaskForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCreateTaskForm.swift; sourceTree = "<group>"; };
+		B595D6E22AD0B18400B022E0 /* ListTaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTaskDetailView.swift; sourceTree = "<group>"; };
 		B595D6E42AD0B3D300B022E0 /* ListChooseListImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListChooseListImageView.swift; sourceTree = "<group>"; };
 		B595D6E62AD0B47000B022E0 /* ListAddTasksButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListAddTasksButton.swift; sourceTree = "<group>"; };
 		B595D6E82AD0B67100B022E0 /* ListTaskRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTaskRow.swift; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 				B595D6E62AD0B47000B022E0 /* ListAddTasksButton.swift */,
 				B595D6EE2AD0C70000B022E0 /* ListRecipientRow.swift */,
 				B595D6E42AD0B3D300B022E0 /* ListChooseListImageView.swift */,
-				B595D6E22AD0B18400B022E0 /* ListCreateTaskForm.swift */,
+				B595D6E22AD0B18400B022E0 /* ListTaskDetailView.swift */,
 				B595D6E82AD0B67100B022E0 /* ListTaskRow.swift */,
 				B52D1CC22ACE60510024F6A7 /* ListRow.swift */,
 				B52D1CC42ACE63850024F6A7 /* ListView.swift */,
@@ -336,7 +336,7 @@
 				B568B1AA2AD35CA900E389BD /* PreviewData.swift in Sources */,
 				B5BC6CAE2ACB7E6700D1F842 /* AppDetailColumn.swift in Sources */,
 				B55B80042AC7CAD100640173 /* DeleteAccountForm.swift in Sources */,
-				B595D6E32AD0B18400B022E0 /* ListCreateTaskForm.swift in Sources */,
+				B595D6E32AD0B18400B022E0 /* ListTaskDetailView.swift in Sources */,
 				B54552892ACA37D2006135E8 /* Extensions.swift in Sources */,
 				B52D1CC12ACE5FE60024F6A7 /* ListDetailView.swift in Sources */,
 				B564B0AB2AD49A4C00E5D994 /* ListSearchResults.swift in Sources */,

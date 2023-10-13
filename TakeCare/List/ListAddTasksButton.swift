@@ -17,7 +17,10 @@ struct ListAddTasksButton: View {
             showingCreateTaskForm = true
         }
         .sheet(isPresented: $showingCreateTaskForm) {
-            ListCreateTaskForm(tasks: $tasks)
+            ListTaskDetailView(
+                tasks: $tasks,
+                selectedTask: .constant(nil)
+            )
         }
     }
 }

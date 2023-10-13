@@ -18,6 +18,13 @@ struct ListDetailView: View, @unchecked Sendable {
         case edit
     }
     
+    enum Field {
+        case name
+        case description
+    }
+    
+    @FocusState private var focusedField: Field?
+    
     var mode: ListDetailMode
     var list: TakeCareList?
 
@@ -26,9 +33,11 @@ struct ListDetailView: View, @unchecked Sendable {
     @State private var recipient: User?
     @State private var tasks = [ListTask]()
     @State private var listImage: UIImage?
+    @State private var selectedTask: ListTask?
     
     @State private var showingErrorAlert = false
     @State private var showingDeleteAlert = false
+    @State private var showingModifyTaskForm = false
     
     var body: some View {
         NavigationStack {
@@ -41,20 +50,29 @@ struct ListDetailView: View, @unchecked Sendable {
                         .multilineTextAlignment(.center)
                         .fontWeight(.bold)
                         .padding(.bottom)
+                        .focused($focusedField, equals: .name)
+                        .submitLabel(.next)
                     
                     TextField("Description", text: $description)
+                        .focused($focusedField, equals: .description)
+                        .submitLabel(.return)
                         .padding(.bottom)
                     
                     ListUpdateRecipientButton(recipient: $recipient)
                     
                     if let recipient = recipient {
-                        ListRecipientRow(user: recipient)
+                        ForEach([recipient]) { recipient in
+                            ListRecipientRow(user: recipient)
+                        }
+                        .onDelete(perform: deleteRecipient)
                     }
                     
                     ListAddTasksButton(tasks: $tasks)
                     
                     ForEach(tasks, id: \.self) { task in
-                        ListTaskRow(task: task)
+                        ListTaskRow(task: task) {
+                            selectedTask = task
+                        }
                     }
                     .onDelete(perform: deleteTask)
                     .onMove(perform: moveTask)
@@ -72,6 +90,24 @@ struct ListDetailView: View, @unchecked Sendable {
                 }
                 .listRowBackground(Color(.systemBackground))
                 .listRowSeparator(.hidden)
+            }
+            .onSubmit {
+                switch focusedField {
+                case .name:
+                    focusedField = .description
+                default:
+                    break
+                }
+            }
+            .onChange(of: $selectedTask.wrappedValue, { oldValue, newValue in
+                if newValue != nil {
+                    showingModifyTaskForm = true
+                }
+            })
+            .sheet(isPresented: $showingModifyTaskForm, onDismiss: {
+                selectedTask = nil
+            }) {
+                ListTaskDetailView(tasks: $tasks, selectedTask: $selectedTask)
             }
             .onAppear(perform: getList)
             .environment(\.editMode, .constant(.active))
@@ -101,7 +137,7 @@ struct ListDetailView: View, @unchecked Sendable {
                                         listImage: listImage
                                     )
                                 case .edit:
-                                    guard let id = list?.id, let ownerID = list?.ownerID else { return }
+                                    guard let id = list?.id else { return }
                                     try await listsModel.updateList(
                                         id: id,
                                         name: name,
@@ -147,6 +183,12 @@ struct ListDetailView: View, @unchecked Sendable {
         }
     }
     
+    private func deleteRecipient(at offsets: IndexSet) {
+        withAnimation {
+            recipient = nil
+        }
+    }
+    
     private func deleteTask(at offsets: IndexSet) {
         tasks.remove(atOffsets: offsets)
     }
@@ -187,6 +229,6 @@ struct ListDetailView: View, @unchecked Sendable {
 }
 
 #Preview {
-    ListDetailView(mode: .edit)
+    ListDetailView(mode: .edit, list: PreviewData.previewTakeCareList)
         .environment(ListsModel())
 }

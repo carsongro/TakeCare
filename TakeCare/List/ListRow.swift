@@ -9,11 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct ListRow: View {
-    var list: TakeCareList {
-        didSet {
-            dump(list)
-        }
-    }
+    var list: TakeCareList
     
     var body: some View {
         HStack {
