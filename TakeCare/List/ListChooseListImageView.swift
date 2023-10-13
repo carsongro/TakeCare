@@ -30,6 +30,7 @@ struct ListChooseListImageView: View {
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 200, height: 200)
                         .clipShape(imageClipShape)
+                        .contentShape(imageClipShape)
                         .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
                 } else {
                     Rectangle()

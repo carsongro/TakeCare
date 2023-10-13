@@ -6,21 +6,21 @@
 //
 
 import SwiftUI
-import Kingfisher
+import SDWebImageSwiftUI
 
 struct ListRecipientRow: View {
     var user: User
     
     var body: some View {
         HStack(alignment: .center) {
-            KFImage(URL(string: user.photoURL ?? ""))
+            WebImage(url: URL(string: user.photoURL ?? ""))
+                .resizable()
                 .placeholder {
                     Image(systemName: "person.circle.fill")
                         .resizable()
                         .recipientRowImage()
                         .foregroundStyle(Color.secondary)
                 }
-                .resizable()
                 .recipientRowImage()
             VStack(alignment: .leading) {
                 Text(user.displayName)

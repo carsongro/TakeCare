@@ -44,7 +44,7 @@ import FirebaseFirestoreSwift
         
         var photoURL: String? = nil
         if let image = listImage {
-            photoURL = try await ImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
+            photoURL = try await LocalImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
         }
         
         let list = TakeCareList(
@@ -78,7 +78,7 @@ import FirebaseFirestoreSwift
         }
         
         if shouldUpdateImage, let image = listImage {
-            photoURL = try await ImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
+            photoURL = try await LocalImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
         }
         
         let list = TakeCareList(
@@ -105,7 +105,7 @@ import FirebaseFirestoreSwift
         guard let id = list.id else { return }
         
         if list.photoURL != nil {
-            try await ImageManager.deleteImage(name: id, path: .list_images)
+            try await LocalImageManager.deleteImage(name: id, path: .list_images)
         }
         
         let docRef = Firestore.firestore().collection("lists").document(id)

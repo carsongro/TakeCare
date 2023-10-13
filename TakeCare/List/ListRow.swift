@@ -6,31 +6,34 @@
 //
 
 import SwiftUI
-import Kingfisher
+import SDWebImageSwiftUI
 
 struct ListRow: View {
     var list: TakeCareList
     
+    @ObservedObject var imageManager = ImageManager()
+    
     var body: some View {
         HStack {
-            KFImage(URL(string: list.photoURL ?? ""))
-                .resizable()
-                .fade(duration: 0.25)
-                .placeholder {
-                    ZStack {
-                        Rectangle()
-                            .listRowImage()
-                            .foregroundStyle(Color(.secondarySystemBackground))
-                        
-                        Image(systemName: "list.bullet")
-                            .resizable()
-                            .padding()
-                            .fontWeight(.light)
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundStyle(.secondary)
-                    }
+            if let image = imageManager.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .listRowImage()
+            } else {
+                ZStack {
+                    Rectangle()
+                        .listRowImage()
+                        .foregroundStyle(Color(.secondarySystemBackground))
+                    
+                    Image(systemName: "list.bullet")
+                        .resizable()
+                        .padding()
+                        .fontWeight(.light)
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundStyle(.secondary)
                 }
                 .listRowImage()
+            }
             
             VStack(alignment: .leading) {
                 Text(list.name)
@@ -59,6 +62,9 @@ struct ListRow: View {
                 .foregroundStyle(.accent)
                 
         }
+        .onAppear {
+            imageManager.load(url: URL(string: list.photoURL ?? ""))
+        }
         .font(.subheadline)
         .contentShape(Rectangle())
     }
@@ -71,6 +77,7 @@ struct ListRowImage: ViewModifier {
             .aspectRatio(contentMode: .fill)
             .frame(width: 60, height: 60)
             .clipShape(imageClipShape)
+            .contentShape(imageClipShape)
             .accessibilityHidden(true)
     }
     

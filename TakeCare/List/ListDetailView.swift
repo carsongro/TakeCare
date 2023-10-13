@@ -7,7 +7,6 @@
 
 import PhotosUI
 import SwiftUI
-import Kingfisher
 
 struct ListDetailView: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
@@ -212,23 +211,11 @@ struct ListDetailView: View, @unchecked Sendable {
             recipient = list.recipient ?? nil
             tasks = list.tasks
             if let url = URL(string: list.photoURL ?? "") {
-                if ImageCache.default.isCached(forKey: url.absoluteString) {
-                    ImageCache.default.retrieveImage(forKey: url.absoluteString) { result in
-                        switch result {
-                        case .success(let image):
-                            guard let cgImage = image.image?.cgImage else { return }
-                            listImage = UIImage(cgImage: cgImage)
-                        case .failure:
-                            KingfisherManager.shared.downloader.downloadImage(with: url) { result in
-                                switch result {
-                                case .success(let image):
-                                    guard let cgImage = image.image.cgImage else { return }
-                                    listImage = UIImage(cgImage: cgImage)
-                                case .failure(let error):
-                                    print(error.localizedDescription)
-                                }
-                            }
-                        }
+                Task {
+                    do {
+                        listImage = try await LocalImageManager.fetchImage(url: url)
+                    } catch {
+                        print(error.localizedDescription)
                     }
                 }
             }

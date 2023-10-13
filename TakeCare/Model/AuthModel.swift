@@ -143,7 +143,7 @@ final class AuthModel: @unchecked Sendable {
     func updateProfileImage(image: UIImage) async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let photoURL = try await ImageManager.uploadImage(
+        let photoURL = try await LocalImageManager.uploadImage(
             name: uid,
             image: image,
             path: .profile_images
@@ -163,7 +163,7 @@ final class AuthModel: @unchecked Sendable {
             ["photoURL": FieldValue.delete()]
         )
         
-        try await ImageManager.deleteImage(name: uid, path: .profile_images)
+        try await LocalImageManager.deleteImage(name: uid, path: .profile_images)
         
         await fetchCurrentUser()
         

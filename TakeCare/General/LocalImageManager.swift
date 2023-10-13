@@ -1,5 +1,5 @@
 //
-//  ImageManager.swift
+//  LocalImageManager.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 9/30/23.
@@ -9,16 +9,17 @@ import Foundation
 import FirebaseStorage
 import FirebaseFirestore
 import UIKit
+import SDWebImageSwiftUI
 
-/// An object for uploading images to firebase
-final class ImageManager {
+/// An object for managing images from firebase
+final class LocalImageManager {
     
     enum ImagePath {
         case profile_images
         case list_images
     }
     
-    private enum ImageUploadError: Error {
+    private enum ImageError: Error {
         case jpegConversionError
         case urlError
     }
@@ -29,7 +30,7 @@ final class ImageManager {
         image: UIImage,
         path: ImagePath
     ) async throws -> String {
-        guard let data = image.jpegData(compressionQuality: 0.7) else { throw ImageUploadError.jpegConversionError }
+        guard let data = image.jpegData(compressionQuality: 0.7) else { throw ImageError.jpegConversionError }
         
         let storageRef = Storage.storage().reference()
         
@@ -52,5 +53,19 @@ final class ImageManager {
         let fileRef = storageRef.child("\(path)/\(name).jpg")
         
         try await fileRef.delete()
+    }
+    
+    static func fetchImage(
+        url: URL
+    ) async throws -> UIImage {
+        return try await withCheckedThrowingContinuation { continuation in
+            SDWebImageManager.shared.loadImage(with: url, progress: nil) { uiImage, _, error, _, _, _ in
+                if let uiImage = uiImage {
+                    continuation.resume(with: .success(uiImage))
+                } else {
+                    continuation.resume(throwing: ImageError.urlError)
+                }
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import PhotosUI
-import Kingfisher
+import SDWebImageSwiftUI
 
 struct ProfileNavigationStack: View {
     @Environment(AuthModel.self) private var authModel
@@ -37,14 +37,14 @@ struct ProfileNavigationStack: View {
                             showingProfileImageConfirmation = true
                         } label: {
                             ZStack {
-                                KFImage(URL(string:authModel.currentUser?.photoURL ?? ""))
-                                    .placeholder { _ in
+                                WebImage(url: URL(string:authModel.currentUser?.photoURL ?? ""))
+                                    .resizable()
+                                    .placeholder {
                                         Image(systemName: "person.circle.fill")
                                             .resizable()
                                             .accountImage()
                                             .foregroundStyle(Color.secondary)
                                     }
-                                    .resizable()
                                     .accountImage()
                                     .blur(radius: isUploadingImage ? 4 : 0)
                                     .opacity(isUploadingImage ? 0.6 : 1)
