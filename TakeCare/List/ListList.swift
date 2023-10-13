@@ -38,7 +38,16 @@ struct ListList: View {
                 }
                 .listRowSeparator(.hidden, edges: .top)
                 
-                ListSearchResults()
+                if listsModel.lists.isEmpty {
+                    Section {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                            .listRowSeparator(.hidden, edges: .bottom)
+                            .padding()
+                    }
+                } else {
+                    ListSearchResults()
+                }
             }
             .listRowBackground(Color(.systemBackground))
         }
