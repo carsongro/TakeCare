@@ -11,8 +11,8 @@ import FirebaseFirestoreSwift
 
 @Observable final class ListsModel: @unchecked Sendable {
     var lists = [TakeCareList]()
-    var currentList: TakeCareList?
     var searchText = ""
+    var didFetchLists = false
 
     init() {
         Task {
@@ -29,11 +29,12 @@ import FirebaseFirestoreSwift
             Task { @MainActor in
                 withAnimation {
                     self.lists = updatedLists
+                    didFetchLists = true
                 }
             }
-            
         } catch {
             print(error.localizedDescription)
+            didFetchLists = true
         }
     }
     

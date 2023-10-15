@@ -60,6 +60,7 @@ struct ListRow: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 22, height: 22)
                 .foregroundStyle(.accent)
+                .padding(.leading, 8)
                 
         }
         .onAppear {

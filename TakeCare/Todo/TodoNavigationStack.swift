@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct TodoNavigationStack: View {
+    @Environment(TodoModel.self) private var todoModel
+    
     var body: some View {
         NavigationStack {
-            Text("Todo")
+            TodoLists()
+                .environment(todoModel)
                 .navigationTitle("Todo")
         }
     }
@@ -18,4 +21,5 @@ struct TodoNavigationStack: View {
 
 #Preview {
     TodoNavigationStack()
+        .environment(TodoModel())
 }

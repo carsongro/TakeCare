@@ -38,7 +38,7 @@ struct ListList: View {
                 }
                 .listRowSeparator(.hidden, edges: .top)
                 
-                if listsModel.lists.isEmpty {
+                if !listsModel.didFetchLists {
                     Section {
                         ProgressView()
                             .frame(maxWidth: .infinity)
