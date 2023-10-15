@@ -18,10 +18,6 @@ struct TodoNavigationStack: View {
                 .navigationDestination(for: TakeCareList.self) { takeCareListID in
                     if let list = todoModel.lists.first(where: { $0.id == takeCareListID.id }) {
                         TodoDetailView(list: list)
-                            #if os(macOS)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background()
-                            #endif
                     }
                 }
         }

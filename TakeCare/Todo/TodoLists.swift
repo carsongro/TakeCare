@@ -43,8 +43,5 @@ struct TodoLists: View {
         TodoLists()
             .environment(TodoModel())
             .navigationTitle("Todo")
-            #if os(macOS)
-            .frame(width: 700, height: 300, alignment: .center)
-            #endif
     }
 }
