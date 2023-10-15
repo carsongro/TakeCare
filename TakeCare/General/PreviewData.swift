@@ -20,7 +20,7 @@ final class PreviewData {
         id: nil,
         ownerID: "",
         name: "Carson's list",
-        description: "Description for this list.",
+        description: "This is the description for this list.",
         recipient: User(
                 id: UUID().uuidString,
                 displayName: "Carson Gross",

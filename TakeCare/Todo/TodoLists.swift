@@ -11,6 +11,7 @@ struct TodoLists: View {
     @Environment(TodoModel.self) private var todoModel
     
     var body: some View {
+        @Bindable var todoModel = todoModel
         List {
             Section {
                 if !todoModel.didFetchLists {
@@ -20,8 +21,9 @@ struct TodoLists: View {
                         .padding()
                 } else if todoModel.lists.isEmpty && todoModel.didFetchLists {
                     ContentUnavailableView(
-                        "You have no todo lists",
-                        systemImage: "list.bullet"
+                        "No Todo's",
+                        systemImage: "list.bullet",
+                        description: Text("You are not currently taking care of any todo lists.")
                     )
                     .listRowSeparator(.hidden)
                 } else {
@@ -30,6 +32,7 @@ struct TodoLists: View {
             }
             .listRowBackground(Color(.systemBackground))
         }
+        .searchable(text: $todoModel.searchText)
         .scrollContentBackground(.hidden)
         .listStyle(.grouped)
         .refreshable {

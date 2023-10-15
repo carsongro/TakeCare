@@ -8,8 +8,8 @@
 import Foundation
 import FirebaseStorage
 import FirebaseFirestore
-import UIKit
 import SDWebImageSwiftUI
+import SwiftUI
 
 /// An object for managing images from firebase
 final class LocalImageManager {
