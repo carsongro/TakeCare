@@ -9,25 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var authModel = AuthModel()
-    @State private var listsModel = ListsModel()
-    @State private var todoModel = TodoModel()
     @State private var selection: AppScreen? = .lists
     
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     var body: some View {
-        if authModel.userSession == nil {
-            AuthLoginView()
-                .environment(authModel)
-                .environment(listsModel)
-                .environment(todoModel)
-                .transition(.move(edge: .bottom))
-        } else {
+        if authModel.isSignedIn {
             if prefersTabNavigation {
                 AppTabView(selection: $selection)
                     .environment(authModel)
-                    .environment(listsModel)
-                    .environment(todoModel)
                     .transition(.move(edge: .bottom))
             } else {
                 NavigationSplitView {
@@ -37,9 +27,11 @@ struct ContentView: View {
                 }
                 .transition(.move(edge: .bottom))
                 .environment(authModel)
-                .environment(listsModel)
-                .environment(todoModel)
             }
+        } else {
+            AuthLoginView()
+                .environment(authModel)
+                .transition(.move(edge: .bottom))
         }
     }
 }

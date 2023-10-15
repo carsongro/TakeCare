@@ -14,18 +14,23 @@ struct TodoLists: View {
         List {
             Section {
                 if !todoModel.didFetchLists {
-                    Section {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
-                            .listRowSeparator(.hidden, edges: .bottom)
-                            .padding()
-                    }
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .listRowSeparator(.hidden, edges: .bottom)
+                        .padding()
+                } else if todoModel.lists.isEmpty && todoModel.didFetchLists {
+                    ContentUnavailableView(
+                        "You have no todo lists",
+                        systemImage: "list.bullet"
+                    )
+                    .listRowSeparator(.hidden)
                 } else {
                     TodoSearchResults()
                 }
             }
             .listRowBackground(Color(.systemBackground))
         }
+        .scrollContentBackground(.hidden)
         .listStyle(.grouped)
         .refreshable {
             await todoModel.fetchLists()
@@ -34,5 +39,12 @@ struct TodoLists: View {
 }
 
 #Preview {
-    TodoLists()
+    NavigationStack {
+        TodoLists()
+            .environment(TodoModel())
+            .navigationTitle("Todo")
+            #if os(macOS)
+            .frame(width: 700, height: 300, alignment: .center)
+            #endif
+    }
 }

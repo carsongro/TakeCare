@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListNavigationStack: View, @unchecked Sendable {
-    @Environment(ListsModel.self) private var listsModel
+    @State private var listsModel = ListsModel()
 
     var body: some View {
         NavigationStack {

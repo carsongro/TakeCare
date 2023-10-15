@@ -10,7 +10,6 @@ import SwiftUI
 struct AppTabView: View {
     @Binding var selection: AppScreen?
     @Environment(AuthModel.self) private var authModel
-    @Environment(ListsModel.self) private var listsModel
     
     var body: some View {
         TabView(selection: $selection) {
@@ -21,7 +20,6 @@ struct AppTabView: View {
             }
         }
         .environment(authModel)
-        .environment(listsModel)
     }
 }
 

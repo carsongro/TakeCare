@@ -10,6 +10,7 @@ import SDWebImageSwiftUI
 
 struct ListRow: View {
     var list: TakeCareList
+    var showingInfoIndicator = true
     
     @ObservedObject var imageManager = ImageManager()
     
@@ -53,14 +54,16 @@ struct ListRow: View {
                 }
             }
             
-            Spacer(minLength: 0)
-            
-            Image(systemName: "info.circle")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 22, height: 22)
-                .foregroundStyle(.accent)
-                .padding(.leading, 8)
+            if showingInfoIndicator {
+                Spacer(minLength: 0)
+                
+                Image(systemName: "info.circle")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 22, height: 22)
+                    .foregroundStyle(.accent)
+                    .padding(.leading, 8)
+            }
                 
         }
         .onAppear {

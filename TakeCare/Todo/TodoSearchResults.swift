@@ -17,12 +17,9 @@ struct TodoSearchResults: View {
     }
     
     var body: some View {
-        @Bindable var todoModel = todoModel
         ForEach(listedLists) { list in
-            NavigationLink {
-                TodoDetailView(list: list)
-            } label: {
-                ListRow(list: list)
+            NavigationLink(value: list) {
+                ListRow(list: list, showingInfoIndicator: false)
             }
         }
         .id(UUID())
@@ -37,6 +34,9 @@ struct TodoSearchResults: View {
 }
 
 #Preview {
-    TodoSearchResults()
-        .environment(TodoModel())
+    NavigationStack {
+        TodoSearchResults()
+            .environment(TodoModel())
+            .navigationTitle("Todo")
+    }
 }

@@ -19,6 +19,10 @@ final class AuthModel: @unchecked Sendable {
     var userSession: FirebaseAuth.User?
     var currentUser: User?
     
+    var isSignedIn: Bool {
+        userSession != nil
+    }
+    
     init() {
         self.userSession = Auth.auth().currentUser
         
