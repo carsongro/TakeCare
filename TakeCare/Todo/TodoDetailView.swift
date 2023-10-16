@@ -9,11 +9,13 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct TodoDetailView: View {
-    var list: TakeCareList
+    @Environment(TodoModel.self) private var todoModel
+    
+    @Binding var list: TakeCareList
     
     var body: some View {
-        ScrollView {
-            VStack {
+        List {
+            Section {
                 let imageClipShape = RoundedRectangle(cornerRadius: 10, style: .continuous)
                 WebImage(url: URL(string: list.photoURL ?? ""))
                     .resizable()
@@ -32,11 +34,18 @@ struct TodoDetailView: View {
                     .contentShape(imageClipShape)
                     .clipShape(imageClipShape)
                     .padding()
+                    .frame(maxWidth: .infinity)
                 
                 Text(list.description ?? "")
             }
-            .frame(maxWidth: .infinity)
+            .listRowSeparator(.hidden)
+            
+            Section("Tasks") {
+                TodoTasksList(list: $list)
+                    .environment(todoModel)
+            }
         }
+        .listStyle(.inset)
         .navigationTitle(list.name)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -44,6 +53,7 @@ struct TodoDetailView: View {
 
 #Preview {
     NavigationStack {
-        TodoDetailView(list: PreviewData.previewTakeCareList)
+        TodoDetailView(list: .constant(PreviewData.previewTakeCareList))
+            .environment(TodoModel())
     }
 }

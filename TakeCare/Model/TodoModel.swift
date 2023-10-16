@@ -14,6 +14,11 @@ import FirebaseFirestoreSwift
     var searchText = ""
     var didFetchLists = false
     
+    private enum TodoError: Error {
+        case listNotFound
+        case taskNotFound
+    }
+    
     init() {
         Task {
             await fetchLists()
@@ -37,5 +42,38 @@ import FirebaseFirestoreSwift
             print(error.localizedDescription)
             didFetchLists = true
         }
+    }
+    
+    @discardableResult
+    func updateListTask(list: TakeCareList, task: ListTask, isCompleted: Bool) throws -> TakeCareList {
+        guard let listID = list.id else { throw TodoError.listNotFound }
+        
+        let updatedTask = ListTask(
+            id: task.id,
+            title: task.title,
+            notes: task.notes,
+            completionDate: task.completionDate,
+            repeatInterval: task.repeatInterval,
+            isCompleted: isCompleted
+        )
+        
+        var tasks = list.tasks
+        guard let index = tasks.firstIndex(where: { $0.id == task.id }) else { throw TodoError.taskNotFound }
+        tasks[index] = updatedTask
+        
+        let updatedList = TakeCareList(
+            ownerID: list.ownerID,
+            name: list.name,
+            description: list.description,
+            recipient: list.recipient,
+            tasks: tasks,
+            photoURL: list.photoURL,
+            isActive: list.isActive
+        )
+        
+        let docRef = Firestore.firestore().collection("lists").document(listID)
+        try docRef.setData(from: updatedList)
+        
+        return updatedList
     }
 }

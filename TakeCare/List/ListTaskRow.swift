@@ -11,12 +11,8 @@ struct ListTaskRow: View {
     
     @State var task: ListTask
     
-    var selectedTaskHandler: () -> Void
-    
     var body: some View {
-        Button {
-            selectedTaskHandler()
-        } label: {
+        HStack {
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
                     Text(task.title)
@@ -36,13 +32,13 @@ struct ListTaskRow: View {
                 
                 Spacer(minLength: 0)
             }
-            .font(.subheadline)
-            .accessibilityElement(children: .combine)
         }
-        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+        .font(.subheadline)
+        .accessibilityElement(children: .combine)
     }
 }
 
 #Preview {
-    ListTaskRow(task: PreviewData.previewListTask) { }
+    ListTaskRow(task: PreviewData.previewListTask)
 }

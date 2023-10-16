@@ -93,7 +93,6 @@ struct ListTaskDetailView: View {
                     }
                 }
             }
-            .scrollContentBackground(.visible)
             .onChange(of: showingDatePicker) { oldValue, newValue in
                 withAnimation {
                     showingDatePickerAnimated = showingDatePicker
@@ -118,7 +117,8 @@ struct ListTaskDetailView: View {
                                 title: title,
                                 notes: notes.isEmpty ? nil : notes,
                                 completionDate: showingDatePicker ? completionDate : nil,
-                                repeatInterval: taskRepeatInterval
+                                repeatInterval: taskRepeatInterval,
+                                isCompleted: false
                             )
                         } else {
                             let newTask = ListTask(
@@ -126,7 +126,8 @@ struct ListTaskDetailView: View {
                                 title: title,
                                 notes: notes.isEmpty ? nil : notes,
                                 completionDate: showingDatePicker ? completionDate : nil,
-                                repeatInterval: taskRepeatInterval
+                                repeatInterval: taskRepeatInterval,
+                                isCompleted: false
                             )
                             
                             guard !tasks.contains(newTask) else {

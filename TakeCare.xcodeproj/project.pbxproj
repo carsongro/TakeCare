@@ -13,6 +13,8 @@
 		B5003D402AC875E400BB7BC5 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B5003D3F2AC875E400BB7BC5 /* FirebaseStorage */; };
 		B50066ED2AC90514008826B7 /* LocalImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50066EC2AC90514008826B7 /* LocalImageManager.swift */; };
 		B50341A52AC7952E0075FFF2 /* PasswordResetForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50341A42AC7952E0075FFF2 /* PasswordResetForm.swift */; };
+		B5212A352ADDD87F00FF4AD1 /* TodoTasksList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5212A342ADDD87F00FF4AD1 /* TodoTasksList.swift */; };
+		B5212A372ADDF9BE00FF4AD1 /* TodoTaskRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5212A362ADDF9BE00FF4AD1 /* TodoTaskRow.swift */; };
 		B52D1CBB2ACE38E40024F6A7 /* ListsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52D1CBA2ACE38E40024F6A7 /* ListsModel.swift */; };
 		B52D1CBD2ACE3A480024F6A7 /* TakeCareList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52D1CBC2ACE3A480024F6A7 /* TakeCareList.swift */; };
 		B52D1CBF2ACE3B1C0024F6A7 /* ListTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52D1CBE2ACE3B1C0024F6A7 /* ListTask.swift */; };
@@ -59,6 +61,8 @@
 		B50066EC2AC90514008826B7 /* LocalImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalImageManager.swift; sourceTree = "<group>"; };
 		B50066EE2AC90CD0008826B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B50341A42AC7952E0075FFF2 /* PasswordResetForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetForm.swift; sourceTree = "<group>"; };
+		B5212A342ADDD87F00FF4AD1 /* TodoTasksList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoTasksList.swift; sourceTree = "<group>"; };
+		B5212A362ADDF9BE00FF4AD1 /* TodoTaskRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoTaskRow.swift; sourceTree = "<group>"; };
 		B52D1CBA2ACE38E40024F6A7 /* ListsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsModel.swift; sourceTree = "<group>"; };
 		B52D1CBC2ACE3A480024F6A7 /* TakeCareList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeCareList.swift; sourceTree = "<group>"; };
 		B52D1CBE2ACE3B1C0024F6A7 /* ListTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTask.swift; sourceTree = "<group>"; };
@@ -244,6 +248,8 @@
 				B53DA6A52ADB5DAA008094D7 /* TodoLists.swift */,
 				B53DA6A72ADB709A008094D7 /* TodoSearchResults.swift */,
 				B53DA6A92ADB75D4008094D7 /* TodoDetailView.swift */,
+				B5212A342ADDD87F00FF4AD1 /* TodoTasksList.swift */,
+				B5212A362ADDF9BE00FF4AD1 /* TodoTaskRow.swift */,
 			);
 			path = Todo;
 			sourceTree = "<group>";
@@ -332,6 +338,7 @@
 			files = (
 				B5BC6CA42ACB7CBF00D1F842 /* ListNavigationStack.swift in Sources */,
 				B50341A52AC7952E0075FFF2 /* PasswordResetForm.swift in Sources */,
+				B5212A352ADDD87F00FF4AD1 /* TodoTasksList.swift in Sources */,
 				B52D1CC32ACE60510024F6A7 /* ListRow.swift in Sources */,
 				B58480972AC76625007A655D /* AuthLoginView.swift in Sources */,
 				B595D6ED2AD0BF7800B022E0 /* ListUpdateRecipientForm.swift in Sources */,
@@ -350,6 +357,7 @@
 				B5BC6CAE2ACB7E6700D1F842 /* AppDetailColumn.swift in Sources */,
 				B53DA6A82ADB709A008094D7 /* TodoSearchResults.swift in Sources */,
 				B55B80042AC7CAD100640173 /* DeleteAccountForm.swift in Sources */,
+				B5212A372ADDF9BE00FF4AD1 /* TodoTaskRow.swift in Sources */,
 				B595D6E32AD0B18400B022E0 /* ListTaskDetailView.swift in Sources */,
 				B54552892ACA37D2006135E8 /* Extensions.swift in Sources */,
 				B52D1CC12ACE5FE60024F6A7 /* ListDetailView.swift in Sources */,

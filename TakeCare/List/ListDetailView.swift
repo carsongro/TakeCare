@@ -26,7 +26,7 @@ struct ListDetailView: View, @unchecked Sendable {
     
     var mode: ListDetailMode
     var list: TakeCareList?
-
+    
     @State private var name = ""
     @State private var description = ""
     @State private var recipient: User?
@@ -46,7 +46,7 @@ struct ListDetailView: View, @unchecked Sendable {
                     ListChooseListImageView(listImage: $listImage) {
                         didChangeImage = true
                     }
-                        .listRowSeparator(.hidden, edges: [.bottom, .top])
+                    .listRowSeparator(.hidden)
                     
                     TextField("List Name", text: $name)
                         .multilineTextAlignment(.center)
@@ -71,15 +71,17 @@ struct ListDetailView: View, @unchecked Sendable {
                     
                     ListAddTasksButton(tasks: $tasks)
                     
-                    ForEach(tasks, id: \.self) { task in
-                        ListTaskRow(task: task) {
+                    ForEach(tasks) { task in
+                        Button {
                             selectedTask = task
+                        } label: {
+                            ListTaskRow(task: task)
                         }
+                        .buttonStyle(.plain)
                     }
                     .onDelete(perform: deleteTask)
                     .onMove(perform: moveTask)
                 }
-                .listRowBackground(Color(.systemBackground))
                 
                 Section {
                     if mode == .edit {
@@ -90,7 +92,6 @@ struct ListDetailView: View, @unchecked Sendable {
                         .frame(maxWidth: .infinity)
                     }
                 }
-                .listRowBackground(Color(.systemBackground))
                 .listRowSeparator(.hidden)
             }
             .onSubmit {
@@ -117,8 +118,7 @@ struct ListDetailView: View, @unchecked Sendable {
             }
             .onAppear(perform: getList)
             .environment(\.editMode, .constant(.active))
-            .scrollContentBackground(.hidden)
-            .listStyle(.grouped)
+            .listStyle(.plain)
             .navigationTitle(mode == .edit ? "Edit List" : "New List")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

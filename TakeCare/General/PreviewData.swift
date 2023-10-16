@@ -13,7 +13,8 @@ final class PreviewData {
         title: "Go for walk",
         notes: "Walk around outside?",
         completionDate: Date(),
-        repeatInterval: .never
+        repeatInterval: .never,
+        isCompleted: false
     )
     
     static let previewTakeCareList = TakeCareList(
@@ -28,13 +29,8 @@ final class PreviewData {
                 photoURL: nil
             ),
         tasks: [
-            ListTask(
-                id: UUID().uuidString,
-                title: "Go for walk",
-                notes: "Walk around outside?",
-                completionDate: nil,
-                repeatInterval: .never
-            )
+            previewListTask,
+            previewListTask
         ],
         photoURL: nil,
         isActive: false

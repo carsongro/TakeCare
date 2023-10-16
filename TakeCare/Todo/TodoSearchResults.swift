@@ -24,7 +24,6 @@ struct TodoSearchResults: View {
         }
         .id(UUID())
         
-        
         if listedLists.isEmpty && !todoModel.searchText.isEmpty {
             ContentUnavailableView("No lists found", systemImage: "magnifyingglass")
                 .listRowSeparator(.hidden)

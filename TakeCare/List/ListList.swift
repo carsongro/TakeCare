@@ -49,12 +49,10 @@ struct ListList: View {
                     ListSearchResults()
                 }
             }
-            .listRowBackground(Color(.systemBackground))
         }
         .searchable(text: $listsModel.searchText)
-        .scrollContentBackground(.hidden)
         .navigationTitle("Lists")
-        .listStyle(.grouped)
+        .listStyle(.plain)
         .sheet(isPresented: $showingCreateListForm) {
             ListDetailView(mode: .create)
                 .environment(listsModel)

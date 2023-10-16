@@ -9,12 +9,13 @@ import Firebase
 import FirebaseFirestoreSwift
 import Foundation
 
-struct ListTask: Codable, Hashable, Equatable {
+struct ListTask: Codable, Hashable, Equatable, Identifiable {
     let id: String
     let title: String
     let notes: String?
     let completionDate: Date?
     let repeatInterval: TaskRepeatInterval
+    let isCompleted: Bool
 }
 
 enum TaskRepeatInterval: String, CaseIterable, Codable {

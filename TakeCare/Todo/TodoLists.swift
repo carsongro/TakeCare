@@ -19,6 +19,7 @@ struct TodoLists: View {
                         .frame(maxWidth: .infinity)
                         .listRowSeparator(.hidden, edges: .bottom)
                         .padding()
+                        .listRowSeparator(.hidden)
                 } else if todoModel.lists.isEmpty && todoModel.didFetchLists {
                     ContentUnavailableView(
                         "No Todo's",
@@ -30,11 +31,9 @@ struct TodoLists: View {
                     TodoSearchResults()
                 }
             }
-            .listRowBackground(Color(.systemBackground))
         }
         .searchable(text: $todoModel.searchText)
-        .scrollContentBackground(.hidden)
-        .listStyle(.grouped)
+        .listStyle(.plain)
         .refreshable {
             await todoModel.fetchLists()
         }
