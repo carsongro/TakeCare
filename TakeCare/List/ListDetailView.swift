@@ -90,6 +90,7 @@ struct ListDetailView: View, @unchecked Sendable {
                         }
                         .buttonStyle(.borderedProminent)
                         .frame(maxWidth: .infinity)
+                        .padding()
                     }
                 }
                 .listRowSeparator(.hidden)

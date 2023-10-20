@@ -14,52 +14,47 @@ struct ListChooseListImageView: View {
     
     @State private var listImageItem: PhotosPickerItem?
     @State private var showingPhotosPicker = false
-    @State private var showingListImagePopover = false
     
     var didChangeImageHandler: (() -> Void)? = nil
     
     var body: some View {
-        Button {
-            showingListImagePopover = true
-        } label: {
-            let imageClipShape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-            ZStack {
-                if let listImage = listImage {
-                    Image(uiImage: listImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 200, height: 200)
-                        .clipShape(imageClipShape)
-                        .contentShape(imageClipShape)
-                        .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
-                } else {
-                    Rectangle()
-                        .foregroundStyle(Color(.secondarySystemBackground))
-                        .frame(width: 200, height: 200)
-                        .clipShape(imageClipShape)
-                        .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
-                    Image(systemName: "list.bullet")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 100, height: 100)
-                        .foregroundStyle(.secondary)
-                }
-                Circle()
-                    .foregroundStyle(Color(.secondarySystemBackground))
-                    .shadow(color: .black.opacity(0.6), radius: 5)
-                    .frame(width: 70, height: 70)
-                    .popover(isPresented: $showingListImagePopover) {
-                        Button("Choose Photo", systemImage: "photo.on.rectangle") {
-                            showingListImagePopover = false
-                            showingPhotosPicker = true
-                        }
-                        .padding()
-                        .presentationCompactAdaptation(.popover)
-                    }
-                Image(systemName: "camera.fill")
+        let imageClipShape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        ZStack {
+            if let listImage = listImage {
+                Image(uiImage: listImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 20, height: 20)
+                    .frame(width: 200, height: 200)
+                    .clipShape(imageClipShape)
+                    .contentShape(imageClipShape)
+                    .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
+            } else {
+                Rectangle()
+                    .foregroundStyle(Color(.secondarySystemBackground))
+                    .frame(width: 200, height: 200)
+                    .clipShape(imageClipShape)
+                    .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
+                Image(systemName: "list.bullet")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 100, height: 100)
+                    .foregroundStyle(.secondary)
+            }
+            Menu {
+                Button("Choose Photo", systemImage: "photo.on.rectangle") {
+                    showingPhotosPicker = true
+                }
+            } label: {
+                ZStack {
+                    Circle()
+                        .foregroundStyle(Color(.secondarySystemBackground))
+                        .shadow(color: .black.opacity(0.6), radius: 5)
+                        .frame(width: 70, height: 70)
+                    Image(systemName: "camera.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 20, height: 20)
+                }
             }
         }
         .frame(maxWidth: .infinity)
@@ -82,11 +77,11 @@ struct ListChooseListImageView: View {
     }
     
     var cornerRadius: Double {
-        #if os(iOS)
+#if os(iOS)
         return 10
-        #else
+#else
         return 4
-        #endif
+#endif
     }
 }
 
