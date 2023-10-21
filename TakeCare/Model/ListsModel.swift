@@ -9,6 +9,7 @@ import SwiftUI
 import Firebase
 import FirebaseFirestoreSwift
 
+/// A model for lists
 @Observable final class ListsModel: @unchecked Sendable {
     var lists = [TakeCareList]()
     var searchText = ""

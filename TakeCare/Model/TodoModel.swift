@@ -9,6 +9,7 @@ import SwiftUI
 import Firebase
 import FirebaseFirestoreSwift
 
+/// A model for todo
 @Observable final class TodoModel: @unchecked Sendable {
     var lists = [TakeCareList]()
     var searchText = ""
