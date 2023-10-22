@@ -15,8 +15,8 @@ struct TodoNavigationStack: View {
             TodoLists()
                 .environment(todoModel)
                 .navigationTitle("Todo")
-                .navigationDestination(for: TakeCareList.self) { takeCareListID in
-                    if let index = todoModel.lists.firstIndex(where: { $0.id == takeCareListID.id }) {
+                .navigationDestination(for: TakeCareList.self) { takeCareList in
+                    if let index = todoModel.lists.firstIndex(where: { $0.id == takeCareList.id }) {
                         TodoDetailView(list: $todoModel.lists[index])
                             .environment(todoModel)
                     }

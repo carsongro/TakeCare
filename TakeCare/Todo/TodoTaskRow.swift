@@ -11,21 +11,22 @@ struct TodoTaskRow: View {
     
     @State var task: ListTask
     @State var isCompleted: Bool
+    let interactionDisabled: Bool
     
-    var tapHandler: (Bool) -> Void
+    var tapHandler: ((Bool) -> Void)?
     
     var body: some View {
-        Button {
-            isCompleted.toggle()
-            tapHandler(isCompleted)
-        } label: {
-            HStack {
-                checkIndicator(isCompleted: isCompleted)
-                
-                ListTaskRow(task: task)
+        if interactionDisabled {
+            rowView
+        } else {
+            Button {
+                isCompleted.toggle()
+                tapHandler?(isCompleted)
+            } label: {
+                rowView
             }
+            .sensoryFeedback(.impact, trigger: isCompleted)
         }
-        .sensoryFeedback(.impact, trigger: isCompleted)
     }
     
     struct checkIndicator: View {
@@ -45,8 +46,20 @@ struct TodoTaskRow: View {
             }
         }
     }
+    
+    var rowView: some View {
+        HStack {
+            checkIndicator(isCompleted: isCompleted)
+            
+            ListTaskRow(task: task)
+        }
+    }
 }
 
 #Preview {
-    TodoTaskRow(task: PreviewData.previewListTask, isCompleted: false) { _ in }
+    TodoTaskRow(
+        task: PreviewData.previewListTask,
+        isCompleted: false,
+        interactionDisabled: false
+    )
 }

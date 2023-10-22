@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var authModel = AuthModel()
-    @State private var selection: AppScreen? = .lists
+    @State private var selection: AppScreen? = .progress
     
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     

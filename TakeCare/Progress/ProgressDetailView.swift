@@ -1,14 +1,14 @@
 //
-//  TodoDetailView.swift
+//  ProgressDetailView.swift
 //  TakeCare
 //
-//  Created by Carson Gross on 10/14/23.
+//  Created by Carson Gross on 10/21/23.
 //
 
 import SwiftUI
 
-struct TodoDetailView: View {
-    @Environment(TodoModel.self) private var todoModel
+struct ProgressDetailView: View {
+    @Environment(\.dismiss) private var dismiss
     
     @Binding var list: TakeCareList
     
@@ -19,9 +19,8 @@ struct TodoDetailView: View {
             }
             .listRowSeparator(.hidden)
             
-            Section("Tasks") {
-                TodoTasksList(list: $list)
-                    .environment(todoModel)
+            Section("List Progress") {
+                ProgressTasksList(list: $list)
             }
         }
         .listStyle(.inset)
@@ -32,7 +31,6 @@ struct TodoDetailView: View {
 
 #Preview {
     NavigationStack {
-        TodoDetailView(list: .constant(PreviewData.previewTakeCareList))
-            .environment(TodoModel())
+        ProgressDetailView(list: .constant(PreviewData.previewTakeCareList))
     }
 }

@@ -16,7 +16,11 @@ struct TodoTasksList: View {
     
     var body: some View {
         ForEach(list.tasks) { task in
-            TodoTaskRow(task: task, isCompleted: task.isCompleted) { isCompleted in
+            TodoTaskRow(
+                task: task,
+                isCompleted: task.isCompleted,
+                interactionDisabled: false
+            ) { isCompleted in
                 Task {
                     try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
                     await todoModel.fetchLists()
