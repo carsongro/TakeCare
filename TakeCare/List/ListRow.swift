@@ -59,7 +59,7 @@ struct ListRow: View {
                 
                 Image(systemName: "info.circle")
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 22, height: 22)
                     .foregroundStyle(.accent)
                     .padding(.leading, 8)

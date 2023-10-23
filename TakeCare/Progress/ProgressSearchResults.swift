@@ -19,7 +19,13 @@ struct ProgressSearchResults: View {
     var body: some View {
         ForEach(listedLists) { list in
             NavigationLink(value: list) {
-                ListRow(list: list, showingInfoIndicator: false)
+                HStack {
+                    ListRow(list: list, showingInfoIndicator: false)
+                    
+                    Spacer(minLength: 0)
+                    
+                    ListIndicator(isCompleted: list.tasks.allSatisfy({ $0.isCompleted }))
+                }
             }
         }
         .id(UUID())
@@ -30,8 +36,22 @@ struct ProgressSearchResults: View {
                 .listRowBackground(Color(.systemBackground))
         }
     }
+    
+    struct ListIndicator: View {
+        let isCompleted: Bool
+        
+        var body: some View {
+            Image(systemName: isCompleted ? "checkmark.circle" : "checklist")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 22, height: 22)
+                .padding(.leading, 8)
+                .foregroundStyle(isCompleted ? .green : .accentColor)
+        }
+    }
 }
 
 #Preview {
     ProgressSearchResults()
+        .environment(ProgressModel())
 }

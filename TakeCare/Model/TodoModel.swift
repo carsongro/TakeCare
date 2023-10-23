@@ -26,7 +26,7 @@ import FirebaseFirestoreSwift
         }
     }
     
-    func fetchLists() async {
+    func fetchLists(animated: Bool = true) async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
@@ -34,7 +34,12 @@ import FirebaseFirestoreSwift
             let updatedLists = try await Firestore.firestore().collection("lists").whereField(listRef, isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
 
             Task { @MainActor in
-                withAnimation {
+                if animated {
+                    withAnimation {
+                        self.lists = updatedLists
+                        didFetchLists = true
+                    }
+                } else {
                     self.lists = updatedLists
                     didFetchLists = true
                 }

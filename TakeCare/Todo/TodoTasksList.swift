@@ -23,7 +23,7 @@ struct TodoTasksList: View {
             ) { isCompleted in
                 Task {
                     try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
-                    await todoModel.fetchLists()
+                    await todoModel.fetchLists(animated: false)
                 }
             }
         }
