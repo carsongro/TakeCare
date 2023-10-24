@@ -17,6 +17,15 @@ final class PreviewData {
         isCompleted: false
     )
     
+    static let previewListTask2 = ListTask(
+        id: UUID().uuidString,
+        title: "Exercise",
+        notes: "Move around",
+        completionDate: Date(),
+        repeatInterval: .never,
+        isCompleted: false
+    )
+    
     static let previewTakeCareList = TakeCareList(
         id: nil,
         ownerID: "",
@@ -30,7 +39,7 @@ final class PreviewData {
             ),
         tasks: [
             previewListTask,
-            previewListTask
+            previewListTask2
         ],
         photoURL: nil,
         isActive: false

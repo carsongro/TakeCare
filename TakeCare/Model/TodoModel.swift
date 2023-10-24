@@ -82,4 +82,14 @@ import FirebaseFirestoreSwift
         
         return updatedList
     }
+    
+    func updateListActive(isActive: Bool, list: TakeCareList) {
+        guard let id = list.id else { return }
+        
+        Firestore.firestore().collection("lists").document(id).updateData(["isActive" : isActive])
+        
+        Task {
+            await fetchLists(animated: false)
+        }
+    }
 }

@@ -23,10 +23,36 @@ struct TodoDetailView: View {
                 TodoTasksList(list: $list)
                     .environment(todoModel)
             }
+            
+            Section {
+                activeButton
+                    .listRowSeparator(.hidden)
+            } header: {
+                Text("List Status")
+            }
         }
         .listStyle(.inset)
         .navigationTitle(list.name)
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    @ViewBuilder
+    var activeButton: some View {
+        HStack {
+            if list.isActive {
+                Button("Make inactive") {
+                    todoModel.updateListActive(isActive: false, list: list)
+                }
+                .buttonStyle(.borderedProminent)
+            } else {
+                Button("Make active") {
+                    todoModel.updateListActive(isActive: true, list: list)
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .frame(maxWidth: .infinity)
+    
     }
 }
 

@@ -26,7 +26,7 @@ import FirebaseFirestoreSwift
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
-            let updatedLists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).whereField("isActive", isEqualTo: false).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) } // TODO: Handle isActive
+            let updatedLists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).whereField("isActive", isEqualTo: true).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) } // TODO: Handle isActive
 
             Task { @MainActor in
                 withAnimation {
