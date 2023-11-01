@@ -61,7 +61,7 @@
 		B8237F1A2AE4B1DA00AF9A2C /* ProgressSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F192AE4B1DA00AF9A2C /* ProgressSearchResults.swift */; };
 		B8237F1C2AE4B3C800AF9A2C /* ProgressTasksList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F1B2AE4B3C800AF9A2C /* ProgressTasksList.swift */; };
 		B8237F1E2AE4B41000AF9A2C /* ListDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */; };
-		B8E79FFC2AE36DBF00EE512C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8E79FFB2AE36DBF00EE512C /* GoogleService-Info.plist */; };
+		B8A0A50B2AF06B5F008FC8F2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,7 +117,7 @@
 		B8237F192AE4B1DA00AF9A2C /* ProgressSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSearchResults.swift; sourceTree = "<group>"; };
 		B8237F1B2AE4B3C800AF9A2C /* ProgressTasksList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTasksList.swift; sourceTree = "<group>"; };
 		B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailHeader.swift; sourceTree = "<group>"; };
-		B8E79FFB2AE36DBF00EE512C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,7 +202,7 @@
 			children = (
 				B58A14042AC520A30045D191 /* Assets.xcassets */,
 				B50066EE2AC90CD0008826B7 /* Info.plist */,
-				B8E79FFB2AE36DBF00EE512C /* GoogleService-Info.plist */,
+				B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */,
 				B58A14062AC520A30045D191 /* TakeCare.entitlements */,
 				B58A14002AC520A20045D191 /* TakeCareApp.swift */,
 				B5E643C72AC7924B0056A111 /* ContentView.swift */,
@@ -353,7 +353,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B58A14092AC520A30045D191 /* Preview Assets.xcassets in Resources */,
-				B8E79FFC2AE36DBF00EE512C /* GoogleService-Info.plist in Resources */,
+				B8A0A50B2AF06B5F008FC8F2 /* GoogleService-Info.plist in Resources */,
 				B58A14052AC520A30045D191 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

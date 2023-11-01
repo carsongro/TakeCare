@@ -88,8 +88,22 @@ import FirebaseFirestoreSwift
         
         Firestore.firestore().collection("lists").document(id).updateData(["isActive" : isActive])
         
+        if isActive {
+            scheduleNotifications()
+        } else {
+            removeNotifications()
+        }
+        
         Task {
             await fetchLists(animated: false)
         }
+    }
+    
+    private func scheduleNotifications() {
+        
+    }
+    
+    private func removeNotifications() {
+        
     }
 }
