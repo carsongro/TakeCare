@@ -40,6 +40,7 @@ struct ListSearchResults: View, @unchecked Sendable {
             selectedList = nil
         }) {
             ListDetailView(mode: .edit, list: selectedList)
+                .interactiveDismissDisabled()
         }
         
         if listedLists.isEmpty && !listsModel.searchText.isEmpty {

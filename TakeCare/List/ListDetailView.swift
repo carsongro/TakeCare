@@ -38,6 +38,7 @@ struct ListDetailView: View, @unchecked Sendable {
     @State private var showingDeleteAlert = false
     @State private var showingModifyTaskForm = false
     @State private var didChangeImage = false
+    @State private var showingDismissDialog = false
     
     var body: some View {
         NavigationStack {
@@ -125,7 +126,7 @@ struct ListDetailView: View, @unchecked Sendable {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        dismiss()
+                        showingDismissDialog = true
                     }
                 }
                 
@@ -164,6 +165,11 @@ struct ListDetailView: View, @unchecked Sendable {
                     }
                     .fontWeight(.semibold)
                     .disabled(name.isEmpty || tasks.isEmpty)
+                }
+            }
+            .confirmationDialog("Are you sure you want to discard your changes?", isPresented: $showingDismissDialog) {
+                Button("Discard Changes", role: .destructive) {
+                    dismiss()
                 }
             }
             .alert(
