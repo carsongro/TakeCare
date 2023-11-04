@@ -22,37 +22,44 @@ import UserNotifications
     }
     
     init() {
-        refresh()
+        refreshNewDay()
     }
     
-    func refresh() {
+    func refresh(animated: Bool = false) {
         Task {
-            await fetchLists()
+            let updatedLists = await fetchLists()
+            if animated {
+                withAnimation {
+                    self.lists = updatedLists
+                    didFetchLists = true
+                }
+            } else {
+                self.lists = updatedLists
+                didFetchLists = true
+            }
+        }
+    }
+    
+    func refreshNewDay() {
+        Task {
+            lists = await fetchLists()
             updateTasksCompletion()
         }
     }
     
-    func fetchLists(animated: Bool = true) async {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+    func fetchLists() async -> [TakeCareList] {
+        guard let uid = Auth.auth().currentUser?.uid else { return [] }
         
         do {
             let listRef = FieldPath(["recipient", "id"])
             let updatedLists = try await Firestore.firestore().collection("lists").whereField(listRef, isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
             
-            Task { @MainActor in
-                if animated {
-                    withAnimation {
-                        self.lists = updatedLists
-                        didFetchLists = true
-                    }
-                } else {
-                    self.lists = updatedLists
-                    didFetchLists = true
-                }
-            }
+            didFetchLists = true
+            return updatedLists
         } catch {
             print(error.localizedDescription)
             didFetchLists = true
+            return []
         }
     }
     
@@ -104,6 +111,10 @@ import UserNotifications
             scheduleTaskNotifications(for: updatedTask)
         }
         
+        Task {
+            refresh()
+        }
+        
         return updatedList
     }
     
@@ -119,7 +130,7 @@ import UserNotifications
         }
         
         Task {
-            await fetchLists(animated: false)
+            lists = await fetchLists()
         }
     }
     
