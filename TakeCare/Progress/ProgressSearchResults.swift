@@ -24,11 +24,19 @@ struct ProgressSearchResults: View {
                     
                     Spacer(minLength: 0)
                     
-                    ListIndicator(isCompleted: list.tasks.allSatisfy({ $0.isCompleted }))
+                    ListIndicator(isCompleted: list.tasks.filter {
+                        if let completionDate = $0.completionDate,
+                           (completionDate <= Date.now ||
+                            Calendar.current.isDateInToday(completionDate)) {
+                            return true
+                        } else {
+                            return false
+                        }
+                    }.allSatisfy { $0.isCompleted })
                 }
             }
         }
-        
+        .id(UUID())
         if listedLists.isEmpty && !progressModel.searchText.isEmpty {
             ContentUnavailableView("No lists in progress found", systemImage: "magnifyingglass")
                 .listRowSeparator(.hidden)

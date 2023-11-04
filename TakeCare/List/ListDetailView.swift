@@ -77,7 +77,7 @@ struct ListDetailView: View, @unchecked Sendable {
                 Section {
                     ListAddTasksButton(tasks: $tasks)
                     
-                    ForEach(tasks) { task in
+                    ForEach(tasks, id: \.self) { task in
                         if list?.isActive ?? false {
                             ListTaskRow(task: task)
                         } else {
@@ -158,6 +158,8 @@ struct ListDetailView: View, @unchecked Sendable {
                     Button("Done") {
                         Task {
                             dismiss()
+                            guard listDidChange else { return }
+                            
                             do {
                                 switch mode {
                                 case .create:

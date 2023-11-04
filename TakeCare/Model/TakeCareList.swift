@@ -10,7 +10,7 @@ import FirebaseFirestoreSwift
 import Foundation
 
 
-struct TakeCareList: Codable, Hashable, Equatable, Identifiable, @unchecked Sendable {
+struct TakeCareList: Codable, Hashable, Identifiable, @unchecked Sendable {
     @DocumentID var id: String?
     let ownerID: String
     let name: String

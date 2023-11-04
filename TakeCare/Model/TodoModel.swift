@@ -128,7 +128,7 @@ import UserNotifications
         
         for list in lists {
             for task in list.tasks {
-                // If the task was marked completed on any day but today, we reset it's value
+                // If the task was marked completed on any day but today, set it to not completed
                 if let lastCompletionDate = task.lastCompletionDate,
                    !Calendar.current.isDateInToday(lastCompletionDate),
                    task.isCompleted {

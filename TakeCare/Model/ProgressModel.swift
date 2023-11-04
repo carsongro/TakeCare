@@ -14,20 +14,20 @@ import FirebaseFirestoreSwift
     var searchText = ""
     var didFetchLists = false
     var canShowDetail = true
+    var didRegisterNotificationObserver = false
     
     init() {
+        registerNotificationObserver()
         Task {
             await fetchLists()
         }
-        registerNotificationObserver()
     }
     
     func fetchLists() async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
-            let updatedLists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).whereField("isActive", isEqualTo: true).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) } // TODO: Handle isActive
-
+            let updatedLists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).whereField("isActive", isEqualTo: true).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
             Task { @MainActor in
                 withAnimation {
                     self.lists = updatedLists
@@ -41,8 +41,10 @@ import FirebaseFirestoreSwift
     }
     
     private func registerNotificationObserver() {
+        guard !didRegisterNotificationObserver else { return }
         // If a user updates, creates, deletes, etc. a list from the lists tab, we refresh our lists here
         NotificationCenter.default.addObserver(self, selector: #selector(updateLists), name: Notification.Name("UpdatedLists"), object: nil)
+        didRegisterNotificationObserver = true
     }
     
     @objc private func updateLists() {
