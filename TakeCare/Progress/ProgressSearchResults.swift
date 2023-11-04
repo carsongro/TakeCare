@@ -17,7 +17,7 @@ struct ProgressSearchResults: View {
     }
     
     var body: some View {
-        ForEach(listedLists) { list in
+        ForEach(listedLists, id: \.self) { list in
             NavigationLink(value: list) {
                 HStack {
                     ListRow(list: list, showingInfoIndicator: false)
@@ -28,7 +28,6 @@ struct ProgressSearchResults: View {
                 }
             }
         }
-        .id(UUID())
         
         if listedLists.isEmpty && !progressModel.searchText.isEmpty {
             ContentUnavailableView("No lists in progress found", systemImage: "magnifyingglass")

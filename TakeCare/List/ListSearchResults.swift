@@ -20,7 +20,7 @@ struct ListSearchResults: View, @unchecked Sendable {
     }
     
     var body: some View {
-        ForEach(listedLists) { list in
+        ForEach(listedLists, id: \.self) { list in
             Button {
                 selectedList = list
             } label: {
@@ -28,9 +28,6 @@ struct ListSearchResults: View, @unchecked Sendable {
             }
             .buttonStyle(.plain)
         }
-        /// This needs to be here for the list to properly update after modifying individual lists:
-        /// https://www.hackingwithswift.com/articles/210/how-to-fix-slow-list-updates-in-swiftui
-        .id(UUID())
         .onChange(of: selectedList) { oldValue, newValue in
             if newValue != nil {
                 showingListDetail = true

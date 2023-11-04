@@ -17,7 +17,7 @@ struct TodoSearchResults: View {
     }
     
     var body: some View {
-        ForEach(listedLists) { list in
+        ForEach(listedLists, id: \.self) { list in
             NavigationLink(value: list) {
                 HStack {
                     ListRow(list: list, showingInfoIndicator: false)
@@ -33,7 +33,6 @@ struct TodoSearchResults: View {
                 }
             }
         }
-        .id(UUID())
         
         if listedLists.isEmpty && !todoModel.searchText.isEmpty {
             ContentUnavailableView("No lists found", systemImage: "magnifyingglass")

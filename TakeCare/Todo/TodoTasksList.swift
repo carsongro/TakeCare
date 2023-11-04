@@ -43,7 +43,7 @@ struct TodoTasksList: View {
     }
     
     var body: some View {
-        ForEach(filteredTasks) { task in
+        ForEach(filteredTasks, id: \.self) { task in
             TodoTaskRow(
                 task: task,
                 isCompleted: task.isCompleted,
@@ -59,7 +59,6 @@ struct TodoTasksList: View {
                 }
             }
         }
-        .id(UUID())
         .alert("There was an error modifying the task", isPresented: $showingErrorAlert) { }
     }
 }

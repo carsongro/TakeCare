@@ -11,14 +11,13 @@ struct ProgressTasksList: View {
     @Binding var list: TakeCareList
     
     var body: some View {
-        ForEach(list.tasks) { task in
+        ForEach(list.tasks, id: \.self) { task in
             TodoTaskRow(
                 task: task,
                 isCompleted: task.isCompleted,
                 interactionDisabled: true
             )
         }
-        .id(UUID())
     }
 }
 

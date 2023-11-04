@@ -12,29 +12,26 @@ struct ListRow: View {
     var list: TakeCareList
     var showingInfoIndicator = true
     
-    @ObservedObject var imageManager = ImageManager()
-    
     var body: some View {
         HStack {
-            if let image = imageManager.image {
-                Image(uiImage: image)
-                    .resizable()
+            WebImage(url: URL(string: list.photoURL ?? ""))
+                .resizable()
+                .placeholder {
+                    ZStack {
+                        Rectangle()
+                            .listRowImage()
+                            .foregroundStyle(Color(.secondarySystemBackground))
+                        
+                        Image(systemName: "list.bullet")
+                            .resizable()
+                            .padding()
+                            .fontWeight(.light)
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(.secondary)
+                    }
                     .listRowImage()
-            } else {
-                ZStack {
-                    Rectangle()
-                        .listRowImage()
-                        .foregroundStyle(Color(.secondarySystemBackground))
-                    
-                    Image(systemName: "list.bullet")
-                        .resizable()
-                        .padding()
-                        .fontWeight(.light)
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundStyle(.secondary)
                 }
                 .listRowImage()
-            }
             
             VStack(alignment: .leading) {
                 Text(list.name)
@@ -65,9 +62,6 @@ struct ListRow: View {
                     .padding(.leading, 8)
             }
                 
-        }
-        .onAppear {
-            imageManager.load(url: URL(string: list.photoURL ?? ""))
         }
         .font(.subheadline)
         .contentShape(Rectangle())
