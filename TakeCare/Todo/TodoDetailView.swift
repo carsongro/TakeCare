@@ -45,7 +45,7 @@ struct TodoDetailView: View {
         .navigationTitle(list.name)
         .navigationBarTitleDisplayMode(.inline)
         .refreshable {
-            todoModel.refreshNewDay()
+            todoModel.refresh()
         }
     }
     

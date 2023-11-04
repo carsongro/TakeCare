@@ -52,7 +52,7 @@ struct TodoTasksList: View {
                 Task {
                     do {
                         try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
-                        todoModel.refresh(animated: true)
+                        await todoModel.fetchLists(animated: true)
                     } catch {
                         showingErrorAlert = true
                     }
