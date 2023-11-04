@@ -19,19 +19,11 @@ struct TodoDetailView: View {
             }
             .listRowSeparator(.hidden)
             
-            Section("Today") {
-                TodoTasksList(list: $list, taskFilter: .todayNotCompleted)
-                    .environment(todoModel)
-            }
-            
-            Section("Other Tasks") {
-                TodoTasksList(list: $list, taskFilter: .other)
-                    .environment(todoModel)
-            }
-            
-            Section("Completed") {
-                TodoTasksList(list: $list, taskFilter: .completed)
-                    .environment(todoModel)
+            ForEach(TaskFilter.allCases, id: \.self) { filter in
+                Section(filter.rawValue) {
+                    TodoTasksList(list: $list, taskFilter: filter)
+                        .environment(todoModel)
+                }
             }
             
             Section {

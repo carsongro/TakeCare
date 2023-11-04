@@ -14,18 +14,14 @@ struct TodoTasksList: View {
     
     @State private var showingErrorAlert = false
     
-    enum TaskFilter {
-        case todayNotCompleted
-        case other
-        case completed
-    }
-    
     var taskFilter: TaskFilter
     
     var filteredTasks: [ListTask] {
+        var tasks = list.tasks
+        
         switch taskFilter {
         case .todayNotCompleted:
-            return list.tasks.filter {
+            tasks = list.tasks.filter {
                 if let completionDate = $0.completionDate,
                    ($0.repeatInterval == .daily ||
                     Calendar.current.isDateInToday(completionDate)) &&
@@ -36,9 +32,32 @@ struct TodoTasksList: View {
                 }
             }
         case .other:
-            return list.tasks.filter { !$0.isCompleted && $0.completionDate == nil }
+            tasks = list.tasks.filter {
+                if let completionDate = $0.completionDate {
+                    return !$0.isCompleted && !Calendar.current.isDateInToday(completionDate) && $0.repeatInterval == .never
+                } else {
+                    return !$0.isCompleted
+                }
+            }
         case .completed:
-            return list.tasks.filter { $0.isCompleted }
+            tasks = list.tasks.filter { $0.isCompleted }
+        }
+        
+        return tasks.sorted {
+            // Sort by the time of day so that daily notifications aren't always first
+            // If only one has a completion date, show the one with a completion date
+            // Otherwise sort by title
+            if let completionDate1 = $0.completionDate,
+               let completionDate2 = $1.completionDate {
+                    
+                return completionDate1.comparableTime < completionDate2.comparableTime
+            } else if $0.completionDate == nil {
+                return $1.completionDate != nil
+            } else if $1.completionDate == nil {
+                return $0.completionDate != nil
+            } else {
+                return $0.title < $1.title
+            }
         }
     }
     

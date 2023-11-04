@@ -54,6 +54,7 @@
 		B5D85A612AD9E61D006413F7 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = B5D85A602AD9E61D006413F7 /* SDWebImageSwiftUI */; };
 		B5E643C82AC7924B0056A111 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C72AC7924B0056A111 /* ContentView.swift */; };
 		B5E643CA2AC792ED0056A111 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C92AC792ED0056A111 /* AppTabView.swift */; };
+		B80C5A432AF6F3640084FBDD /* TaskFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80C5A422AF6F3640084FBDD /* TaskFilter.swift */; };
 		B821FC3C2AE4A26100623152 /* ProgressNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B821FC3B2AE4A26100623152 /* ProgressNavigationStack.swift */; };
 		B8237F142AE4AC4300AF9A2C /* ProgressLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F132AE4AC4300AF9A2C /* ProgressLists.swift */; };
 		B8237F162AE4AC6100AF9A2C /* ProgressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F152AE4AC6100AF9A2C /* ProgressModel.swift */; };
@@ -110,6 +111,7 @@
 		B5BC6CAD2ACB7E6700D1F842 /* AppDetailColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailColumn.swift; sourceTree = "<group>"; };
 		B5E643C72AC7924B0056A111 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B5E643C92AC792ED0056A111 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
+		B80C5A422AF6F3640084FBDD /* TaskFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskFilter.swift; sourceTree = "<group>"; };
 		B821FC3B2AE4A26100623152 /* ProgressNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressNavigationStack.swift; sourceTree = "<group>"; };
 		B8237F132AE4AC4300AF9A2C /* ProgressLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressLists.swift; sourceTree = "<group>"; };
 		B8237F152AE4AC6100AF9A2C /* ProgressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressModel.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				B52D1CBC2ACE3A480024F6A7 /* TakeCareList.swift */,
 				B52D1CBE2ACE3B1C0024F6A7 /* ListTask.swift */,
 				B53DA6A32ADB5C0A008094D7 /* TodoModel.swift */,
+				B80C5A422AF6F3640084FBDD /* TaskFilter.swift */,
 				B8237F152AE4AC6100AF9A2C /* ProgressModel.swift */,
 			);
 			path = Model;
@@ -369,6 +372,7 @@
 				B50341A52AC7952E0075FFF2 /* PasswordResetForm.swift in Sources */,
 				B8237F182AE4B04E00AF9A2C /* ProgressDetailView.swift in Sources */,
 				B5212A352ADDD87F00FF4AD1 /* TodoTasksList.swift in Sources */,
+				B80C5A432AF6F3640084FBDD /* TaskFilter.swift in Sources */,
 				B52D1CC32ACE60510024F6A7 /* ListRow.swift in Sources */,
 				B58480972AC76625007A655D /* AuthLoginView.swift in Sources */,
 				B595D6ED2AD0BF7800B022E0 /* ListUpdateRecipientForm.swift in Sources */,

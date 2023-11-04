@@ -50,12 +50,21 @@ import FirebaseFirestoreSwift
             photoURL = try await LocalImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
         }
         
+        let sortedTasks = tasks.sorted {
+            if let completionDate1 = $0.completionDate,
+               let completionDate2 = $1.completionDate {
+                return completionDate1 < completionDate2
+            } else {
+                return $0.title < $1.title
+            }
+        }
+        
         let list = TakeCareList(
             ownerID: uid,
             name: name,
             description: description,
             recipient: recipient,
-            tasks: tasks,
+            tasks: sortedTasks,
             photoURL: photoURL,
             isActive: false
         )

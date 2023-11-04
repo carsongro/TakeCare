@@ -53,7 +53,7 @@ import UserNotifications
                 
                 if isInitialFetch {
                     updateTasksCompletion()
-                    correctLocalNotifications()
+                    correctLocalNotificationsIfNeeded()
                 }
             }
         } catch {
@@ -229,12 +229,17 @@ import UserNotifications
         UNUserNotificationCenter.current().add(request)
     }
     
+    
+    private func correctLocalNotificationsIfNeeded() {
+        removeLocalNotificationsForDeletedTasks()
+        addLocalNotificationsForNewTasks()
+    }
+    
     /// A method to remove local notifications if the logged in user has been removed from a list as a recipient
     /// Or a list task is deleted by the list owner while the list is active
-    private func correctLocalNotifications() {
-        let allTodoTasksIDs = Set(lists.compactMap { $0.tasks.compactMap { $0.id } }.joined())
-        
+    private func removeLocalNotificationsForDeletedTasks() {
         Task {
+            let allTodoTasksIDs = Set(lists.compactMap { $0.tasks.compactMap { $0.id } }.joined())
             let requests = await UNUserNotificationCenter.current().pendingNotificationRequests()
             
             var idsToRemove = [String]()
@@ -245,6 +250,20 @@ import UserNotifications
             }
             
             UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: idsToRemove)
+        }
+    }
+    
+    /// A method to add local notifications for tasks that have been added since accepting the list
+    private func addLocalNotificationsForNewTasks() {
+        Task {
+            let allTodoTasks = lists.compactMap { $0.tasks.compactMap { $0 } }.joined()
+            let requests = Set(await UNUserNotificationCenter.current().pendingNotificationRequests().compactMap { $0.identifier })
+            
+            for task in allTodoTasks {
+                if !requests.contains(task.id) {
+                    scheduleTaskNotifications(for: task)
+                }
+            }
         }
     }
 }

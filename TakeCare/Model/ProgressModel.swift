@@ -13,7 +13,6 @@ import FirebaseFirestoreSwift
     var lists = [TakeCareList]()
     var searchText = ""
     var didFetchLists = false
-    var canShowDetail = true
     var didRegisterNotificationObserver = false
     
     init() {

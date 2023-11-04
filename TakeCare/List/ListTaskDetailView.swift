@@ -123,24 +123,35 @@ struct ListTaskDetailView: View {
                                 )
                             }
                         case .create:
-                                let newTask = ListTask(
-                                    id: UUID().uuidString,
-                                    title: title,
-                                    notes: notes.isEmpty ? nil : notes,
-                                    completionDate: showingDatePicker ? completionDate : nil,
-                                    repeatInterval: taskRepeatInterval,
-                                    isCompleted: false,
-                                    lastCompletionDate: nil
-                                )
-                                
-                                guard !tasks.contains(newTask) else {
-                                    showingDuplicateTaskAlert = true
-                                    return
-                                }
-                                
-                                tasks.append(newTask)
-                        }
+                            let newTask = ListTask(
+                                id: UUID().uuidString,
+                                title: title,
+                                notes: notes.isEmpty ? nil : notes,
+                                completionDate: showingDatePicker ? completionDate : nil,
+                                repeatInterval: taskRepeatInterval,
+                                isCompleted: false,
+                                lastCompletionDate: nil
+                            )
                             
+                            guard !tasks.contains(newTask) else {
+                                showingDuplicateTaskAlert = true
+                                return
+                            }
+                            
+                            tasks.append(newTask)
+                            
+                            let sortedTasks = tasks.sorted {
+                                if let completionDate1 = $0.completionDate,
+                                   let completionDate2 = $1.completionDate {
+                                    return completionDate1 < completionDate2
+                                } else {
+                                    return $0.title < $1.title
+                                }
+                            }
+                            
+                            tasks = sortedTasks
+                        }
+                        
                         dismiss()
                     }
                     .disabled(title.isEmpty)

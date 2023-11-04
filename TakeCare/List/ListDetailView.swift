@@ -90,12 +90,12 @@ struct ListDetailView: View, @unchecked Sendable {
                         }
                     }
                     .onDelete(perform: deleteTask)
-                    .onMove(perform: moveTask)
+//                    .onMove(perform: moveTask)
                 } header: {
                     Text("Tasks")
                 } footer: {
                     if mode == .edit && list?.isActive ?? true {
-                        Text("Tasks cannot be modified while the list is active.")
+                        Text("Tasks cannot be modified while the list is active. If a new task is added, recipients will not be notified until they open the app after the new task is added")
                     }
                 }
                 
