@@ -53,6 +53,7 @@ import UserNotifications
                 
                 if isInitialFetch {
                     updateTasksCompletion()
+                    correctLocalNotifications()
                 }
             }
         } catch {
@@ -226,5 +227,24 @@ import UserNotifications
         let request = UNNotificationRequest(identifier: task.id, content: content, trigger: trigger)
         
         UNUserNotificationCenter.current().add(request)
+    }
+    
+    /// A method to remove local notifications if the logged in user has been removed from a list as a recipient
+    /// Or a list task is deleted by the list owner while the list is active
+    private func correctLocalNotifications() {
+        let allTodoTasksIDs = Set(lists.compactMap { $0.tasks.compactMap { $0.id } }.joined())
+        
+        Task {
+            let requests = await UNUserNotificationCenter.current().pendingNotificationRequests()
+            
+            var idsToRemove = [String]()
+            for id in requests.compactMap({ $0.identifier }) {
+                if !allTodoTasksIDs.contains(id) {
+                    idsToRemove.append(id)
+                }
+            }
+            
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: idsToRemove)
+        }
     }
 }
