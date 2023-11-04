@@ -16,7 +16,7 @@ struct TakeCareList: Codable, Hashable, Equatable, Identifiable, @unchecked Send
     let name: String
     let description: String?
     let recipient: User?
-    let tasks: [ListTask]
+    var tasks: [ListTask]
     let photoURL: String?
     let isActive: Bool
     

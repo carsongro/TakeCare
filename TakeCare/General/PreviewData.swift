@@ -14,7 +14,8 @@ final class PreviewData {
         notes: "Walk around outside?",
         completionDate: Date(),
         repeatInterval: .never,
-        isCompleted: false
+        isCompleted: false,
+        lastCompletionDate: nil
     )
     
     static let previewListTask2 = ListTask(
@@ -23,7 +24,8 @@ final class PreviewData {
         notes: "Move around",
         completionDate: Date(),
         repeatInterval: .never,
-        isCompleted: true
+        isCompleted: true,
+        lastCompletionDate: nil
     )
     
     static let previewTakeCareList = TakeCareList(

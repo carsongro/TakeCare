@@ -22,8 +22,13 @@ import UserNotifications
     }
     
     init() {
+        refresh()
+    }
+    
+    func refresh() {
         Task {
             await fetchLists()
+            updateTasksCompletion()
         }
     }
     
@@ -33,7 +38,7 @@ import UserNotifications
         do {
             let listRef = FieldPath(["recipient", "id"])
             let updatedLists = try await Firestore.firestore().collection("lists").whereField(listRef, isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
-
+            
             Task { @MainActor in
                 if animated {
                     withAnimation {
@@ -51,8 +56,15 @@ import UserNotifications
         }
     }
     
+    /// A function for updating the completion status of a task
+    /// - Parameters:
+    ///   - list: The list the task belongs to
+    ///   - task: The task to change the completion status for
+    ///   - isCompleted: Whether the task should be marked as complete or not
+    ///   - scheduleNotification: Defaults to `true`. True means notification will be scheduled when `isCompleted` is `false`.
+    /// - Returns: The updated task
     @discardableResult
-    func updateListTask(list: TakeCareList, task: ListTask, isCompleted: Bool) throws -> TakeCareList {
+    func updateListTask(list: TakeCareList, task: ListTask, isCompleted: Bool, scheduleNotification: Bool = true) throws -> TakeCareList {
         guard let listID = list.id else { throw TodoError.listNotFound }
         
         let updatedTask = ListTask(
@@ -61,7 +73,8 @@ import UserNotifications
             notes: task.notes,
             completionDate: task.completionDate,
             repeatInterval: task.repeatInterval,
-            isCompleted: isCompleted
+            isCompleted: isCompleted,
+            lastCompletionDate: Date.now
         )
         
         var tasks = list.tasks
@@ -81,6 +94,16 @@ import UserNotifications
         let docRef = Firestore.firestore().collection("lists").document(listID)
         try docRef.setData(from: updatedList)
         
+        // If the task is completed and it doesn't repeat then we remove the notification
+        // Otherwise if the task has a completion date then we schedule one
+        if isCompleted && task.repeatInterval == .never {
+            Task {
+                UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [updatedTask.id])
+            }
+        } else if updatedTask.completionDate != nil && !isCompleted && scheduleNotification {
+            scheduleTaskNotifications(for: updatedTask)
+        }
+        
         return updatedList
     }
     
@@ -99,6 +122,40 @@ import UserNotifications
             await fetchLists(animated: false)
         }
     }
+    
+    private func updateTasksCompletion() {
+        var shouldRefresh = false
+        
+        for list in lists {
+            for task in list.tasks {
+                // If the task was marked completed on any day but today, we reset it's value
+                if let lastCompletionDate = task.lastCompletionDate,
+                   !Calendar.current.isDateInToday(lastCompletionDate),
+                   task.isCompleted {
+                    shouldRefresh = true
+                    
+                    do {
+                        try updateListTask(
+                            list: list,
+                            task: task,
+                            isCompleted: false,
+                            scheduleNotification: false
+                        )
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+        }
+        
+        if shouldRefresh {
+            Task {
+                await fetchLists()
+            }
+        }
+    }
+    
+    // MARK: Local Notifications
     
     /// When the user makes a list active, it schedules notifications
     private func handleListNotifications(list: TakeCareList) {
@@ -134,30 +191,35 @@ import UserNotifications
     
     private func scheduleNotifications(for list: TakeCareList) {
         for task in list.tasks {
-            guard let completionDate = task.completionDate else { continue }
-            let dateComponents = Calendar.current.dateComponents(
-                Set(
-                    arrayLiteral: Calendar.Component.year,
-                    Calendar.Component.month,
-                    Calendar.Component.day,
-                    Calendar.Component.hour,
-                    Calendar.Component.minute
-                ),
-                from: completionDate
-            )
-            
-            let content = UNMutableNotificationContent()
-            content.title = task.title
-            if let notes = task.notes {
-                content.subtitle = notes
-            }
-            content.sound = UNNotificationSound.default
-            
-            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: task.repeatInterval == .daily)
-            
-            let request = UNNotificationRequest(identifier: task.id, content: content, trigger: trigger)
-            
-            UNUserNotificationCenter.current().add(request)
+            scheduleTaskNotifications(for: task)
         }
+    }
+    
+    private func scheduleTaskNotifications(for task: ListTask) {
+        guard let completionDate = task.completionDate, !task.isCompleted else { return }
+        
+        let dateComponents = Calendar.current.dateComponents(
+            Set(
+                arrayLiteral: Calendar.Component.year,
+                Calendar.Component.month,
+                Calendar.Component.day,
+                Calendar.Component.hour,
+                Calendar.Component.minute
+            ),
+            from: completionDate
+        )
+        
+        let content = UNMutableNotificationContent()
+        content.title = task.title
+        if let notes = task.notes {
+            content.subtitle = notes
+        }
+        content.sound = UNNotificationSound.default
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: task.repeatInterval == .daily)
+        
+        let request = UNNotificationRequest(identifier: task.id, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request)
     }
 }

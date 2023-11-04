@@ -19,8 +19,18 @@ struct TodoDetailView: View {
             }
             .listRowSeparator(.hidden)
             
-            Section("Tasks") {
-                TodoTasksList(list: $list)
+            Section("Today") {
+                TodoTasksList(list: $list, taskFilter: .todayNotCompleted)
+                    .environment(todoModel)
+            }
+            
+            Section("Other Tasks") {
+                TodoTasksList(list: $list, taskFilter: .other)
+                    .environment(todoModel)
+            }
+            
+            Section("Completed") {
+                TodoTasksList(list: $list, taskFilter: .completed)
                     .environment(todoModel)
             }
             
@@ -34,6 +44,9 @@ struct TodoDetailView: View {
         .listStyle(.inset)
         .navigationTitle(list.name)
         .navigationBarTitleDisplayMode(.inline)
+        .refreshable {
+            todoModel.refresh()
+        }
     }
     
     @ViewBuilder

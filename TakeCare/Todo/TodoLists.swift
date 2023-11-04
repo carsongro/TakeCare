@@ -35,7 +35,7 @@ struct TodoLists: View {
         .searchable(text: $todoModel.searchText)
         .listStyle(.plain)
         .refreshable {
-            await todoModel.fetchLists()
+            todoModel.refresh()
         }
     }
 }

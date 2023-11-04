@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TodoTaskRow: View {
     
-    @State var task: ListTask
+    var task: ListTask
     @State var isCompleted: Bool
     let interactionDisabled: Bool // Provides a way to disable interaction without a visual indication of being disabled
     

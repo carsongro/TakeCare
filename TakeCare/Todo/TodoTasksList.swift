@@ -14,8 +14,36 @@ struct TodoTasksList: View {
     
     @State private var showingErrorAlert = false
     
+    enum TaskFilter {
+        case todayNotCompleted
+        case other
+        case completed
+    }
+    
+    var taskFilter: TaskFilter
+    
+    var filteredTasks: [ListTask] {
+        switch taskFilter {
+        case .todayNotCompleted:
+            return list.tasks.filter {
+                if let completionDate = $0.completionDate,
+                   ($0.repeatInterval == .daily ||
+                    Calendar.current.isDateInToday(completionDate)) &&
+                   !$0.isCompleted {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        case .other:
+            return list.tasks.filter { !$0.isCompleted && $0.completionDate == nil }
+        case .completed:
+            return list.tasks.filter { $0.isCompleted }
+        }
+    }
+    
     var body: some View {
-        ForEach(list.tasks) { task in
+        ForEach(filteredTasks) { task in
             TodoTaskRow(
                 task: task,
                 isCompleted: task.isCompleted,
@@ -24,7 +52,7 @@ struct TodoTasksList: View {
                 Task {
                     do {
                         try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
-                        await todoModel.fetchLists(animated: false)
+                        await todoModel.fetchLists(animated: true)
                     } catch {
                         showingErrorAlert = true
                     }
@@ -37,6 +65,6 @@ struct TodoTasksList: View {
 }
 
 #Preview {
-    TodoTasksList(list: .constant(PreviewData.previewTakeCareList))
+    TodoTasksList(list: .constant(PreviewData.previewTakeCareList), taskFilter: .completed)
         .environment(TodoModel())
 }

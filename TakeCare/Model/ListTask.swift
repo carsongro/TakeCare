@@ -16,6 +16,7 @@ struct ListTask: Codable, Hashable, Equatable, Identifiable {
     let completionDate: Date?
     let repeatInterval: TaskRepeatInterval
     let isCompleted: Bool
+    let lastCompletionDate: Date?
 }
 
 enum TaskRepeatInterval: String, CaseIterable, Codable {

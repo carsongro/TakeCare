@@ -108,34 +108,39 @@ struct ListTaskDetailView: View {
                 
                 ToolbarItem(placement: .primaryAction) {
                     Button("Done") {
-                        if mode == .edit,
-                           let id = selectedTask?.id,
-                           let idx = tasks.firstIndex(where: { $0.id == id }) {
-                            tasks[idx] = ListTask(
-                                id: id,
-                                title: title,
-                                notes: notes.isEmpty ? nil : notes,
-                                completionDate: showingDatePicker ? completionDate : nil,
-                                repeatInterval: taskRepeatInterval,
-                                isCompleted: false
-                            )
-                        } else {
-                            let newTask = ListTask(
-                                id: UUID().uuidString,
-                                title: title,
-                                notes: notes.isEmpty ? nil : notes,
-                                completionDate: showingDatePicker ? completionDate : nil,
-                                repeatInterval: taskRepeatInterval,
-                                isCompleted: false
-                            )
-                            
-                            guard !tasks.contains(newTask) else {
-                                showingDuplicateTaskAlert = true
-                                return
+                        switch mode {
+                        case .edit:
+                            if let id = selectedTask?.id,
+                               let idx = tasks.firstIndex(where: { $0.id == id }) {
+                                tasks[idx] = ListTask(
+                                    id: id,
+                                    title: title,
+                                    notes: notes.isEmpty ? nil : notes,
+                                    completionDate: showingDatePicker ? completionDate : nil,
+                                    repeatInterval: taskRepeatInterval,
+                                    isCompleted: false,
+                                    lastCompletionDate: selectedTask?.lastCompletionDate
+                                )
                             }
-                            
-                            tasks.append(newTask)
+                        case .create:
+                                let newTask = ListTask(
+                                    id: UUID().uuidString,
+                                    title: title,
+                                    notes: notes.isEmpty ? nil : notes,
+                                    completionDate: showingDatePicker ? completionDate : nil,
+                                    repeatInterval: taskRepeatInterval,
+                                    isCompleted: false,
+                                    lastCompletionDate: nil
+                                )
+                                
+                                guard !tasks.contains(newTask) else {
+                                    showingDuplicateTaskAlert = true
+                                    return
+                                }
+                                
+                                tasks.append(newTask)
                         }
+                            
                         dismiss()
                     }
                     .disabled(title.isEmpty)
