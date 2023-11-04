@@ -51,7 +51,9 @@ struct TodoDetailView: View {
                 .buttonStyle(.borderedProminent)
             }
         }
+        .sensoryFeedback(.success, trigger: list.isActive)
         .frame(maxWidth: .infinity)
+        .padding(.vertical)
     
     }
 }

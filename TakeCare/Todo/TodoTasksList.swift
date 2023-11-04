@@ -19,11 +19,15 @@ struct TodoTasksList: View {
             TodoTaskRow(
                 task: task,
                 isCompleted: task.isCompleted,
-                interactionDisabled: false
+                interactionDisabled: !list.isActive
             ) { isCompleted in
                 Task {
-                    try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
-                    await todoModel.fetchLists(animated: false)
+                    do {
+                        try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
+                        await todoModel.fetchLists(animated: false)
+                    } catch {
+                        showingErrorAlert = true
+                    }
                 }
             }
         }

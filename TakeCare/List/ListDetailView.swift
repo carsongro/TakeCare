@@ -60,7 +60,10 @@ struct ListDetailView: View, @unchecked Sendable {
                         .focused($focusedField, equals: .description)
                         .submitLabel(.return)
                         .padding(.bottom)
-                    
+                }
+                .listRowBackground(Color(.systemGroupedBackground))
+                
+                Section("Recipient") {
                     ListUpdateRecipientButton(recipient: $recipient)
                     
                     if let recipient = recipient {
@@ -69,19 +72,31 @@ struct ListDetailView: View, @unchecked Sendable {
                         }
                         .onDelete(perform: deleteRecipient)
                     }
-                    
+                }
+                
+                Section {
                     ListAddTasksButton(tasks: $tasks)
                     
                     ForEach(tasks) { task in
-                        Button {
-                            selectedTask = task
-                        } label: {
+                        if list?.isActive ?? false {
                             ListTaskRow(task: task)
+                        } else {
+                            Button {
+                                selectedTask = task
+                            } label: {
+                                ListTaskRow(task: task)
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
                     }
                     .onDelete(perform: deleteTask)
                     .onMove(perform: moveTask)
+                } header: {
+                    Text("Tasks")
+                } footer: {
+                    if mode == .edit && list?.isActive ?? true {
+                        Text("Tasks cannot be modified while the list is active.")
+                    }
                 }
                 
                 Section {
@@ -95,6 +110,7 @@ struct ListDetailView: View, @unchecked Sendable {
                     }
                 }
                 .listRowSeparator(.hidden)
+                .listRowBackground(Color(.systemGroupedBackground))
             }
             .onSubmit {
                 switch focusedField {
@@ -120,13 +136,21 @@ struct ListDetailView: View, @unchecked Sendable {
             }
             .onAppear(perform: getList)
             .environment(\.editMode, .constant(.active))
-            .listStyle(.plain)
             .navigationTitle(mode == .edit ? "Edit List" : "New List")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        showingDismissDialog = true
+                        if mode == .edit && listDidChange || listDidChange {
+                            showingDismissDialog = true
+                        } else {
+                            dismiss()
+                        }
+                    }
+                    .confirmationDialog("Are you sure you want to discard your changes?", isPresented: $showingDismissDialog) {
+                        Button("Discard Changes", role: .destructive) {
+                            dismiss()
+                        }
                     }
                 }
                 
@@ -165,11 +189,6 @@ struct ListDetailView: View, @unchecked Sendable {
                     }
                     .fontWeight(.semibold)
                     .disabled(name.isEmpty || tasks.isEmpty)
-                }
-            }
-            .confirmationDialog("Are you sure you want to discard your changes?", isPresented: $showingDismissDialog) {
-                Button("Discard Changes", role: .destructive) {
-                    dismiss()
                 }
             }
             .alert(
@@ -227,6 +246,14 @@ struct ListDetailView: View, @unchecked Sendable {
                 }
             }
         }
+    }
+    
+    private var listDidChange: Bool {
+        name != list?.name ||
+        description != list?.description ||
+        recipient != list?.recipient || 
+        tasks != list?.tasks ||
+        didChangeImage
     }
 }
 

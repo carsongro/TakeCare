@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ListTaskRow: View {
     
-    @State var task: ListTask
+    var task: ListTask
     
     var body: some View {
         HStack {
@@ -24,9 +24,16 @@ struct ListTaskRow: View {
                             .accessibility(label: Text("Task notes: \(notes)", comment: "Accessibility label containing the full task notes"))
                     }
                     if let completionDate = task.completionDate {
-                        Text("\(completionDate.formatted(date: .abbreviated, time: .shortened)), Repeats: \(task.repeatInterval.rawValue)")
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
+                        switch task.repeatInterval {
+                        case .never:
+                            Text("\(completionDate.formatted(date: .abbreviated, time: .shortened))")
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        case .daily:
+                            Text("Repeats \(task.repeatInterval.rawValue.lowercased()) at \(completionDate.formatted(date: .omitted, time: .shortened))")
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
                     }
                 }
                 

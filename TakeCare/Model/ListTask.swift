@@ -21,6 +21,4 @@ struct ListTask: Codable, Hashable, Equatable, Identifiable {
 enum TaskRepeatInterval: String, CaseIterable, Codable {
     case never = "Never"
     case daily = "Daily"
-    case weekly = "Weekly"
-    case everyOtherDay = "Every other day"
 }

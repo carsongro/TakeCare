@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 import FirebaseFirestoreSwift
+import UserNotifications
 
 /// A model for todo lists
 @Observable final class TodoModel: @unchecked Sendable {
@@ -89,9 +90,9 @@ import FirebaseFirestoreSwift
         Firestore.firestore().collection("lists").document(id).updateData(["isActive" : isActive])
         
         if isActive {
-            scheduleNotifications()
+            handleListNotifications(list: list)
         } else {
-            removeNotifications()
+            removeNotifications(for: list)
         }
         
         Task {
@@ -99,11 +100,64 @@ import FirebaseFirestoreSwift
         }
     }
     
-    private func scheduleNotifications() {
-        
+    /// When the user makes a list active, it schedules notifications
+    private func handleListNotifications(list: TakeCareList) {
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+            switch settings.authorizationStatus {
+            case .notDetermined:
+                self?.getNotificationPermission(list: list)
+            case .authorized:
+                self?.scheduleNotifications(for: list)
+            default:
+                break
+            }
+        }
     }
     
-    private func removeNotifications() {
-        
+    /// When the user makes a list inactive, it removes notifications
+    private func removeNotifications(for list: TakeCareList) {
+        Task {
+            UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: list.tasks.compactMap { $0.id })
+        }
+    }
+    
+    private func getNotificationPermission(list: TakeCareList) {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] success, error in
+            if success {
+                print("Success getting notification permission")
+                self?.scheduleNotifications(for: list)
+            } else if let error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func scheduleNotifications(for list: TakeCareList) {
+        for task in list.tasks {
+            guard let completionDate = task.completionDate else { continue }
+            let dateComponents = Calendar.current.dateComponents(
+                Set(
+                    arrayLiteral: Calendar.Component.year,
+                    Calendar.Component.month,
+                    Calendar.Component.day,
+                    Calendar.Component.hour,
+                    Calendar.Component.minute
+                ),
+                from: completionDate
+            )
+            
+            let content = UNMutableNotificationContent()
+            content.title = task.title
+            if let notes = task.notes {
+                content.subtitle = notes
+            }
+            content.sound = UNNotificationSound.default
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: task.repeatInterval == .daily)
+            
+            let request = UNNotificationRequest(identifier: task.id, content: content, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request)
+        }
     }
 }

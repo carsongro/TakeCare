@@ -11,7 +11,7 @@ struct TodoTaskRow: View {
     
     @State var task: ListTask
     @State var isCompleted: Bool
-    let interactionDisabled: Bool
+    let interactionDisabled: Bool // Provides a way to disable interaction without a visual indication of being disabled
     
     var tapHandler: ((Bool) -> Void)?
     

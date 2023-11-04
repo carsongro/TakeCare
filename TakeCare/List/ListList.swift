@@ -57,6 +57,9 @@ struct ListList: View {
             ListDetailView(mode: .create)
                 .environment(listsModel)
         }
+        .refreshable {
+            await listsModel.fetchLists()
+        }
     }
 }
 

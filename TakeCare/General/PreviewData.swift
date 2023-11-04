@@ -23,7 +23,7 @@ final class PreviewData {
         notes: "Move around",
         completionDate: Date(),
         repeatInterval: .never,
-        isCompleted: false
+        isCompleted: true
     )
     
     static let previewTakeCareList = TakeCareList(
@@ -42,6 +42,6 @@ final class PreviewData {
             previewListTask2
         ],
         photoURL: nil,
-        isActive: false
+        isActive: true
     )
 }

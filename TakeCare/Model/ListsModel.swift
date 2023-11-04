@@ -91,7 +91,7 @@ import FirebaseFirestoreSwift
             recipient: recipient,
             tasks: tasks,
             photoURL: photoURL,
-            isActive: isActive
+            isActive: recipient == nil ? false : isActive
         )
         
         try docRef.setData(from: list)

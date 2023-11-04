@@ -69,7 +69,6 @@ struct ListTaskDetailView: View {
                             }
                         }
                     }
-                    .listRowBackground(Color(.systemGroupedBackground))
                 }
             }
             .onSubmit {

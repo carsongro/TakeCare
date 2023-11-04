@@ -30,7 +30,7 @@ struct ListChooseListImageView: View {
                     .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
             } else {
                 Rectangle()
-                    .foregroundStyle(Color(.secondarySystemBackground))
+                    .foregroundStyle(Color(UIColor.secondarySystemBackground))
                     .frame(width: 200, height: 200)
                     .clipShape(imageClipShape)
                     .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
