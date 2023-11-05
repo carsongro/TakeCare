@@ -31,7 +31,6 @@ import FirebaseFirestoreSwift
                 withAnimation {
                     self.lists = updatedLists
                     didFetchLists = true
-                    NotificationCenter.default.post(name: Notification.Name("UpdatedLists"), object: nil)
                 }
             }
         } catch {
