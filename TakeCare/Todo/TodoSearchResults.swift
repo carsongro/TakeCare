@@ -47,6 +47,6 @@ struct TodoSearchResults: View {
     NavigationStack {
         TodoSearchResults()
             .environment(TodoModel())
-            .navigationTitle("Todo")
+            .navigationTitle("To Do")
     }
 }

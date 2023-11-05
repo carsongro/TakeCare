@@ -24,16 +24,27 @@ struct ProgressDetailView: View {
             }
             .listRowSeparator(.hidden)
             
-            ForEach(TaskFilter.allCases, id: \.self) { filter in
-                Section(filter.rawValue) {
-                    TodoTasksList(list: $list, taskFilter: filter, interactionDisabled: true)
+            Section("Recipient") {
+                if let recipient = list.recipient {
+                    ListRecipientRow(user: recipient)
                 }
             }
+            .listRowSeparator(.hidden)
+            
+            ForEach(TaskFilter.allCases, id: \.self) { filter in
+                TodoTasksList(list: $list, taskFilter: filter, interactionDisabled: true)
+            }
+            
+            Section {
+                Color.clear
+            }
+            .padding(.bottom)
+            .listRowSeparator(.hidden)
         }
         .refreshable {
             await listsModel.fetchLists()
         }
-        .listStyle(.inset)
+        .listStyle(.plain)
         .navigationTitle(list.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -77,5 +88,6 @@ struct ProgressDetailView: View {
 #Preview {
     NavigationStack {
         ProgressDetailView(list: .constant(PreviewData.previewTakeCareList))
+            .environment(ListsModel())
     }
 }

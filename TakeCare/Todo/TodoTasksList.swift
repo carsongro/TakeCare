@@ -60,13 +60,17 @@ struct TodoTasksList: View {
     }
     
     var body: some View {
-        ForEach(filteredTasks, id: \.self) { task in
-            TodoTaskRow(
-                task: task,
-                isCompleted: task.isCompleted,
-                interactionDisabled: !list.isActive || interactionDisabled
-            ) { isCompleted in
-                tapHandler?(task, isCompleted)
+        if !filteredTasks.isEmpty {
+            Section(taskFilter.rawValue) {
+                ForEach(filteredTasks, id: \.self) { task in
+                    TodoTaskRow(
+                        task: task,
+                        isCompleted: task.isCompleted,
+                        interactionDisabled: !list.isActive || interactionDisabled
+                    ) { isCompleted in
+                        tapHandler?(task, isCompleted)
+                    }
+                }
             }
         }
     }

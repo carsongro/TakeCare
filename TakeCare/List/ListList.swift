@@ -50,14 +50,14 @@ struct ListList: View {
                 }
             }
         }
+        .refreshable {
+            await listsModel.fetchLists()
+        }
         .searchable(text: $listsModel.searchText)
         .listStyle(.plain)
         .sheet(isPresented: $showingCreateListForm) {
             ListDetailView(mode: .create)
                 .environment(listsModel)
-        }
-        .refreshable {
-            await listsModel.fetchLists()
         }
     }
 }

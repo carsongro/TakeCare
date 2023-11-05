@@ -97,6 +97,7 @@ struct ListDetailView: View, @unchecked Sendable {
                     }
                 }
             }
+            .interactiveDismissDisabled()
             .onSubmit {
                 switch focusedField {
                 case .name:

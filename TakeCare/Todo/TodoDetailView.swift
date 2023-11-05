@@ -22,15 +22,13 @@ struct TodoDetailView: View {
             .listRowSeparator(.hidden)
             
             ForEach(TaskFilter.allCases, id: \.self) { filter in
-                Section(filter.rawValue) {
-                    TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
-                        Task {
-                            do {
-                                try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
-                                await todoModel.fetchLists(animated: true)
-                            } catch {
-                                showingErrorAlert = true
-                            }
+                TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
+                    Task {
+                        do {
+                            try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
+                            await todoModel.fetchLists(animated: true)
+                        } catch {
+                            showingErrorAlert = true
                         }
                     }
                 }
@@ -39,11 +37,9 @@ struct TodoDetailView: View {
             Section {
                 activeButton
                     .listRowSeparator(.hidden)
-            } header: {
-                Text("List Status")
             }
         }
-        .listStyle(.inset)
+        .listStyle(.plain)
         .navigationTitle(list.name)
         .navigationBarTitleDisplayMode(.inline)
         .refreshable {

@@ -44,6 +44,6 @@ struct TodoLists: View {
     NavigationStack {
         TodoLists()
             .environment(TodoModel())
-            .navigationTitle("Todo")
+            .navigationTitle("To Do")
     }
 }
