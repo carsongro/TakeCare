@@ -53,6 +53,8 @@ struct ProgressDetailView: View {
                     showingEditList = true
                 }
                 
+                Divider()
+                
                 Button("Delete List", systemImage: "trash", role: .destructive) {
                     showingDeleteAlert = true
                 }
@@ -63,7 +65,7 @@ struct ProgressDetailView: View {
                 .environment(listsModel)
         }
         .alert(
-            "Are you sure you want to delete this list",
+            "Are you sure you want to delete this list?",
             isPresented: $showingDeleteAlert
         ) {
             Button("Cancel", role: .cancel) { }
