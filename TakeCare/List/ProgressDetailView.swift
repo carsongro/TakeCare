@@ -1,5 +1,5 @@
 //
-//  ProgressDetailView.swift
+//  ListProgressDetailView.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 10/21/23.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProgressDetailView: View {
+struct ListProgressDetailView: View {
     @Environment(ListsModel.self) private var listsModel
     @Environment(\.dismiss) private var dismiss
     
@@ -89,7 +89,7 @@ struct ProgressDetailView: View {
 
 #Preview {
     NavigationStack {
-        ProgressDetailView(list: .constant(PreviewData.previewTakeCareList))
+        ListProgressDetailView(list: .constant(PreviewData.previewTakeCareList))
             .environment(ListsModel())
     }
 }

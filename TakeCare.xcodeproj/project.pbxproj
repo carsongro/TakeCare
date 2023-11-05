@@ -201,7 +201,6 @@
 				B58A14072AC520A30045D191 /* Preview Content */,
 				B578AB272AC635AE008CEAE1 /* Auth */,
 				B5BC6CA12ACB7CA700D1F842 /* List */,
-				B821FC3A2AE4A1CF00623152 /* Progress */,
 				B5BC6CA22ACB7CAC00D1F842 /* Todo */,
 				B584809D2AC76C24007A655D /* Profile */,
 				B5BC6C9A2ACB76F700D1F842 /* Navigation */,
@@ -246,6 +245,7 @@
 				B595D6E82AD0B67100B022E0 /* ListTaskRow.swift */,
 				B52D1CC22ACE60510024F6A7 /* ListRow.swift */,
 				B52D1CC42ACE63850024F6A7 /* ListView.swift */,
+				B8237F172AE4B04E00AF9A2C /* ProgressDetailView.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -261,14 +261,6 @@
 				B5212A362ADDF9BE00FF4AD1 /* TodoTaskRow.swift */,
 			);
 			path = Todo;
-			sourceTree = "<group>";
-		};
-		B821FC3A2AE4A1CF00623152 /* Progress */ = {
-			isa = PBXGroup;
-			children = (
-				B8237F172AE4B04E00AF9A2C /* ProgressDetailView.swift */,
-			);
-			path = Progress;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -188,7 +188,7 @@ import UserNotifications
     private func getNotificationPermission(list: TakeCareList) {
         Task {
             do {
-                let result = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+                try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
                 scheduleNotifications(for: list)
             } catch {
                 print(error.localizedDescription)
