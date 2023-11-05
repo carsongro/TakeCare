@@ -57,6 +57,7 @@
 		B80C5A432AF6F3640084FBDD /* TaskFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80C5A422AF6F3640084FBDD /* TaskFilter.swift */; };
 		B8237F182AE4B04E00AF9A2C /* ProgressDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F172AE4B04E00AF9A2C /* ProgressDetailView.swift */; };
 		B8237F1E2AE4B41000AF9A2C /* ListDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */; };
+		B85F6E862AF853B0005F6D85 /* UserSearchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85F6E852AF853B0005F6D85 /* UserSearchError.swift */; };
 		B8A0A50B2AF06B5F008FC8F2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -109,6 +110,7 @@
 		B80C5A422AF6F3640084FBDD /* TaskFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskFilter.swift; sourceTree = "<group>"; };
 		B8237F172AE4B04E00AF9A2C /* ProgressDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDetailView.swift; sourceTree = "<group>"; };
 		B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailHeader.swift; sourceTree = "<group>"; };
+		B85F6E852AF853B0005F6D85 /* UserSearchError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchError.swift; sourceTree = "<group>"; };
 		B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -169,6 +171,7 @@
 				B52D1CBE2ACE3B1C0024F6A7 /* ListTask.swift */,
 				B53DA6A32ADB5C0A008094D7 /* TodoModel.swift */,
 				B80C5A422AF6F3640084FBDD /* TaskFilter.swift */,
+				B85F6E852AF853B0005F6D85 /* UserSearchError.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -376,6 +379,7 @@
 				B595D6EB2AD0BF0900B022E0 /* ListUpdateRecipientButton.swift in Sources */,
 				B52D1CBD2ACE3A480024F6A7 /* TakeCareList.swift in Sources */,
 				B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */,
+				B85F6E862AF853B0005F6D85 /* UserSearchError.swift in Sources */,
 				B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */,
 				B58480A52AC76EED007A655D /* User.swift in Sources */,
 				B5BC6CA02ACB7BF500D1F842 /* ProfileNavigationStack.swift in Sources */,

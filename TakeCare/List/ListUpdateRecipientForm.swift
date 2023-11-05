@@ -16,10 +16,8 @@ struct ListUpdateRecipientForm: View, @unchecked Sendable {
     @State private var users = [User]()
     @State private var searchText = ""
     @State private var showingSearchAlert = false
-    
-    enum UserSearchError: Error {
-        case noUsersFound
-    }
+    @State private var didSearch = false
+    @State private var isSearching = false
     
     var body: some View {
         NavigationStack {
@@ -33,6 +31,15 @@ struct ListUpdateRecipientForm: View, @unchecked Sendable {
                             dismiss()
                         }
                     }
+                }
+                
+                if !searchText.isEmpty && users.isEmpty && didSearch {
+                    ContentUnavailableView("No users found", systemImage: "person.2")
+                        .listRowBackground(Color(.systemGroupedBackground))
+                } else if !searchText.isEmpty && isSearching && users.isEmpty {
+                    ProgressView()
+                        .listRowBackground(Color(.systemGroupedBackground))
+                        .frame(maxWidth: .infinity)
                 }
             }
             .searchable(text: $searchText, prompt: "Recipient's email address")
@@ -48,8 +55,14 @@ struct ListUpdateRecipientForm: View, @unchecked Sendable {
                     }
                 }
             }
+            .onChange(of: searchText, { oldValue, newValue in
+                if newValue.isEmpty {
+                    didSearch = false
+                    users.removeAll()
+                }
+            })
             .alert(
-                "No users found",
+                "There was an error while searching.",
                 isPresented: $showingSearchAlert) { }
         }
     }
@@ -57,16 +70,17 @@ struct ListUpdateRecipientForm: View, @unchecked Sendable {
     private func runSearch() {
         Task {
             do {
+                isSearching = true
                 let users = try await listsModel.searchUser(email: searchText)
                 Task { @MainActor in
                     self.users = users
-                }
-                
-                if users.isEmpty {
-                    throw UserSearchError.noUsersFound
+                    didSearch = true
+                    isSearching = false
                 }
             } catch {
                 showingSearchAlert = true
+                didSearch = false
+                isSearching = false
             }
         }
     }

@@ -130,6 +130,7 @@ import FirebaseFirestoreSwift
     }
     
     func searchUser(email: String) async throws -> [User] {
+        guard email != Auth.auth().currentUser?.email else { throw UserSearchError.sameEmail }
         let users = try await Firestore.firestore().collection("users").whereField("email", isEqualTo: email.lowercased()).getDocuments().documents.compactMap { try $0.data(as: User.self) }
         return users
     }

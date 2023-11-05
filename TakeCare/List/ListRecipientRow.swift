@@ -33,13 +33,7 @@ struct ListRecipientRow: View {
         .accessibilityElement(children: .combine)
     }
     
-    var cornerRadius: Double {
-        #if os(iOS)
-        return 10
-        #else
-        return 4
-        #endif
-    }
+    var cornerRadius: Double { 10 }
 }
 
 struct RecipientRowImage: ViewModifier {

@@ -101,13 +101,7 @@ struct ListRowImage: ViewModifier {
             .accessibilityHidden(true)
     }
     
-    private var cornerRadius: Double {
-        #if os(iOS)
-        return 10
-        #else
-        return 4
-        #endif
-    }
+    private var cornerRadius: Double { 10 }
 }
 
 extension View {

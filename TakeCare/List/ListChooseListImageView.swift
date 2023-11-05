@@ -76,13 +76,7 @@ struct ListChooseListImageView: View {
         .photosPicker(isPresented: $showingPhotosPicker, selection: $listImageItem)
     }
     
-    var cornerRadius: Double {
-#if os(iOS)
-        return 10
-#else
-        return 4
-#endif
-    }
+    var cornerRadius: Double { 10 }
 }
 
 #Preview {
