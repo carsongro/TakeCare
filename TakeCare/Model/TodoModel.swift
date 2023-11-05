@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-@preconcurrency import Firebase
-@preconcurrency import FirebaseFirestoreSwift
+import Firebase
+import FirebaseFirestoreSwift
 import UserNotifications
 
 /// A model for todo lists
@@ -29,7 +29,7 @@ import UserNotifications
     
     func refresh() {
         Task {
-            await fetchLists()
+            await fetchLists(isInitialFetch: true)
         }
     }
     
@@ -41,18 +41,13 @@ import UserNotifications
             let updatedLists = try await Firestore.firestore().collection("lists").whereField(listRef, isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
             
             Task { @MainActor in
-                if animated {
-                    withAnimation {
-                        self.lists = updatedLists
-                        didFetchLists = true
-                    }
-                } else {
+                withAnimation(animated ? .default : .none) {
                     self.lists = updatedLists
-                    didFetchLists = true
                 }
                 
                 if isInitialFetch {
                     try await updateTasksCompletion()
+                    didFetchLists = true
                     correctLocalNotificationsIfNeeded()
                 }
             }
@@ -129,6 +124,7 @@ import UserNotifications
         }
     }
     
+    /// A function that resets the completion status of tasks that repeat daily
     private func updateTasksCompletion() async throws {
         var shouldRefresh = false
         var listsToUpdate = [TakeCareList: [ListTask]]()

@@ -51,7 +51,7 @@ struct ListList: View {
             }
         }
         .refreshable {
-            await listsModel.fetchLists()
+            await listsModel.fetchLists(isInitialFetch: true)
         }
         .searchable(text: $listsModel.searchText)
         .listStyle(.plain)
