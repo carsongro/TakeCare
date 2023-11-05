@@ -51,7 +51,6 @@ struct ListList: View {
             }
         }
         .searchable(text: $listsModel.searchText)
-        .navigationTitle("Lists")
         .listStyle(.plain)
         .sheet(isPresented: $showingCreateListForm) {
             ListDetailView(mode: .create)

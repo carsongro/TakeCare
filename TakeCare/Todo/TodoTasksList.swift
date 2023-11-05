@@ -8,15 +8,13 @@
 import SwiftUI
 
 struct TodoTasksList: View {
-    @Environment(TodoModel.self) private var todoModel
-    
     @Binding var list: TakeCareList
     
-    @State private var showingErrorAlert = false
-    
     var taskFilter: TaskFilter
+    var interactionDisabled: Bool = false
+    var tapHandler: ((ListTask, Bool) -> Void)? = nil
     
-    var filteredTasks: [ListTask] {
+    private var filteredTasks: [ListTask] {
         var tasks = list.tasks
         
         switch taskFilter {
@@ -66,23 +64,14 @@ struct TodoTasksList: View {
             TodoTaskRow(
                 task: task,
                 isCompleted: task.isCompleted,
-                interactionDisabled: !list.isActive
+                interactionDisabled: !list.isActive || interactionDisabled
             ) { isCompleted in
-                Task {
-                    do {
-                        try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
-                        await todoModel.fetchLists(animated: true)
-                    } catch {
-                        showingErrorAlert = true
-                    }
-                }
+                tapHandler?(task, isCompleted)
             }
         }
-        .alert("There was an error modifying the task", isPresented: $showingErrorAlert) { }
     }
 }
 
 #Preview {
     TodoTasksList(list: .constant(PreviewData.previewTakeCareList), taskFilter: .completed)
-        .environment(TodoModel())
 }

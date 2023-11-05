@@ -20,7 +20,7 @@ struct TodoSearchResults: View {
         ForEach(listedLists, id: \.self) { list in
             NavigationLink(value: list) {
                 HStack {
-                    ListRow(list: list, showingInfoIndicator: false)
+                    ListRow(list: list)
                     
                     Spacer(minLength: 0)
                     

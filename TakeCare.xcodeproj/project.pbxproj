@@ -55,12 +55,7 @@
 		B5E643C82AC7924B0056A111 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C72AC7924B0056A111 /* ContentView.swift */; };
 		B5E643CA2AC792ED0056A111 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C92AC792ED0056A111 /* AppTabView.swift */; };
 		B80C5A432AF6F3640084FBDD /* TaskFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80C5A422AF6F3640084FBDD /* TaskFilter.swift */; };
-		B821FC3C2AE4A26100623152 /* ProgressNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B821FC3B2AE4A26100623152 /* ProgressNavigationStack.swift */; };
-		B8237F142AE4AC4300AF9A2C /* ProgressLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F132AE4AC4300AF9A2C /* ProgressLists.swift */; };
-		B8237F162AE4AC6100AF9A2C /* ProgressModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F152AE4AC6100AF9A2C /* ProgressModel.swift */; };
 		B8237F182AE4B04E00AF9A2C /* ProgressDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F172AE4B04E00AF9A2C /* ProgressDetailView.swift */; };
-		B8237F1A2AE4B1DA00AF9A2C /* ProgressSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F192AE4B1DA00AF9A2C /* ProgressSearchResults.swift */; };
-		B8237F1C2AE4B3C800AF9A2C /* ProgressTasksList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F1B2AE4B3C800AF9A2C /* ProgressTasksList.swift */; };
 		B8237F1E2AE4B41000AF9A2C /* ListDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */; };
 		B8A0A50B2AF06B5F008FC8F2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
@@ -112,12 +107,7 @@
 		B5E643C72AC7924B0056A111 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B5E643C92AC792ED0056A111 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
 		B80C5A422AF6F3640084FBDD /* TaskFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskFilter.swift; sourceTree = "<group>"; };
-		B821FC3B2AE4A26100623152 /* ProgressNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressNavigationStack.swift; sourceTree = "<group>"; };
-		B8237F132AE4AC4300AF9A2C /* ProgressLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressLists.swift; sourceTree = "<group>"; };
-		B8237F152AE4AC6100AF9A2C /* ProgressModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressModel.swift; sourceTree = "<group>"; };
 		B8237F172AE4B04E00AF9A2C /* ProgressDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressDetailView.swift; sourceTree = "<group>"; };
-		B8237F192AE4B1DA00AF9A2C /* ProgressSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressSearchResults.swift; sourceTree = "<group>"; };
-		B8237F1B2AE4B3C800AF9A2C /* ProgressTasksList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressTasksList.swift; sourceTree = "<group>"; };
 		B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailHeader.swift; sourceTree = "<group>"; };
 		B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -179,7 +169,6 @@
 				B52D1CBE2ACE3B1C0024F6A7 /* ListTask.swift */,
 				B53DA6A32ADB5C0A008094D7 /* TodoModel.swift */,
 				B80C5A422AF6F3640084FBDD /* TaskFilter.swift */,
-				B8237F152AE4AC6100AF9A2C /* ProgressModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -277,11 +266,7 @@
 		B821FC3A2AE4A1CF00623152 /* Progress */ = {
 			isa = PBXGroup;
 			children = (
-				B821FC3B2AE4A26100623152 /* ProgressNavigationStack.swift */,
 				B8237F172AE4B04E00AF9A2C /* ProgressDetailView.swift */,
-				B8237F1B2AE4B3C800AF9A2C /* ProgressTasksList.swift */,
-				B8237F132AE4AC4300AF9A2C /* ProgressLists.swift */,
-				B8237F192AE4B1DA00AF9A2C /* ProgressSearchResults.swift */,
 			);
 			path = Progress;
 			sourceTree = "<group>";
@@ -382,14 +367,12 @@
 				B5E643C82AC7924B0056A111 /* ContentView.swift in Sources */,
 				B584809C2AC76A39007A655D /* AuthCreateAccountView.swift in Sources */,
 				B564B0AD2AD49C9F00E5D994 /* ListList.swift in Sources */,
-				B8237F162AE4AC6100AF9A2C /* ProgressModel.swift in Sources */,
 				B50066ED2AC90514008826B7 /* LocalImageManager.swift in Sources */,
 				B5BC6CA82ACB7CFD00D1F842 /* TodoNavigationStack.swift in Sources */,
 				B55B80062AC7CB9200640173 /* UpdateEmailForm.swift in Sources */,
 				B58480E32AC77608007A655D /* AuthModel.swift in Sources */,
 				B595D6EF2AD0C70000B022E0 /* ListRecipientRow.swift in Sources */,
 				B568B1AA2AD35CA900E389BD /* PreviewData.swift in Sources */,
-				B8237F142AE4AC4300AF9A2C /* ProgressLists.swift in Sources */,
 				B5BC6CAE2ACB7E6700D1F842 /* AppDetailColumn.swift in Sources */,
 				B53DA6A82ADB709A008094D7 /* TodoSearchResults.swift in Sources */,
 				B55B80042AC7CAD100640173 /* DeleteAccountForm.swift in Sources */,
@@ -399,7 +382,6 @@
 				B52D1CC12ACE5FE60024F6A7 /* ListDetailView.swift in Sources */,
 				B564B0AB2AD49A4C00E5D994 /* ListSearchResults.swift in Sources */,
 				B595D6EB2AD0BF0900B022E0 /* ListUpdateRecipientButton.swift in Sources */,
-				B821FC3C2AE4A26100623152 /* ProgressNavigationStack.swift in Sources */,
 				B52D1CBD2ACE3A480024F6A7 /* TakeCareList.swift in Sources */,
 				B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */,
 				B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */,
@@ -408,10 +390,8 @@
 				B52D1CBB2ACE38E40024F6A7 /* ListsModel.swift in Sources */,
 				B53DA6AA2ADB75D4008094D7 /* TodoDetailView.swift in Sources */,
 				B8237F1E2AE4B41000AF9A2C /* ListDetailHeader.swift in Sources */,
-				B8237F1A2AE4B1DA00AF9A2C /* ProgressSearchResults.swift in Sources */,
 				B52D1CBF2ACE3B1C0024F6A7 /* ListTask.swift in Sources */,
 				B595D6E72AD0B47000B022E0 /* ListAddTasksButton.swift in Sources */,
-				B8237F1C2AE4B3C800AF9A2C /* ProgressTasksList.swift in Sources */,
 				B5E643CA2AC792ED0056A111 /* AppTabView.swift in Sources */,
 				B595D6E52AD0B3D300B022E0 /* ListChooseListImageView.swift in Sources */,
 				B53DA6A42ADB5C0A008094D7 /* TodoModel.swift in Sources */,

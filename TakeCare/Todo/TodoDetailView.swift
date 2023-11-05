@@ -12,6 +12,8 @@ struct TodoDetailView: View {
     
     @Binding var list: TakeCareList
     
+    @State private var showingErrorAlert = false
+    
     var body: some View {
         List {
             Section {
@@ -21,8 +23,16 @@ struct TodoDetailView: View {
             
             ForEach(TaskFilter.allCases, id: \.self) { filter in
                 Section(filter.rawValue) {
-                    TodoTasksList(list: $list, taskFilter: filter)
-                        .environment(todoModel)
+                    TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
+                        Task {
+                            do {
+                                try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
+                                await todoModel.fetchLists(animated: true)
+                            } catch {
+                                showingErrorAlert = true
+                            }
+                        }
+                    }
                 }
             }
             
@@ -39,6 +49,7 @@ struct TodoDetailView: View {
         .refreshable {
             todoModel.refresh()
         }
+        .alert("There was an error modifying the task", isPresented: $showingErrorAlert) { }
     }
     
     @ViewBuilder

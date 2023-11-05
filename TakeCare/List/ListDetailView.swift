@@ -35,7 +35,6 @@ struct ListDetailView: View, @unchecked Sendable {
     @State private var selectedTask: ListTask?
     
     @State private var showingErrorAlert = false
-    @State private var showingDeleteAlert = false
     @State private var showingModifyTaskForm = false
     @State private var didChangeImage = false
     @State private var showingDismissDialog = false
@@ -90,7 +89,6 @@ struct ListDetailView: View, @unchecked Sendable {
                         }
                     }
                     .onDelete(perform: deleteTask)
-//                    .onMove(perform: moveTask)
                 } header: {
                     Text("Tasks")
                 } footer: {
@@ -98,19 +96,6 @@ struct ListDetailView: View, @unchecked Sendable {
                         Text("Tasks cannot be modified while the list is active. If a new task is added, recipients will not be notified until they open the app after the new task is added")
                     }
                 }
-                
-                Section {
-                    if mode == .edit {
-                        Button("Delete list", role: .destructive) {
-                            showingDeleteAlert = true
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                    }
-                }
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color(.systemGroupedBackground))
             }
             .onSubmit {
                 switch focusedField {
@@ -194,24 +179,6 @@ struct ListDetailView: View, @unchecked Sendable {
                 }
             }
             .alert(
-                "Are you sure you want to delete this list",
-                isPresented: $showingDeleteAlert
-            ) {
-                Button("Cancel", role: .cancel) { }
-                Button("Delete", role: .destructive) {
-                    Task {
-                        do {
-                            guard let list = list else { return }
-                            
-                            dismiss()
-                            try await listsModel.deleteList(list)
-                        } catch {
-                            showingErrorAlert = true
-                        }
-                    }
-                }
-            }
-            .alert(
                 "An error occured",
                 isPresented: $showingErrorAlert
             ) { }
@@ -226,10 +193,6 @@ struct ListDetailView: View, @unchecked Sendable {
     
     private func deleteTask(at offsets: IndexSet) {
         tasks.remove(atOffsets: offsets)
-    }
-    
-    private func moveTask(fromOffsets: IndexSet, toOffset: Int) {
-        tasks.move(fromOffsets: fromOffsets, toOffset: toOffset)
     }
     
     private func getList() {

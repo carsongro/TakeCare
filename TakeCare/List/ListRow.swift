@@ -10,7 +10,6 @@ import SDWebImageSwiftUI
 
 struct ListRow: View {
     var list: TakeCareList
-    var showingInfoIndicator = true
     
     var body: some View {
         HStack {
@@ -51,20 +50,42 @@ struct ListRow: View {
                 }
             }
             
-            if showingInfoIndicator {
-                Spacer(minLength: 0)
-                
-                Image(systemName: "info.circle")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 22, height: 22)
-                    .foregroundStyle(.accent)
-                    .padding(.leading, 8)
-            }
+            Spacer(minLength: 0)
+            
+            ListIndicator(isCompleted: list.tasks.filter {
+                if let completionDate = $0.completionDate,
+                   (completionDate <= Date.now ||
+                    Calendar.current.isDateInToday(completionDate)) {
+                    return true
+                } else {
+                    return false
+                }
+            }.allSatisfy { $0.isCompleted } && !list.tasks.filter {
+                if let completionDate = $0.completionDate,
+                   (completionDate <= Date.now ||
+                    Calendar.current.isDateInToday(completionDate)) {
+                    return true
+                } else {
+                    return false
+                }
+            }.isEmpty)
                 
         }
         .font(.subheadline)
         .contentShape(Rectangle())
+    }
+    
+    struct ListIndicator: View {
+        let isCompleted: Bool
+        
+        var body: some View {
+            Image(systemName: isCompleted ? "checkmark.circle" : "checklist")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 22, height: 22)
+                .padding(.leading, 8)
+                .foregroundStyle(isCompleted ? .green : .accentColor)
+        }
     }
 }
 
