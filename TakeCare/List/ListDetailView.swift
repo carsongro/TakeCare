@@ -62,7 +62,7 @@ struct ListDetailView: View, @unchecked Sendable {
                 }
                 .listRowBackground(Color(.systemGroupedBackground))
                 
-                Section("Recipient") {
+                Section {
                     ListUpdateRecipientButton(recipient: $recipient)
                     
                     if let recipient = recipient {
@@ -70,6 +70,12 @@ struct ListDetailView: View, @unchecked Sendable {
                             ListRecipientRow(user: recipient)
                         }
                         .onDelete(perform: deleteRecipient)
+                    }
+                } header: {
+                    Text("Recipient")
+                } footer: {
+                    if mode == .edit && list?.isActive ?? true {
+                        Text("If a recipient is removed or changed while the list is active, the recipient will continue to receive notifications until the next time they open the app.")
                     }
                 }
                 
@@ -93,7 +99,7 @@ struct ListDetailView: View, @unchecked Sendable {
                     Text("Tasks")
                 } footer: {
                     if mode == .edit && list?.isActive ?? true {
-                        Text("Tasks cannot be modified while the list is active. If a new task is added, recipients will not be notified until they open the app after the new task is added")
+                        Text("Tasks cannot be modified while the list is active. If a new task is added or a task is deleted, the recipient will not receive updated notifications until the next time they open the app.")
                     }
                 }
             }
