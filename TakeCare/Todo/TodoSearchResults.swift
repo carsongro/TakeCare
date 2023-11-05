@@ -19,18 +19,7 @@ struct TodoSearchResults: View {
     var body: some View {
         ForEach(listedLists, id: \.self) { list in
             NavigationLink(value: list) {
-                HStack {
-                    ListRow(list: list)
-                    
-                    Spacer(minLength: 0)
-                    
-                    if !list.isActive {
-                        Text("Not Active")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .padding()
-                    }
-                }
+                ListRow(list: list)
             }
         }
         .id(UUID())

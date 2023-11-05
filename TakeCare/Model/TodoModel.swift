@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import Firebase
-import FirebaseFirestoreSwift
+@preconcurrency import Firebase
+@preconcurrency import FirebaseFirestoreSwift
 import UserNotifications
 
 /// A model for todo lists
@@ -52,7 +52,7 @@ import UserNotifications
                 }
                 
                 if isInitialFetch {
-                    updateTasksCompletion()
+                    try await updateTasksCompletion()
                     correctLocalNotificationsIfNeeded()
                 }
             }
@@ -70,7 +70,7 @@ import UserNotifications
     ///   - scheduleNotification: Defaults to `true`. True means notification will be scheduled when `isCompleted` is `false`.
     /// - Returns: The updated task
     @discardableResult
-    func updateListTask(list: TakeCareList, task: ListTask, isCompleted: Bool, scheduleNotification: Bool = true) throws -> TakeCareList {
+    func updateListTask(list: TakeCareList, task: ListTask, isCompleted: Bool, scheduleNotification: Bool = true, lastCompletionDate: Date = Date.now) throws -> TakeCareList {
         guard let listID = list.id else { throw TodoError.listNotFound }
         
         let updatedTask = ListTask(
@@ -80,7 +80,7 @@ import UserNotifications
             completionDate: task.completionDate,
             repeatInterval: task.repeatInterval,
             isCompleted: isCompleted,
-            lastCompletionDate: Date.now
+            lastCompletionDate: lastCompletionDate
         )
         
         var tasks = list.tasks
@@ -129,8 +129,9 @@ import UserNotifications
         }
     }
     
-    private func updateTasksCompletion() {
+    private func updateTasksCompletion() async throws {
         var shouldRefresh = false
+        var listsToUpdate = [TakeCareList: [ListTask]]()
         
         for list in lists {
             for task in list.tasks {
@@ -140,22 +141,56 @@ import UserNotifications
                    task.isCompleted {
                     shouldRefresh = true
                     
-                    do {
-                        try updateListTask(
-                            list: list,
-                            task: task,
-                            isCompleted: false,
-                            scheduleNotification: false
-                        )
-                    } catch {
-                        print(error.localizedDescription)
+                    if !listsToUpdate.keys.contains(list) {
+                        listsToUpdate[list] = [task]
+                    } else {
+                        listsToUpdate[list]?.append(task)
                     }
                 }
             }
         }
         
         if shouldRefresh {
-            Task {
+            let db = Firestore.firestore()
+            let batch = db.batch()
+            
+            for (list, tasks) in listsToUpdate {
+                var updatedList = list
+                
+                for task in tasks {
+                    guard let index = updatedList.tasks.firstIndex(of: task) else { continue }
+                    
+                    let updatedTask = ListTask(
+                        id: task.id,
+                        title: task.title,
+                        notes: task.notes,
+                        completionDate: task.completionDate,
+                        repeatInterval: task.repeatInterval,
+                        isCompleted: false,
+                        lastCompletionDate: task.lastCompletionDate
+                    )
+                    
+                    updatedList.tasks[index] = updatedTask
+                }
+                
+                guard let id = updatedList.id else { continue }
+                
+                let listRef = db.collection("lists").document(id)
+                
+                try batch.setData(from: updatedList, forDocument: listRef)
+            }
+            
+            let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
+                batch.commit { error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume(with: .success(true))
+                    }
+                }
+            }
+            
+            if result {
                 await fetchLists()
             }
         }
