@@ -192,6 +192,26 @@ import UserNotifications
         }
     }
     
+    func removeTodoList(list: TakeCareList) async throws {
+        guard let id = list.id else { return }
+        
+        let updatedList = TakeCareList(
+            ownerID: list.ownerID,
+            name: list.name,
+            description: list.description,
+            recipient: nil,
+            tasks: list.tasks,
+            photoURL: list.photoURL,
+            isActive: false
+        )
+        
+        try Firestore.firestore().collection("lists").document(id).setData(from: updatedList)
+        
+        await fetchLists()
+        
+        correctLocalNotificationsIfNeeded()
+    }
+    
     // MARK: Local Notifications
     
     /// When the user makes a list active, it schedules notifications

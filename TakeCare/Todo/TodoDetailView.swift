@@ -9,10 +9,12 @@ import SwiftUI
 
 struct TodoDetailView: View {
     @Environment(TodoModel.self) private var todoModel
+    @Environment(\.dismiss) private var dismiss
     
     @Binding var list: TakeCareList
     
     @State private var showingErrorAlert = false
+    @State private var showingRemoveAlert = false
     
     var body: some View {
         List {
@@ -45,7 +47,25 @@ struct TodoDetailView: View {
         .refreshable {
             todoModel.refresh()
         }
-        .alert("There was an error modifying the task", isPresented: $showingErrorAlert) { }
+        .toolbar {
+            Button("Remove", systemImage: "minus.circle") {
+                showingRemoveAlert = true
+            }
+        }
+        .alert("Are you sure you want to remove this list from your to do?", isPresented: $showingRemoveAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("Remove", role: .destructive) {
+                Task {
+                    do {
+                        try await todoModel.removeTodoList(list: list)
+                        dismiss()
+                    } catch {
+                        showingErrorAlert = true
+                    }
+                }
+            }
+        }
+        .alert("An error occured", isPresented: $showingErrorAlert) { }
     }
     
     @ViewBuilder
