@@ -165,12 +165,13 @@ import UserNotifications
     
     /// When the user makes a list active, it schedules notifications
     private func handleListNotifications(list: TakeCareList) {
-        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+        Task {
+            let settings = await UNUserNotificationCenter.current().notificationSettings()
             switch settings.authorizationStatus {
             case .notDetermined:
-                self?.getNotificationPermission(list: list)
+                getNotificationPermission(list: list)
             case .authorized:
-                self?.scheduleNotifications(for: list)
+                scheduleNotifications(for: list)
             default:
                 break
             }
@@ -185,11 +186,11 @@ import UserNotifications
     }
     
     private func getNotificationPermission(list: TakeCareList) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] success, error in
-            if success {
-                print("Success getting notification permission")
-                self?.scheduleNotifications(for: list)
-            } else if let error {
+        Task {
+            do {
+                let result = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+                scheduleNotifications(for: list)
+            } catch {
                 print(error.localizedDescription)
             }
         }
@@ -231,8 +232,13 @@ import UserNotifications
     
     
     private func correctLocalNotificationsIfNeeded() {
-        removeLocalNotificationsForDeletedTasks()
-        addLocalNotificationsForNewTasks()
+        Task {
+            let settings = await UNUserNotificationCenter.current().notificationSettings()
+            guard settings.authorizationStatus == .authorized else { return }
+            
+            removeLocalNotificationsForDeletedTasks()
+            addLocalNotificationsForNewTasks()
+        }
     }
     
     /// A method to remove local notifications if the logged in user has been removed from a list as a recipient
