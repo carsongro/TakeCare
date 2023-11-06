@@ -65,7 +65,7 @@ import UserNotifications
     ///   - scheduleNotification: Defaults to `true`. True means notification will be scheduled when `isCompleted` is `false`.
     /// - Returns: The updated task
     @discardableResult
-    func updateListTask(list: TakeCareList, task: ListTask, isCompleted: Bool, scheduleNotification: Bool = true, lastCompletionDate: Date = Date.now) throws -> TakeCareList {
+    func updateListTask(list: TakeCareList, task: ListTask, isCompleted: Bool, scheduleNotification: Bool = true, lastCompletionDate: Date? = Date.now) throws -> TakeCareList {
         guard let listID = list.id else { throw TodoError.listNotFound }
         
         let updatedTask = ListTask(
@@ -109,18 +109,22 @@ import UserNotifications
     }
     
     func updateListActive(isActive: Bool, list: TakeCareList) {
-        guard let id = list.id else { return }
-        
-        Firestore.firestore().collection("lists").document(id).updateData(["isActive" : isActive])
-        
-        if isActive {
-            handleListNotifications(list: list)
-        } else {
-            removeNotifications(for: list)
-        }
-        
         Task {
-            await fetchLists(animated: false)
+            guard let id = list.id else { return }
+            
+            do {
+                try await Firestore.firestore().collection("lists").document(id).updateData(["isActive" : isActive])
+                
+                if isActive {
+                    handleListNotifications(list: list)
+                } else {
+                    removeNotifications(for: list)
+                }
+                
+                await fetchLists(animated: false)
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
@@ -256,16 +260,55 @@ import UserNotifications
     private func scheduleTaskNotifications(for task: ListTask) {
         guard let completionDate = task.completionDate, !task.isCompleted else { return }
         
-        let dateComponents = Calendar.current.dateComponents(
-            Set(
-                arrayLiteral: Calendar.Component.year,
-                Calendar.Component.month,
-                Calendar.Component.day,
-                Calendar.Component.hour,
-                Calendar.Component.minute
-            ),
+        let components = Set(
+            arrayLiteral: Calendar.Component.year,
+            Calendar.Component.month,
+            Calendar.Component.day,
+            Calendar.Component.hour,
+            Calendar.Component.minute
+        )
+        
+        var dateComponents = Calendar.current.dateComponents(
+            components,
             from: completionDate
         )
+        
+        /// If the task repeats daily but the notification for a task is scheduled to happen in the past, the nofication will never be delivered,
+        /// this may happen if a user activates a list and some of the tasks happen in the past.
+        /// In this case we update the date that the inital notification is delivered to ensure the user gets notifiations even when activating a list
+        /// at a time later than the start date of a task's completion date.
+        /// If the completion date falls on a different day, we can use today as the starting point, but if the completion date is today but at a earlier time,
+        /// the first notification is scheduled to start tomorrow
+        if task.repeatInterval == .daily && !Calendar.current.isDateInToday(completionDate) && completionDate < Date.now {
+            if let hour = dateComponents.hour,
+               let minute = dateComponents.minute,
+               let newDate = Calendar.current.date(
+                bySettingHour: hour,
+                minute: minute,
+                second: 0,
+                of: Date()
+               ) {
+                dateComponents = Calendar.current.dateComponents(
+                    components,
+                    from: newDate
+                )
+            }
+        } else if task.repeatInterval == .daily && Calendar.current.isDateInToday(completionDate) && completionDate < Date.now {
+            if let hour = dateComponents.hour,
+               let minute = dateComponents.minute,
+               let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
+               let newDate = Calendar.current.date(
+                bySettingHour: hour,
+                minute: minute,
+                second: 0,
+                of: tomorrow
+               ) {
+                dateComponents = Calendar.current.dateComponents(
+                    components,
+                    from: newDate
+                )
+            }
+        }
         
         let content = UNMutableNotificationContent()
         content.title = task.title

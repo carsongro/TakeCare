@@ -55,6 +55,7 @@ struct ListTaskDetailView: View {
                         DatePicker(
                             "Start Date",
                             selection: $completionDate,
+                            in: Date()...,
                             displayedComponents: [.date, .hourAndMinute]
                         )
                         .datePickerStyle(.graphical)
