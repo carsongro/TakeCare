@@ -16,56 +16,59 @@ struct TodoDetailView: View {
     @State private var showingErrorAlert = false
     @State private var showingRemoveAlert = false
     
+    
     var body: some View {
-        List {
-            Section {
-                ListDetailHeader(list: $list)
+        GeometryReader { proxy in
+            List {
+                Section {
+                    ListDetailHeader(list: $list, width: proxy.size.width)
+                }
+                .listRowSeparator(.hidden)
+                
+                ForEach(TaskFilter.allCases, id: \.self) { filter in
+                    TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
+                        Task {
+                            do {
+                                try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
+                                await todoModel.fetchLists(animated: true)
+                            } catch {
+                                showingErrorAlert = true
+                            }
+                        }
+                    }
+                }
+                
+                Section {
+                    activeButton
+                        .listRowSeparator(.hidden)
+                }
             }
-            .listRowSeparator(.hidden)
-            
-            ForEach(TaskFilter.allCases, id: \.self) { filter in
-                TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
+            .listStyle(.plain)
+            .navigationTitle(list.name)
+            .navigationBarTitleDisplayMode(.inline)
+            .refreshable {
+                todoModel.refresh()
+            }
+            .toolbar {
+                Button("Remove", systemImage: "minus.circle") {
+                    showingRemoveAlert = true
+                }
+            }
+            .alert("Are you sure you want to remove this list from your to do?", isPresented: $showingRemoveAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Remove", role: .destructive) {
                     Task {
                         do {
-                            try todoModel.updateListTask(list: list, task: task, isCompleted: isCompleted)
-                            await todoModel.fetchLists(animated: true)
+                            try await todoModel.removeTodoList(list: list)
+                            dismiss()
                         } catch {
                             showingErrorAlert = true
                         }
                     }
                 }
             }
-            
-            Section {
-                activeButton
-                    .listRowSeparator(.hidden)
-            }
+            .alert("An error occured", isPresented: $showingErrorAlert) { }
         }
-        .listStyle(.plain)
-        .navigationTitle(list.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .refreshable {
-            todoModel.refresh()
-        }
-        .toolbar {
-            Button("Remove", systemImage: "minus.circle") {
-                showingRemoveAlert = true
-            }
-        }
-        .alert("Are you sure you want to remove this list from your to do?", isPresented: $showingRemoveAlert) {
-            Button("Cancel", role: .cancel) { }
-            Button("Remove", role: .destructive) {
-                Task {
-                    do {
-                        try await todoModel.removeTodoList(list: list)
-                        dismiss()
-                    } catch {
-                        showingErrorAlert = true
-                    }
-                }
-            }
-        }
-        .alert("An error occured", isPresented: $showingErrorAlert) { }
     }
     
     @ViewBuilder

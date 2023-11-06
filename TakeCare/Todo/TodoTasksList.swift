@@ -47,7 +47,6 @@ struct TodoTasksList: View {
             // Otherwise sort by title
             if let completionDate1 = $0.completionDate,
                let completionDate2 = $1.completionDate {
-                    
                 return completionDate1.comparableTime < completionDate2.comparableTime
             } else if $0.completionDate == nil {
                 return $1.completionDate != nil

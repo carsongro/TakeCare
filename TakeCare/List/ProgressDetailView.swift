@@ -18,72 +18,74 @@ struct ListProgressDetailView: View {
     @State private var showingDeleteAlert = false
     
     var body: some View {
-        List {
-            Section {
-                ListDetailHeader(list: $list)
-            }
-            .listRowSeparator(.hidden)
-            
-            Section("Recipient") {
-                if let recipient = list.recipient {
-                    ListRecipientRow(user: recipient)
+        GeometryReader { proxy in
+            List {
+                Section {
+                    ListDetailHeader(list: $list, width: proxy.size.width)
                 }
-            }
-            .listRowSeparator(.hidden)
-            
-            ForEach(TaskFilter.allCases, id: \.self) { filter in
-                TodoTasksList(list: $list, taskFilter: filter, interactionDisabled: true)
-            }
-            
-            Section {
-                Color.clear
-            }
-            .padding(.bottom)
-            .listRowSeparator(.hidden)
-        }
-        .refreshable {
-            await listsModel.fetchLists()
-        }
-        .listStyle(.plain)
-        .navigationTitle(list.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            Menu("Edit", systemImage: "ellipsis.circle") {
-                Button("Edit", systemImage: "pencil") {
-                    showingEditList = true
+                .listRowSeparator(.hidden)
+                
+                Section("Recipient") {
+                    if let recipient = list.recipient {
+                        ListRecipientRow(user: recipient)
+                    }
+                }
+                .listRowSeparator(.hidden)
+                
+                ForEach(TaskFilter.allCases, id: \.self) { filter in
+                    TodoTasksList(list: $list, taskFilter: filter, interactionDisabled: true)
                 }
                 
-                Divider()
-                
-                Button("Delete List", systemImage: "trash", role: .destructive) {
-                    showingDeleteAlert = true
+                Section {
+                    Color.clear
                 }
+                .padding(.bottom)
+                .listRowSeparator(.hidden)
             }
-        }
-        .sheet(isPresented: $showingEditList) {
-            ListDetailView(mode: .edit, list: list)
-                .environment(listsModel)
-        }
-        .alert(
-            "Are you sure you want to delete this list?",
-            isPresented: $showingDeleteAlert
-        ) {
-            Button("Cancel", role: .cancel) { }
-            Button("Delete", role: .destructive) {
-                Task {
-                    do {
-                        dismiss()
-                        try await listsModel.deleteList(list)
-                    } catch {
-                        showingErrorAlert = true
+            .refreshable {
+                await listsModel.fetchLists()
+            }
+            .listStyle(.plain)
+            .navigationTitle(list.name)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                Menu("Edit", systemImage: "ellipsis.circle") {
+                    Button("Edit", systemImage: "pencil") {
+                        showingEditList = true
+                    }
+                    
+                    Divider()
+                    
+                    Button("Delete List", systemImage: "trash", role: .destructive) {
+                        showingDeleteAlert = true
                     }
                 }
             }
+            .sheet(isPresented: $showingEditList) {
+                ListDetailView(mode: .edit, list: list)
+                    .environment(listsModel)
+            }
+            .alert(
+                "Are you sure you want to delete this list?",
+                isPresented: $showingDeleteAlert
+            ) {
+                Button("Cancel", role: .cancel) { }
+                Button("Delete", role: .destructive) {
+                    Task {
+                        do {
+                            dismiss()
+                            try await listsModel.deleteList(list)
+                        } catch {
+                            showingErrorAlert = true
+                        }
+                    }
+                }
+            }
+            .alert(
+                "There was an error deleting the list",
+                isPresented: $showingErrorAlert
+            ) { }
         }
-        .alert(
-            "There was an error deleting the list",
-            isPresented: $showingErrorAlert
-        ) { }
     }
 }
 

@@ -9,7 +9,12 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct ListDetailHeader: View {
+    @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     @Binding var list: TakeCareList
+    
+    var width: CGFloat
+    
+    var proportionalWidth: CGFloat { width * (prefersTabNavigation ? 2/3 : 1/4) }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -21,13 +26,13 @@ struct ListDetailHeader: View {
                         Image(systemName: "list.bullet")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 200, height: 200)
+                            .frame(width: proportionalWidth, height: proportionalWidth)
                             .padding()
                     }
                 }
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 200, height: 200)
+                .frame(width: proportionalWidth, height: proportionalWidth)
                 .contentShape(imageClipShape)
                 .clipShape(imageClipShape)
                 .frame(maxWidth: .infinity)
@@ -46,5 +51,5 @@ struct ListDetailHeader: View {
 }
 
 #Preview {
-    ListDetailHeader(list: .constant(PreviewData.previewTakeCareList))
+    ListDetailHeader(list: .constant(PreviewData.previewTakeCareList), width: 300)
 }

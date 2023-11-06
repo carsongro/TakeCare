@@ -9,13 +9,17 @@ import PhotosUI
 import SwiftUI
 
 struct ListChooseListImageView: View {
+    @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     @Binding var listImage: UIImage?
+    var width: CGFloat
     
     @State private var listImageItem: PhotosPickerItem?
     @State private var showingPhotosPicker = false
     
     var didChangeImageHandler: (() -> Void)? = nil
+    
+    var proportionalWidth: CGFloat { width * (prefersTabNavigation ? 3/5 : 1/3) }
     
     var body: some View {
         let imageClipShape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
@@ -24,14 +28,14 @@ struct ListChooseListImageView: View {
                 Image(uiImage: listImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 200, height: 200)
+                    .frame(width: proportionalWidth, height: proportionalWidth)
                     .clipShape(imageClipShape)
                     .contentShape(imageClipShape)
                     .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
             } else {
                 Rectangle()
                     .foregroundStyle(Color(UIColor.secondarySystemBackground))
-                    .frame(width: 200, height: 200)
+                    .frame(width: proportionalWidth, height: proportionalWidth)
                     .clipShape(imageClipShape)
                     .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
                 Image(systemName: "list.bullet")
@@ -80,5 +84,5 @@ struct ListChooseListImageView: View {
 }
 
 #Preview {
-    ListChooseListImageView(listImage: .constant(nil))
+    ListChooseListImageView(listImage: .constant(nil), width: 300)
 }

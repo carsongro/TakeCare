@@ -41,154 +41,156 @@ struct ListDetailView: View, @unchecked Sendable {
     
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    ListChooseListImageView(listImage: $listImage) {
-                        didChangeImage = true
-                    }
-                    .listRowSeparator(.hidden)
-                    
-                    TextField("List Name", text: $name)
-                        .multilineTextAlignment(.center)
-                        .fontWeight(.bold)
-                        .padding(.bottom)
-                        .focused($focusedField, equals: .name)
-                        .submitLabel(.next)
-                    
-                    TextField("Description", text: $description)
-                        .focused($focusedField, equals: .description)
-                        .submitLabel(.return)
-                        .padding(.bottom)
-                }
-                .listRowBackground(Color(.systemGroupedBackground))
-                
-                Section {
-                    ListUpdateRecipientButton(recipient: $recipient)
-                    
-                    if let recipient = recipient {
-                        ForEach([recipient]) { recipient in
-                            ListRecipientRow(user: recipient)
+            GeometryReader { proxy in
+                List {
+                    Section {
+                        ListChooseListImageView(listImage: $listImage, width: proxy.size.width) {
+                            didChangeImage = true
                         }
-                        .onDelete(perform: deleteRecipient)
+                        .listRowSeparator(.hidden)
+                        
+                        TextField("List Name", text: $name)
+                            .multilineTextAlignment(.center)
+                            .fontWeight(.bold)
+                            .padding(.bottom)
+                            .focused($focusedField, equals: .name)
+                            .submitLabel(.next)
+                        
+                        TextField("Description", text: $description)
+                            .focused($focusedField, equals: .description)
+                            .submitLabel(.return)
+                            .padding(.bottom)
                     }
-                } header: {
-                    Text("Recipient")
-                } footer: {
-                    if mode == .edit && list?.isActive ?? true {
-                        Text("If a recipient is removed or changed while the list is active, the recipient will continue to receive notifications until the next time they open the app.")
-                    }
-                }
-                
-                Section {
-                    ListAddTasksButton(tasks: $tasks)
+                    .listRowBackground(Color(.systemGroupedBackground))
                     
-                    ForEach(tasks, id: \.self) { task in
-                        if list?.isActive ?? false {
-                            ListTaskRow(task: task)
-                        } else {
-                            Button {
-                                selectedTask = task
-                            } label: {
+                    Section {
+                        ListUpdateRecipientButton(recipient: $recipient)
+                        
+                        if let recipient = recipient {
+                            ForEach([recipient]) { recipient in
+                                ListRecipientRow(user: recipient)
+                            }
+                            .onDelete(perform: deleteRecipient)
+                        }
+                    } header: {
+                        Text("Recipient")
+                    } footer: {
+                        if mode == .edit && list?.isActive ?? true {
+                            Text("If a recipient is removed or changed while the list is active, the recipient will continue to receive notifications until the next time they open the app.")
+                        }
+                    }
+                    
+                    Section {
+                        ListAddTasksButton(tasks: $tasks)
+                        
+                        ForEach(tasks, id: \.self) { task in
+                            if list?.isActive ?? false {
                                 ListTaskRow(task: task)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                    .onDelete(perform: deleteTask)
-                } header: {
-                    Text("Tasks")
-                } footer: {
-                    if mode == .edit && list?.isActive ?? true {
-                        Text("Tasks cannot be modified while the list is active. If a new task is added or a task is deleted, the recipient will not receive updated notifications until the next time they open the app.")
-                    }
-                }
-            }
-            .interactiveDismissDisabled()
-            .onSubmit {
-                switch focusedField {
-                case .name:
-                    focusedField = .description
-                default:
-                    break
-                }
-            }
-            .onChange(of: $selectedTask.wrappedValue, { oldValue, newValue in
-                if newValue != nil {
-                    showingModifyTaskForm = true
-                }
-            })
-            .sheet(isPresented: $showingModifyTaskForm, onDismiss: {
-                selectedTask = nil
-            }) {
-                ListTaskDetailView(
-                    tasks: $tasks,
-                    selectedTask: $selectedTask,
-                    mode: .edit
-                )
-            }
-            .onAppear(perform: getList)
-            .environment(\.editMode, .constant(.active))
-            .navigationTitle(mode == .edit ? "Edit List" : "New List")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        if mode == .edit && listDidChange || listDidChange {
-                            showingDismissDialog = true
-                        } else {
-                            dismiss()
-                        }
-                    }
-                    .confirmationDialog("Are you sure you want to discard your changes?", isPresented: $showingDismissDialog) {
-                        Button("Discard Changes", role: .destructive) {
-                            dismiss()
-                        }
-                    }
-                }
-                
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Done") {
-                        Task {
-                            dismiss()
-                            guard listDidChange else { return }
-                            
-                            do {
-                                switch mode {
-                                case .create:
-                                    try await listsModel.createList(
-                                        name: name,
-                                        description: description,
-                                        recipient: recipient,
-                                        tasks: tasks,
-                                        listImage: listImage
-                                    )
-                                case .edit:
-                                    guard let id = list?.id else { return }
-                                    try await listsModel.updateList(
-                                        id: id,
-                                        name: name,
-                                        description: description,
-                                        recipient: recipient,
-                                        tasks: tasks,
-                                        listImage: listImage,
-                                        isActive: list?.isActive ?? false,
-                                        sendInvites: list?.recipient != recipient,
-                                        shouldUpdateImage: didChangeImage
-                                    )
+                            } else {
+                                Button {
+                                    selectedTask = task
+                                } label: {
+                                    ListTaskRow(task: task)
                                 }
-                            } catch {
-                                showingErrorAlert = true
+                                .buttonStyle(.plain)
+                            }
+                        }
+                        .onDelete(perform: deleteTask)
+                    } header: {
+                        Text("Tasks")
+                    } footer: {
+                        if mode == .edit && list?.isActive ?? true {
+                            Text("Tasks cannot be modified while the list is active. If a new task is added or a task is deleted, the recipient will not receive updated notifications until the next time they open the app.")
+                        }
+                    }
+                }
+                .interactiveDismissDisabled()
+                .onSubmit {
+                    switch focusedField {
+                    case .name:
+                        focusedField = .description
+                    default:
+                        break
+                    }
+                }
+                .onChange(of: $selectedTask.wrappedValue, { oldValue, newValue in
+                    if newValue != nil {
+                        showingModifyTaskForm = true
+                    }
+                })
+                .sheet(isPresented: $showingModifyTaskForm, onDismiss: {
+                    selectedTask = nil
+                }) {
+                    ListTaskDetailView(
+                        tasks: $tasks,
+                        selectedTask: $selectedTask,
+                        mode: .edit
+                    )
+                }
+                .onAppear(perform: getList)
+                .environment(\.editMode, .constant(.active))
+                .navigationTitle(mode == .edit ? "Edit List" : "New List")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            if mode == .edit && listDidChange || listDidChange {
+                                showingDismissDialog = true
+                            } else {
+                                dismiss()
+                            }
+                        }
+                        .confirmationDialog("Are you sure you want to discard your changes?", isPresented: $showingDismissDialog) {
+                            Button("Discard Changes", role: .destructive) {
+                                dismiss()
                             }
                         }
                     }
-                    .fontWeight(.semibold)
-                    .disabled(name.isEmpty || tasks.isEmpty)
+                    
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Done") {
+                            Task {
+                                dismiss()
+                                guard listDidChange else { return }
+                                
+                                do {
+                                    switch mode {
+                                    case .create:
+                                        try await listsModel.createList(
+                                            name: name,
+                                            description: description,
+                                            recipient: recipient,
+                                            tasks: tasks,
+                                            listImage: listImage
+                                        )
+                                    case .edit:
+                                        guard let id = list?.id else { return }
+                                        try await listsModel.updateList(
+                                            id: id,
+                                            name: name,
+                                            description: description,
+                                            recipient: recipient,
+                                            tasks: tasks,
+                                            listImage: listImage,
+                                            isActive: list?.isActive ?? false,
+                                            sendInvites: list?.recipient != recipient,
+                                            shouldUpdateImage: didChangeImage
+                                        )
+                                    }
+                                } catch {
+                                    showingErrorAlert = true
+                                }
+                            }
+                        }
+                        .fontWeight(.semibold)
+                        .disabled(name.isEmpty || tasks.isEmpty)
+                    }
                 }
+                .alert(
+                    "An error occured",
+                    isPresented: $showingErrorAlert
+                ) { }
             }
-            .alert(
-                "An error occured",
-                isPresented: $showingErrorAlert
-            ) { }
         }
     }
     
