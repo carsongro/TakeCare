@@ -19,7 +19,7 @@ struct ListRecipientRow: View {
                     Image(systemName: "person.circle.fill")
                         .resizable()
                         .recipientRowImage()
-                        .foregroundStyle(Color.secondary)
+                        .foregroundStyle(.secondary)
                 }
                 .recipientRowImage()
             VStack(alignment: .leading) {
