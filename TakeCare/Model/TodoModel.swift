@@ -95,14 +95,21 @@ import UserNotifications
         let docRef = Firestore.firestore().collection("lists").document(listID)
         try docRef.setData(from: updatedList)
         
-        // If the task is completed and it doesn't repeat then we remove the notification
-        // Otherwise if the task has a completion date then we schedule one
-        if isCompleted && task.repeatInterval == .never {
+        // If the task is completed we remove the notifications
+        if isCompleted {
             Task {
                 UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [updatedTask.id])
             }
+            
+            if task.repeatInterval == .daily { // We need to reschedule the notification to start tomorrow
+                Task {
+                    try await scheduleTaskNotifications(for: updatedTask, startTomorrow: true)
+                }
+            }
         } else if updatedTask.completionDate != nil && !isCompleted && scheduleNotification {
-            scheduleTaskNotifications(for: updatedTask)
+            Task {
+                try await scheduleTaskNotifications(for: updatedTask)
+            }
         }
         
         return updatedList
@@ -252,13 +259,17 @@ import UserNotifications
     }
     
     private func scheduleNotifications(for list: TakeCareList) {
-        for task in list.tasks {
-            scheduleTaskNotifications(for: task)
+        Task {
+            for task in list.tasks {
+                try await scheduleTaskNotifications(for: task)
+            }
         }
     }
     
-    private func scheduleTaskNotifications(for task: ListTask) {
-        guard let completionDate = task.completionDate, !task.isCompleted else { return }
+    private func scheduleTaskNotifications(for task: ListTask, startTomorrow: Bool = false) async throws {
+        let requests = Set(await UNUserNotificationCenter.current().pendingNotificationRequests().compactMap { $0.identifier })
+        
+        guard let completionDate = task.completionDate, !task.isCompleted, requests.contains(task.id) else { return }
         
         let components = Set(
             arrayLiteral: Calendar.Component.year,
@@ -279,21 +290,9 @@ import UserNotifications
         /// at a time later than the start date of a task's completion date.
         /// If the completion date falls on a different day, we can use today as the starting point, but if the completion date is today but at a earlier time,
         /// the first notification is scheduled to start tomorrow
-        if task.repeatInterval == .daily && !Calendar.current.isDateInToday(completionDate) && completionDate < Date.now {
-            if let hour = dateComponents.hour,
-               let minute = dateComponents.minute,
-               let newDate = Calendar.current.date(
-                bySettingHour: hour,
-                minute: minute,
-                second: 0,
-                of: Date()
-               ) {
-                dateComponents = Calendar.current.dateComponents(
-                    components,
-                    from: newDate
-                )
-            }
-        } else if task.repeatInterval == .daily && Calendar.current.isDateInToday(completionDate) && completionDate < Date.now {
+        
+        
+        if (task.repeatInterval == .daily && Calendar.current.isDateInToday(completionDate) && completionDate < Date.now) || startTomorrow {
             if let hour = dateComponents.hour,
                let minute = dateComponents.minute,
                let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
@@ -302,6 +301,20 @@ import UserNotifications
                 minute: minute,
                 second: 0,
                 of: tomorrow
+               ) {
+                dateComponents = Calendar.current.dateComponents(
+                    components,
+                    from: newDate
+                )
+            }
+        } else if task.repeatInterval == .daily && !Calendar.current.isDateInToday(completionDate) && completionDate < Date.now {
+            if let hour = dateComponents.hour,
+               let minute = dateComponents.minute,
+               let newDate = Calendar.current.date(
+                bySettingHour: hour,
+                minute: minute,
+                second: 0,
+                of: Date()
                ) {
                 dateComponents = Calendar.current.dateComponents(
                     components,
@@ -321,7 +334,7 @@ import UserNotifications
         
         let request = UNNotificationRequest(identifier: task.id, content: content, trigger: trigger)
         
-        UNUserNotificationCenter.current().add(request)
+        try await UNUserNotificationCenter.current().add(request)
     }
     
     
@@ -361,7 +374,7 @@ import UserNotifications
             
             for task in allTodoTasks {
                 if !requests.contains(task.id) {
-                    scheduleTaskNotifications(for: task)
+                    try await scheduleTaskNotifications(for: task)
                 }
             }
         }
