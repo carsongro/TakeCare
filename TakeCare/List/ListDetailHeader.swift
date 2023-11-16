@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct ListDetailHeader: View {
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
@@ -19,7 +18,7 @@ struct ListDetailHeader: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             let imageClipShape = RoundedRectangle(cornerRadius: 10, style: .continuous)
-            WebImage(url: URL(string: list.photoURL ?? ""))
+            CachedAsyncImage(url: URL(string: list.photoURL ?? ""))
                 .resizable()
                 .placeholder {
                     ZStack {
@@ -30,12 +29,12 @@ struct ListDetailHeader: View {
                             .padding()
                     }
                 }
-                .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: proportionalWidth, height: proportionalWidth)
                 .contentShape(imageClipShape)
                 .clipShape(imageClipShape)
                 .frame(maxWidth: .infinity)
+            
             
             Text(list.isActive ? "Currently Active" : "Not Active")
                 .font(.footnote)

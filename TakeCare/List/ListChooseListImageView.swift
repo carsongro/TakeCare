@@ -11,7 +11,7 @@ import SwiftUI
 struct ListChooseListImageView: View {
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
-    @Binding var listImage: UIImage?
+    @Binding var listImage: Image?
     var width: CGFloat
     
     @State private var listImageItem: PhotosPickerItem?
@@ -25,7 +25,7 @@ struct ListChooseListImageView: View {
         let imageClipShape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         ZStack {
             if let listImage = listImage {
-                Image(uiImage: listImage)
+                listImage
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: proportionalWidth, height: proportionalWidth)
@@ -67,10 +67,8 @@ struct ListChooseListImageView: View {
         .onChange(of: listImageItem) { _, _ in
             Task {
                 if let data = try? await listImageItem?.loadTransferable(type: Data.self) {
-                    if let uiImage = UIImage(data: data) {
-                        withAnimation {
-                            listImage = uiImage
-                        }
+                    if let image = Image(data: data) {
+                        listImage = image
                         didChangeImageHandler?()
                         listImageItem = nil
                     }

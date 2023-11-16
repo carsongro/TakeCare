@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct ListRow: View {
     var list: TakeCareList
     
     var body: some View {
         HStack {
-            WebImage(url: URL(string: list.photoURL ?? ""))
+            CachedAsyncImage(url: URL(string: list.photoURL ?? ""))
                 .resizable()
                 .placeholder {
                     ZStack {

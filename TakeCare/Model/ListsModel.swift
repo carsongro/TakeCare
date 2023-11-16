@@ -43,14 +43,14 @@ import FirebaseFirestoreSwift
         }
     }
     
-    func createList(name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: UIImage?) async throws {
+    func createList(name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: Image?) async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let docRef = Firestore.firestore().collection("lists").document()
         
         var photoURL: String? = nil
         if let image = listImage {
-            photoURL = try await LocalImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
+            photoURL = try await ImageManager.shared.uploadImage(name: docRef.documentID, image: image, path: .list_images)
         }
         
         let sortedTasks = tasks.sorted {
@@ -81,7 +81,17 @@ import FirebaseFirestoreSwift
         await fetchLists()
     }
     
-    func updateList(id: String, name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: UIImage?, isActive: Bool, sendInvites: Bool, shouldUpdateImage: Bool = true) async throws {
+    func updateList(
+        id: String,
+        name: String,
+        description: String?,
+        recipient: User?,
+        tasks: [ListTask],
+        listImage: Image?,
+        isActive: Bool,
+        sendInvites: Bool,
+        shouldUpdateImage: Bool = true
+    ) async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let docRef = Firestore.firestore().collection("lists").document(id)
@@ -93,7 +103,7 @@ import FirebaseFirestoreSwift
         }
         
         if shouldUpdateImage, let image = listImage {
-            photoURL = try await LocalImageManager.uploadImage(name: docRef.documentID, image: image, path: .list_images)
+            photoURL = try await ImageManager.shared.uploadImage(name: docRef.documentID, image: image, path: .list_images)
         }
         
         let list = TakeCareList(
@@ -113,14 +123,14 @@ import FirebaseFirestoreSwift
             try await sendListInvite(to: recipient)
         }
         
-        await fetchLists()
+        await fetchLists(isInitialFetch: true)
     }
     
     func deleteList(_ list: TakeCareList) async throws {
         guard let id = list.id else { return }
         
         if list.photoURL != nil {
-            try await LocalImageManager.deleteImage(name: id, path: .list_images)
+            try await ImageManager.shared.deleteImage(name: id, path: .list_images)
         }
         
         let docRef = Firestore.firestore().collection("lists").document(id)

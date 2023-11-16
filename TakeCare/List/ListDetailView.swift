@@ -31,7 +31,7 @@ struct ListDetailView: View, @unchecked Sendable {
     @State private var description = ""
     @State private var recipient: User?
     @State private var tasks = [ListTask]()
-    @State private var listImage: UIImage?
+    @State private var listImage: Image?
     @State private var selectedTask: ListTask?
     
     @State private var showingErrorAlert = false
@@ -213,7 +213,7 @@ struct ListDetailView: View, @unchecked Sendable {
             if let url = URL(string: list.photoURL ?? "") {
                 Task {
                     do {
-                        listImage = try await LocalImageManager.fetchImage(url: url)
+                        listImage = try await ImageManager.shared.Image(from: url)
                     } catch {
                         print(error.localizedDescription)
                     }

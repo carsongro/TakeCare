@@ -65,7 +65,13 @@ import UserNotifications
     ///   - scheduleNotification: Defaults to `true`. True means notification will be scheduled when `isCompleted` is `false`.
     /// - Returns: The updated task
     @discardableResult
-    func updateListTask(list: TakeCareList, task: ListTask, isCompleted: Bool, scheduleNotification: Bool = true, lastCompletionDate: Date? = Date.now) throws -> TakeCareList {
+    func updateListTask(
+        list: TakeCareList,
+        task: ListTask,
+        isCompleted: Bool,
+        scheduleNotification: Bool = true,
+        lastCompletionDate: Date? = Date.now
+    ) throws -> TakeCareList {
         guard let listID = list.id else { throw TodoError.listNotFound }
         
         let updatedTask = ListTask(
@@ -145,7 +151,8 @@ import UserNotifications
                 // If the task was marked completed on any day but today, set it to not completed
                 if let lastCompletionDate = task.lastCompletionDate,
                    !Calendar.current.isDateInToday(lastCompletionDate),
-                   task.isCompleted {
+                   task.isCompleted,
+                   task.repeatInterval == .daily {
                     shouldRefresh = true
                     
                     if !listsToUpdate.keys.contains(list) {

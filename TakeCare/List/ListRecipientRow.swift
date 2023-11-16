@@ -6,14 +6,13 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct ListRecipientRow: View {
     var user: User
     
     var body: some View {
         HStack(alignment: .center) {
-            WebImage(url: URL(string: user.photoURL ?? ""))
+            CachedAsyncImage(url: URL(string: user.photoURL ?? ""))
                 .resizable()
                 .placeholder {
                     Image(systemName: "person.circle.fill")
@@ -22,6 +21,7 @@ struct ListRecipientRow: View {
                         .foregroundStyle(.secondary)
                 }
                 .recipientRowImage()
+            
             VStack(alignment: .leading) {
                 Text(user.displayName)
                     .font(.headline)

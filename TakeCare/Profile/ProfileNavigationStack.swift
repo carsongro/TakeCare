@@ -7,7 +7,6 @@
 
 import SwiftUI
 import PhotosUI
-import SDWebImageSwiftUI
 
 struct ProfileNavigationStack: View {
     @Environment(AuthModel.self) private var authModel
@@ -37,7 +36,7 @@ struct ProfileNavigationStack: View {
                             showingProfileImageConfirmation = true
                         } label: {
                             ZStack {
-                                WebImage(url: URL(string:authModel.currentUser?.photoURL ?? ""))
+                                CachedAsyncImage(url: URL(string: authModel.currentUser?.photoURL ?? ""))
                                     .resizable()
                                     .placeholder {
                                         Image(systemName: "person.circle.fill")
@@ -93,7 +92,7 @@ struct ProfileNavigationStack: View {
                 .onChange(of: profileImageItem) { _, _ in
                     Task {
                         if let data = try? await profileImageItem?.loadTransferable(type: Data.self) {
-                            if let uiImage = UIImage(data: data) {
+                            if let image = Image(data: data) {
                                 defer {
                                     withAnimation {
                                         isUploadingImage = false
@@ -103,7 +102,7 @@ struct ProfileNavigationStack: View {
                                     withAnimation {
                                         isUploadingImage = true
                                     }
-                                    try await authModel.updateProfileImage(image: uiImage)
+                                    try await authModel.updateProfileImage(image: image)
                                     profileImageItem = nil
                                 } catch {
                                     errorAlertText = "There was an error updating your profile image"

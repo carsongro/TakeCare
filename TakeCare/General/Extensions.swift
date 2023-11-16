@@ -44,3 +44,15 @@ extension Date {
         ComparableTime(self)
     }
 }
+
+extension Image {
+    init?(data: Data) {
+        guard let uiImage = UIImage(data: data) else { return nil }
+        self.init(uiImage: uiImage)
+    }
+    
+    @MainActor
+    func data(compressionQuality: Double = 0.7) async -> Data? {
+        ImageRenderer(content: self).uiImage?.jpegData(compressionQuality: compressionQuality)
+    }
+}
