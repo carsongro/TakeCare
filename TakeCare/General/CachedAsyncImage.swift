@@ -13,8 +13,12 @@ struct CachedAsyncImage: View {
     
     var url: URL?
     
-    var placeholder: AnyView?
-    var isResizable = false
+    private var placeholder: AnyView?
+    private var isResizable = false
+    
+    init(url: URL?) {
+        self.url = url
+    }
     
     var body: some View {
         Group {
@@ -67,8 +71,4 @@ struct CachedAsyncImage: View {
         imageView.isResizable = true
         return imageView
     }
-}
-
-#Preview {
-    CachedAsyncImage()
 }
