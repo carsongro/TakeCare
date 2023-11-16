@@ -7,6 +7,7 @@
 
 import PhotosUI
 import SwiftUI
+import IoImage
 
 struct ListDetailView: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
@@ -213,7 +214,7 @@ struct ListDetailView: View, @unchecked Sendable {
             if let url = URL(string: list.photoURL ?? "") {
                 Task {
                     do {
-                        listImage = try await ImageManager.shared.Image(from: url)
+                        listImage = try await IoImageLoader.shared.Image(from: url)
                     } catch {
                         print(error.localizedDescription)
                     }

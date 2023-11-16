@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import IoImage
 
 struct ListDetailHeader: View {
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
@@ -18,7 +19,7 @@ struct ListDetailHeader: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             let imageClipShape = RoundedRectangle(cornerRadius: 10, style: .continuous)
-            CachedAsyncImage(url: URL(string: list.photoURL ?? ""))
+            IoImageView(url: URL(string: list.photoURL ?? ""))
                 .resizable()
                 .placeholder {
                     ZStack {

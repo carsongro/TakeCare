@@ -58,7 +58,7 @@
 		B8237F1E2AE4B41000AF9A2C /* ListDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */; };
 		B82F5EB22AF873220050D3A9 /* ComparableTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82F5EB12AF873220050D3A9 /* ComparableTime.swift */; };
 		B85F6E862AF853B0005F6D85 /* UserSearchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85F6E852AF853B0005F6D85 /* UserSearchError.swift */; };
-		B8879AD52B0483A800DFA6E7 /* CachedAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8879AD42B0483A800DFA6E7 /* CachedAsyncImage.swift */; };
+		B88177BB2B05A53900138983 /* IoImage in Frameworks */ = {isa = PBXBuildFile; productRef = B88177BA2B05A53900138983 /* IoImage */; };
 		B8A0A50B2AF06B5F008FC8F2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -113,7 +113,6 @@
 		B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailHeader.swift; sourceTree = "<group>"; };
 		B82F5EB12AF873220050D3A9 /* ComparableTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparableTime.swift; sourceTree = "<group>"; };
 		B85F6E852AF853B0005F6D85 /* UserSearchError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchError.swift; sourceTree = "<group>"; };
-		B8879AD42B0483A800DFA6E7 /* CachedAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedAsyncImage.swift; sourceTree = "<group>"; };
 		B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -123,6 +122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5003D3A2AC875E400BB7BC5 /* FirebaseAuth in Frameworks */,
+				B88177BB2B05A53900138983 /* IoImage in Frameworks */,
 				B5003D3C2AC875E400BB7BC5 /* FirebaseFirestore in Frameworks */,
 				B5003D402AC875E400BB7BC5 /* FirebaseStorage in Frameworks */,
 				B5003D3E2AC875E400BB7BC5 /* FirebaseFirestoreSwift in Frameworks */,
@@ -136,7 +136,6 @@
 			isa = PBXGroup;
 			children = (
 				B50066EC2AC90514008826B7 /* ImageManager.swift */,
-				B8879AD42B0483A800DFA6E7 /* CachedAsyncImage.swift */,
 				B54552882ACA37D2006135E8 /* Extensions.swift */,
 				B82F5EB12AF873220050D3A9 /* ComparableTime.swift */,
 				B568B1A92AD35CA900E389BD /* PreviewData.swift */,
@@ -291,6 +290,7 @@
 				B5003D3B2AC875E400BB7BC5 /* FirebaseFirestore */,
 				B5003D3D2AC875E400BB7BC5 /* FirebaseFirestoreSwift */,
 				B5003D3F2AC875E400BB7BC5 /* FirebaseStorage */,
+				B88177BA2B05A53900138983 /* IoImage */,
 			);
 			productName = TakeCare;
 			productReference = B58A13FD2AC520A20045D191 /* TakeCare.app */;
@@ -322,6 +322,7 @@
 			mainGroup = B58A13F42AC520A20045D191;
 			packageReferences = (
 				B5003D382AC875E400BB7BC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				B88177B92B05A53900138983 /* XCRemoteSwiftPackageReference "IoImage" */,
 			);
 			productRefGroup = B58A13FE2AC520A20045D191 /* Products */;
 			projectDirPath = "";
@@ -360,7 +361,6 @@
 				B58480972AC76625007A655D /* AuthLoginView.swift in Sources */,
 				B595D6ED2AD0BF7800B022E0 /* ListUpdateRecipientForm.swift in Sources */,
 				B52D1CC52ACE63850024F6A7 /* ListView.swift in Sources */,
-				B8879AD52B0483A800DFA6E7 /* CachedAsyncImage.swift in Sources */,
 				B5BC6CAC2ACB7E1000D1F842 /* AppSidebarList.swift in Sources */,
 				B53DA6A62ADB5DAA008094D7 /* TodoLists.swift in Sources */,
 				B5E643C82AC7924B0056A111 /* ContentView.swift in Sources */,
@@ -636,6 +636,14 @@
 				minimumVersion = 10.15.0;
 			};
 		};
+		B88177B92B05A53900138983 /* XCRemoteSwiftPackageReference "IoImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/carsongro/IoImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -658,6 +666,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B5003D382AC875E400BB7BC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		B88177BA2B05A53900138983 /* IoImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B88177B92B05A53900138983 /* XCRemoteSwiftPackageReference "IoImage" */;
+			productName = IoImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

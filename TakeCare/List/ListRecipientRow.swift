@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import IoImage
 
 struct ListRecipientRow: View {
     var user: User
     
     var body: some View {
         HStack(alignment: .center) {
-            CachedAsyncImage(url: URL(string: user.photoURL ?? ""))
+            IoImageView(url: URL(string: user.photoURL ?? ""))
                 .resizable()
                 .placeholder {
                     Image(systemName: "person.circle.fill")

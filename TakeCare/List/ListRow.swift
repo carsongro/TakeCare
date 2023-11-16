@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import IoImage
 
 struct ListRow: View {
     var list: TakeCareList
     
     var body: some View {
         HStack {
-            CachedAsyncImage(url: URL(string: list.photoURL ?? ""))
+            IoImageView(url: URL(string: list.photoURL ?? ""))
                 .resizable()
                 .placeholder {
                     ZStack {

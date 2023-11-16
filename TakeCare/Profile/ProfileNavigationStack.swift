@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import IoImage
 
 struct ProfileNavigationStack: View {
     @Environment(AuthModel.self) private var authModel
@@ -36,7 +37,7 @@ struct ProfileNavigationStack: View {
                             showingProfileImageConfirmation = true
                         } label: {
                             ZStack {
-                                CachedAsyncImage(url: URL(string: authModel.currentUser?.photoURL ?? ""))
+                                IoImageView(url: URL(string: authModel.currentUser?.photoURL ?? ""))
                                     .resizable()
                                     .placeholder {
                                         Image(systemName: "person.circle.fill")
