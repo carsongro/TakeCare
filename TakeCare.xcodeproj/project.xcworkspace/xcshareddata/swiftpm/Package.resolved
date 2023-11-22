@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/carsongro/IoImage",
       "state" : {
-        "revision" : "67c633b78b6c3a55f1a6c5ee34ec5a1cc2c5c334",
-        "version" : "1.7.0"
+        "revision" : "e21b45a6714f819e8b63f5f7ed9a8ec9b6cd1bdd",
+        "version" : "1.8.0"
       }
     },
     {
