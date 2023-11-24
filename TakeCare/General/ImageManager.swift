@@ -5,14 +5,12 @@
 //  Created by Carson Gross on 9/30/23.
 //
 
-@preconcurrency import Foundation
 @preconcurrency import FirebaseStorage
 import FirebaseFirestore
 import SwiftUI
 
-/// An global actor for managing images
-@globalActor
-actor ImageManager {
+/// A shared singleton instance for managing images in firebase
+final class ImageManager {
     public static let shared = ImageManager()
     
     private init() { }
