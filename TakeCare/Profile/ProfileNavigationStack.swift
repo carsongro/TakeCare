@@ -158,6 +158,7 @@ struct ProfileNavigationStack: View {
 struct AccountImage: ViewModifier {
     func body(content: Content) -> some View {
         content
+            .aspectRatio(contentMode: .fill)
             .frame(width: 130, height: 130)
             .frame(maxWidth: .infinity)
             .clipShape(Circle())
