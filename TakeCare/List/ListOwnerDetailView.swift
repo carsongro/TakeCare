@@ -9,7 +9,7 @@ import PhotosUI
 import SwiftUI
 import IoImage
 
-struct ListDetailView: View, @unchecked Sendable {
+struct ListOwnerDetailView: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
     @Environment(\.dismiss) private var dismiss
     
@@ -233,6 +233,6 @@ struct ListDetailView: View, @unchecked Sendable {
 }
 
 #Preview {
-    ListDetailView(mode: .edit, list: PreviewData.previewTakeCareList)
+    ListOwnerDetailView(mode: .edit, list: PreviewData.previewTakeCareList)
         .environment(ListsModel())
 }

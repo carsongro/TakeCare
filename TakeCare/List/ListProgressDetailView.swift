@@ -62,7 +62,7 @@ struct ListProgressDetailView: View {
                 }
             }
             .sheet(isPresented: $showingEditList) {
-                ListDetailView(mode: .edit, list: list)
+                ListOwnerDetailView(mode: .edit, list: list)
                     .environment(listsModel)
             }
             .alert(

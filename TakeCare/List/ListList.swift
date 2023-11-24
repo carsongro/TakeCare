@@ -56,7 +56,7 @@ struct ListList: View {
         .searchable(text: $listsModel.searchText)
         .listStyle(.plain)
         .sheet(isPresented: $showingCreateListForm) {
-            ListDetailView(mode: .create)
+            ListOwnerDetailView(mode: .create)
                 .environment(listsModel)
         }
     }

@@ -22,19 +22,19 @@ struct ListDetailHeader: View {
             IoImageView(url: URL(string: list.photoURL ?? ""))
                 .resizable()
                 .placeholder {
-                    ZStack {
-                        Image(systemName: "list.bullet")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: proportionalWidth, height: proportionalWidth)
-                            .padding()
-                    }
+                    Image(systemName: "list.bullet")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: proportionalWidth, height: proportionalWidth)
+                        .padding()
+                        .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
                 }
                 .aspectRatio(contentMode: .fill)
                 .frame(width: proportionalWidth, height: proportionalWidth)
                 .contentShape(imageClipShape)
                 .clipShape(imageClipShape)
                 .frame(maxWidth: .infinity)
+                .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
             
             
             Text(list.isActive ? "Currently Active" : "Not Active")
