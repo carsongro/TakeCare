@@ -8,6 +8,7 @@
 import SwiftUI
 @preconcurrency import Firebase
 import FirebaseFirestoreSwift
+import UserNotifications
 
 protocol TextFieldProtocol {
     var textFieldsAreValid: Bool { get }
@@ -39,6 +40,7 @@ final class AuthModel: @unchecked Sendable {
             self.userSession = result.user
         }
         await fetchCurrentUser()
+        NotificationCenter.default.post(name: Notification.Name("UserSignedIn"), object: nil)
     }
     
     func createUser(withEmail email: String, password: String, name: String) async throws {
@@ -67,6 +69,8 @@ final class AuthModel: @unchecked Sendable {
     
     func signOut() throws {
         try Auth.auth().signOut()
+        
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
         withAnimation {
             self.userSession = nil
@@ -124,6 +128,9 @@ final class AuthModel: @unchecked Sendable {
         
         try? await Firestore.firestore().collection("users").document(uid).delete()
         try await Auth.auth().currentUser?.delete()
+        
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+        
         withAnimation {
             self.userSession = nil
             self.currentUser = nil

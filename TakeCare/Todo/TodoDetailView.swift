@@ -26,9 +26,7 @@ struct TodoDetailView: View {
                 .listRowSeparator(.hidden)
                 
                 ForEach(TaskFilter.allCases, id: \.self) { filter in
-                    TodoTasksList(list: $list, taskFilter: filter) {
-                        task,
-                        isCompleted in
+                    TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
                         Task {
                             do {
                                 try todoModel.updateListTask(

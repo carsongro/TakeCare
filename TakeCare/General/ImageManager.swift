@@ -5,7 +5,7 @@
 //  Created by Carson Gross on 9/30/23.
 //
 
-@preconcurrency import FirebaseStorage
+import FirebaseStorage
 import FirebaseFirestore
 import SwiftUI
 
