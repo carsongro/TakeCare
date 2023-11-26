@@ -108,8 +108,7 @@ actor LocalNotificationHelper {
         switch task.repeatInterval {
         case .never: guard completionDate > Date.now else { return }
         case .daily:
-            if Calendar.current.isDateInToday(completionDate) && completionDate < Date.now {
-                // The completion date is schedule to happen today but at an earlier time
+            if (Calendar.current.isDateInToday(completionDate) && completionDate < Date.now) || (!Calendar.current.isDateInToday(completionDate) && completionDate.comparableTime < Date.now.comparableTime) {
                 guard let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
                       let newDate = Calendar.current.date(
                         bySettingHour: hour,
@@ -117,19 +116,6 @@ actor LocalNotificationHelper {
                         second: 0,
                         of: tomorrow
                       ) else { return }
-                
-                dateComponents = Calendar.current.dateComponents(
-                    components,
-                    from: newDate
-                )
-            } else if !Calendar.current.isDateInToday(completionDate) && completionDate < Date.now {
-                // The completion date is scheduled to happen on a day earlier than today
-                guard let newDate = Calendar.current.date(
-                    bySettingHour: hour,
-                    minute: minute,
-                    second: 0,
-                    of: Date()
-                ) else { return }
                 
                 dateComponents = Calendar.current.dateComponents(
                     components,
