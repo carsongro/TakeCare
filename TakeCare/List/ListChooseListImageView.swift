@@ -24,7 +24,7 @@ struct ListChooseListImageView: View {
     var body: some View {
         let imageClipShape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
         ZStack {
-            if let listImage = listImage {
+            if let listImage {
                 listImage
                     .resizable()
                     .aspectRatio(contentMode: .fill)
