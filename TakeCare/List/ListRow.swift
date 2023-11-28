@@ -58,6 +58,8 @@ struct ListRow: View {
                        (completionDate <= Date.now ||
                         Calendar.current.isDateInToday(completionDate)) {
                         return true
+                    } else if $0.completionDate == nil {
+                        return true
                     } else {
                         return false
                     }
@@ -65,6 +67,8 @@ struct ListRow: View {
                     if let completionDate = $0.completionDate,
                        (completionDate <= Date.now ||
                         Calendar.current.isDateInToday(completionDate)) {
+                        return true
+                    } else if $0.completionDate == nil {
                         return true
                     } else {
                         return false
