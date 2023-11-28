@@ -27,6 +27,7 @@ struct ProfileNavigationStack: View {
     @State private var showingProfileImageConfirmation = false
     @State private var showingPhotosPicker = false
     @State private var isUploadingImage = false
+    @State private var showingCamera = false
     
     var body: some View {
         NavigationStack {
@@ -56,6 +57,10 @@ struct ProfileNavigationStack: View {
                         }
                         .accessibilityLabel("Change profile image")
                         .confirmationDialog("Profile Image", isPresented: $showingProfileImageConfirmation) {
+                            Button("Take Photo") {
+                                showingCamera = true
+                            }
+                            
                             Button("Choose Photo") {
                                 showingPhotosPicker = true
                             }
@@ -111,6 +116,26 @@ struct ProfileNavigationStack: View {
                             }
                         }
                     }
+                }
+                .fullScreenCover(isPresented: $showingCamera) {
+                    CameraView() { image in
+                        Task {
+                            defer {
+                                withAnimation {
+                                    isUploadingImage = false
+                                }
+                            }
+                            do {
+                                withAnimation {
+                                    isUploadingImage = true
+                                }
+                                try await authModel.updateProfileImage(image: image)
+                            } catch {
+                                errorAlertText = "There was an error updating your profile image"
+                            }
+                        }
+                    }
+                    .ignoresSafeArea()
                 }
                 .sheet(isPresented: $presentingDeleteAccountSheet) {
                     DeleteAccountForm()

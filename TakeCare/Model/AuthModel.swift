@@ -154,7 +154,7 @@ final class AuthModel: @unchecked Sendable {
     func updateProfileImage(image: Image) async throws {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let photoURL = try await ImageManager.shared.uploadImage(
+        let photoURL = try await FirebaseImageManager.shared.uploadImage(
             name: uid,
             image: image,
             path: .profile_images
@@ -174,7 +174,7 @@ final class AuthModel: @unchecked Sendable {
             ["photoURL": FieldValue.delete()]
         )
         
-        try await ImageManager.shared.deleteImage(name: uid, path: .profile_images)
+        try await FirebaseImageManager.shared.deleteImage(name: uid, path: .profile_images)
         
         await fetchCurrentUser()
         

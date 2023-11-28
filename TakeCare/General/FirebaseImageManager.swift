@@ -1,5 +1,5 @@
 //
-//  LocalImageManager.swift
+//  FirebaseImageManager.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 9/30/23.
@@ -10,8 +10,8 @@ import FirebaseFirestore
 import SwiftUI
 
 /// A shared singleton instance for managing images in firebase
-final class ImageManager {
-    public static let shared = ImageManager()
+final class FirebaseImageManager {
+    public static let shared = FirebaseImageManager()
     
     private init() { }
     

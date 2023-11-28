@@ -16,6 +16,7 @@ struct ListChooseListImageView: View {
     
     @State private var listImageItem: PhotosPickerItem?
     @State private var showingPhotosPicker = false
+    @State private var showingCamera = false
     
     var didChangeImageHandler: (() -> Void)? = nil
     
@@ -45,6 +46,10 @@ struct ListChooseListImageView: View {
                     .foregroundStyle(.secondary)
             }
             Menu {
+                Button("Take Photo", systemImage: "camera") {
+                    showingCamera = true
+                }
+                
                 Button("Choose Photo", systemImage: "photo.on.rectangle") {
                     showingPhotosPicker = true
                 }
@@ -76,6 +81,13 @@ struct ListChooseListImageView: View {
             }
         }
         .photosPicker(isPresented: $showingPhotosPicker, selection: $listImageItem)
+        .fullScreenCover(isPresented: $showingCamera) {
+            CameraView { image in
+                listImage = image
+                didChangeImageHandler?()
+            }
+            .ignoresSafeArea()
+        }
     }
     
     var cornerRadius: Double { 10 }
