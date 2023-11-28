@@ -7,7 +7,7 @@
 
 import PhotosUI
 import SwiftUI
-import IoImage
+import Kingfisher
 
 struct ListOwnerDetailView: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
@@ -77,7 +77,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                         Text("Recipient")
                     } footer: {
                         if mode == .edit && list?.isActive ?? true {
-                            Text("If a recipient is removed or changed while the list is active, the recipient will continue to receive notifications until the next time they open the app.")
+                            Text("If a recipient is removed or changed while the list is active, the recipient will continue to receive notifications for the tasks until the next time they open the app.")
                         }
                     }
                     
@@ -85,23 +85,19 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                         ListAddTasksButton(tasks: $tasks)
                         
                         ForEach(tasks, id: \.self) { task in
-                            if list?.isActive ?? false {
+                            Button {
+                                selectedTask = task
+                            } label: {
                                 ListTaskRow(task: task)
-                            } else {
-                                Button {
-                                    selectedTask = task
-                                } label: {
-                                    ListTaskRow(task: task)
-                                }
-                                .buttonStyle(.plain)
                             }
+                            .buttonStyle(.plain)
                         }
                         .onDelete(perform: deleteTask)
                     } header: {
                         Text("Tasks")
                     } footer: {
                         if mode == .edit && list?.isActive ?? true {
-                            Text("Tasks cannot be modified while the list is active. If a new task is added or a task is deleted, the recipient will not receive updated notifications until the next time they open the app.")
+                            Text("If a task is added, deleted, or modified, the recipient will not receive updated notifications until the next time they open the app.")
                         }
                     }
                 }
@@ -212,10 +208,13 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
             recipient = list.recipient ?? nil
             tasks = list.tasks
             if let url = URL(string: list.photoURL ?? "") {
-                Task {
-                    do {
-                        listImage = try await IoImageLoader.shared.Image(from: url)
-                    } catch {
+                KingfisherManager.shared.retrieveImage(with: url) { result in
+                    switch result {
+                    case .success(let image):
+                        if let cgImage = image.image.cgImage {
+                            listImage = Image(uiImage: UIImage(cgImage: cgImage))
+                        }
+                    case .failure(let error):
                         print(error.localizedDescription)
                     }
                 }

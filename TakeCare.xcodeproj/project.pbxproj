@@ -58,9 +58,9 @@
 		B8237F1E2AE4B41000AF9A2C /* ListDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */; };
 		B82F5EB22AF873220050D3A9 /* ComparableTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82F5EB12AF873220050D3A9 /* ComparableTime.swift */; };
 		B85F6E862AF853B0005F6D85 /* UserSearchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85F6E852AF853B0005F6D85 /* UserSearchError.swift */; };
+		B88C29CA2B1595F000165276 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B88C29C92B1595F000165276 /* Kingfisher */; };
 		B8A0A50B2AF06B5F008FC8F2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */; };
 		B8BEE2A12B118333005462C9 /* LocalNotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8BEE2A02B118333005462C9 /* LocalNotificationHelper.swift */; };
-		B8C58E2D2B05B23200322B0C /* IoImage in Frameworks */ = {isa = PBXBuildFile; productRef = B8C58E2C2B05B23200322B0C /* IoImage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -123,8 +123,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B88C29CA2B1595F000165276 /* Kingfisher in Frameworks */,
 				B5003D3A2AC875E400BB7BC5 /* FirebaseAuth in Frameworks */,
-				B8C58E2D2B05B23200322B0C /* IoImage in Frameworks */,
 				B5003D3C2AC875E400BB7BC5 /* FirebaseFirestore in Frameworks */,
 				B5003D402AC875E400BB7BC5 /* FirebaseStorage in Frameworks */,
 				B5003D3E2AC875E400BB7BC5 /* FirebaseFirestoreSwift in Frameworks */,
@@ -301,7 +301,7 @@
 				B5003D3B2AC875E400BB7BC5 /* FirebaseFirestore */,
 				B5003D3D2AC875E400BB7BC5 /* FirebaseFirestoreSwift */,
 				B5003D3F2AC875E400BB7BC5 /* FirebaseStorage */,
-				B8C58E2C2B05B23200322B0C /* IoImage */,
+				B88C29C92B1595F000165276 /* Kingfisher */,
 			);
 			productName = TakeCare;
 			productReference = B58A13FD2AC520A20045D191 /* TakeCare.app */;
@@ -333,7 +333,7 @@
 			mainGroup = B58A13F42AC520A20045D191;
 			packageReferences = (
 				B5003D382AC875E400BB7BC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				B8C58E2B2B05B23200322B0C /* XCRemoteSwiftPackageReference "IoImage" */,
+				B88C29C82B1595EF00165276 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = B58A13FE2AC520A20045D191 /* Products */;
 			projectDirPath = "";
@@ -648,12 +648,12 @@
 				minimumVersion = 10.15.0;
 			};
 		};
-		B8C58E2B2B05B23200322B0C /* XCRemoteSwiftPackageReference "IoImage" */ = {
+		B88C29C82B1595EF00165276 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/carsongro/IoImage";
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.0;
+				minimumVersion = 7.10.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -679,10 +679,10 @@
 			package = B5003D382AC875E400BB7BC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
 		};
-		B8C58E2C2B05B23200322B0C /* IoImage */ = {
+		B88C29C92B1595F000165276 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B8C58E2B2B05B23200322B0C /* XCRemoteSwiftPackageReference "IoImage" */;
-			productName = IoImage;
+			package = B88C29C82B1595EF00165276 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

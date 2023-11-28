@@ -114,7 +114,7 @@ struct ListTaskDetailView: View {
                             if let id = selectedTask?.id,
                                let idx = tasks.firstIndex(where: { $0.id == id }) {
                                 tasks[idx] = ListTask(
-                                    id: id,
+                                    id: UUID().uuidString,
                                     title: title,
                                     notes: notes.isEmpty ? nil : notes,
                                     completionDate: showingDatePicker ? completionDate : nil,

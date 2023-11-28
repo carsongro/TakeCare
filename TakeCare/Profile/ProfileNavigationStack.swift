@@ -7,7 +7,7 @@
 
 import SwiftUI
 import PhotosUI
-import IoImage
+import Kingfisher
 
 struct ProfileNavigationStack: View {
     @Environment(AuthModel.self) private var authModel
@@ -37,7 +37,7 @@ struct ProfileNavigationStack: View {
                             showingProfileImageConfirmation = true
                         } label: {
                             ZStack {
-                                IoImageView(url: URL(string: authModel.currentUser?.photoURL ?? ""))
+                                KFImage(URL(string: authModel.currentUser?.photoURL ?? ""))
                                     .resizable()
                                     .placeholder {
                                         Image(systemName: "person.circle.fill")
