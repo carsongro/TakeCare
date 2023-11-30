@@ -46,7 +46,7 @@ struct ListChooseListImageView: View {
                     .foregroundStyle(.secondary)
             }
             Menu {
-                Button("Take Photo", systemImage: "camera") {
+                Button("Take Photo", systemImage: "camera.fill") {
                     showingCamera = true
                 }
                 
