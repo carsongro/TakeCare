@@ -25,6 +25,8 @@ struct TodoTasksList: View {
                     Calendar.current.isDateInToday(completionDate)) &&
                    !$0.isCompleted {
                     return true
+                } else if $0.completionDate == nil && $0.repeatInterval == .daily && !$0.isCompleted {
+                    return true
                 } else {
                     return false
                 }
@@ -34,7 +36,7 @@ struct TodoTasksList: View {
                 if let completionDate = $0.completionDate {
                     return !$0.isCompleted && ((!Calendar.current.isDateInToday(completionDate) && $0.repeatInterval == .never) || ($0.repeatInterval == .daily && completionDate > Date.now))
                 } else {
-                    return !$0.isCompleted
+                    return !$0.isCompleted && $0.repeatInterval != .daily
                 }
             }
         case .completed:

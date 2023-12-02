@@ -23,18 +23,26 @@ struct ListTaskRow: View {
                             .lineLimit(2)
                             .accessibilityLabel(Text("Task notes: \(notes)"))
                     }
-                    if let completionDate = task.completionDate?.formatted(date: .abbreviated, time: .shortened) {
-                        switch task.repeatInterval {
-                        case .never:
+                    
+                    switch task.repeatInterval {
+                    case .never:
+                        if let completionDate = task.completionDate?.formatted(date: .abbreviated, time: .shortened) {
                             Text("\(completionDate)")
                                 .foregroundStyle(.secondary)
                                 .lineLimit(1)
                                 .accessibilityLabel(Text("Completion date: \(completionDate)"))
-                        case .daily:
-                            Text("Repeats \(task.repeatInterval.rawValue.lowercased()) at \(completionDate)")
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
                         }
+                    case .daily:
+                        Group {
+                            if let completionDate = task.completionDate?.formatted(date: .abbreviated, time: .shortened) {
+                                Text("Repeats \(task.repeatInterval.rawValue.lowercased()) at \(completionDate)")
+                                    
+                            } else {
+                                Text("Repeats \(task.repeatInterval.rawValue.lowercased())")
+                            }
+                        }
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
                     }
                 }
                 

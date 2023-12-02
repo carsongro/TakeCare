@@ -61,15 +61,20 @@ struct ListTaskDetailView: View {
                         .datePickerStyle(.graphical)
                     }
                 }
+                .onChange(of: showingDatePicker) { _, _ in
+                    withAnimation {
+                        showingDatePickerAnimated = showingDatePicker
+                    }
+                }
                 
-                if showingDatePickerAnimated {
-                    Section {
-                        Picker("Repeat", systemImage: "repeat", selection: $taskRepeatInterval) {
-                            ForEach(TaskRepeatInterval.allCases, id: \.self) { interval in
-                                Text(interval.rawValue).tag(interval)
-                            }
+                Section {
+                    Picker("Repeat", systemImage: "repeat", selection: $taskRepeatInterval) {
+                        ForEach(TaskRepeatInterval.allCases, id: \.self) { interval in
+                            Text(interval.rawValue).tag(interval)
                         }
                     }
+                } footer: {
+                    Text("Recipients will not receive notifications for tasks that repeat daily but do not have a start date.")
                 }
             }
             .onSubmit {
@@ -91,11 +96,6 @@ struct ListTaskDetailView: View {
                         showingDatePickerAnimated = true
                         taskRepeatInterval = selectedTask.repeatInterval
                     }
-                }
-            }
-            .onChange(of: showingDatePicker) { oldValue, newValue in
-                withAnimation {
-                    showingDatePickerAnimated = showingDatePicker
                 }
             }
             .navigationTitle(mode == .create ? "New Task" : "Edit Task")
