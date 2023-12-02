@@ -131,7 +131,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button("Cancel") {
-                            if mode == .edit && listDidChange || listDidChange {
+                            if didChangeList {
                                 showingDismissDialog = true
                             } else {
                                 dismiss()
@@ -148,7 +148,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                         Button("Done") {
                             Task {
                                 dismiss()
-                                guard listDidChange else { return }
+                                guard didChangeList else { return }
                                 
                                 do {
                                     switch mode {
@@ -222,11 +222,11 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
         }
     }
     
-    private var listDidChange: Bool {
-        name != list?.name ||
-        description != list?.description ||
-        recipient != list?.recipient || 
-        tasks != list?.tasks ||
+    private var didChangeList: Bool {
+        name != list?.name ?? "" ||
+        description != list?.description ?? "" ||
+        recipient != list?.recipient ||
+        tasks != list?.tasks ?? [] ||
         didChangeImage
     }
 }

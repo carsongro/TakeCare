@@ -32,7 +32,7 @@ struct TodoTasksList: View {
         case .other:
             tasks = list.tasks.filter {
                 if let completionDate = $0.completionDate {
-                    return (!$0.isCompleted && !Calendar.current.isDateInToday(completionDate) && $0.repeatInterval == .never) || ($0.repeatInterval == .daily && completionDate > Date.now)
+                    return !$0.isCompleted && ((!Calendar.current.isDateInToday(completionDate) && $0.repeatInterval == .never) || ($0.repeatInterval == .daily && completionDate > Date.now))
                 } else {
                     return !$0.isCompleted
                 }
