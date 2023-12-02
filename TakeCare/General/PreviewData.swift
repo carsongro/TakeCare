@@ -13,7 +13,7 @@ final class PreviewData {
         title: "Go for walk",
         notes: "Walk around outside?",
         completionDate: Date(),
-        repeatInterval: .never,
+        repeatInterval: .daily,
         isCompleted: false,
         lastCompletionDate: nil
     )

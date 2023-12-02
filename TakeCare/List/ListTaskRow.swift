@@ -34,9 +34,12 @@ struct ListTaskRow: View {
                         }
                     case .daily:
                         Group {
-                            if let completionDate = task.completionDate?.formatted(date: .abbreviated, time: .shortened) {
-                                Text("Repeats \(task.repeatInterval.rawValue.lowercased()) starting \(completionDate)")
-                                    
+                            if let completionDate = task.completionDate {
+                                if Calendar.current.isDateInToday(completionDate) || completionDate < Date.now {
+                                    Text("Repeats \(task.repeatInterval.rawValue.lowercased()) at \(completionDate.formatted(date: .omitted, time: .shortened))")
+                                } else {
+                                    Text("Repeats \(task.repeatInterval.rawValue.lowercased()) starting \(completionDate.formatted(date: .abbreviated, time: .shortened))")
+                                }
                             } else {
                                 Text("Repeats \(task.repeatInterval.rawValue.lowercased())")
                             }
