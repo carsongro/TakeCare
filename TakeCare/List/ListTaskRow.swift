@@ -35,7 +35,7 @@ struct ListTaskRow: View {
                     case .daily:
                         Group {
                             if let completionDate = task.completionDate?.formatted(date: .abbreviated, time: .shortened) {
-                                Text("Repeats \(task.repeatInterval.rawValue.lowercased()) at \(completionDate)")
+                                Text("Repeats \(task.repeatInterval.rawValue.lowercased()) starting \(completionDate)")
                                     
                             } else {
                                 Text("Repeats \(task.repeatInterval.rawValue.lowercased())")
