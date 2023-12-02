@@ -59,7 +59,7 @@ struct TodoDetailView: View {
                     
                     Divider()
                     
-                    Button("Delete List", systemImage: "trash", role: .destructive) {
+                    Button("Remove List", systemImage: "minus.circle", role: .destructive) {
                         showingRemoveAlert = true
                     }
                 }
