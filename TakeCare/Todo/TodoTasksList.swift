@@ -89,6 +89,12 @@ struct TodoTasksList: View {
     }
 }
 
+enum TaskFilter: String, CaseIterable {
+    case todayNotCompleted = "Today"
+    case other = "Other"
+    case completed = "Completed"
+}
+
 #Preview {
     TodoTasksList(list: .constant(PreviewData.previewTakeCareList), taskFilter: .completed)
 }

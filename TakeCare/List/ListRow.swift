@@ -44,7 +44,12 @@ struct ListRow: View {
                         .accessibilityLabel(Text("Description: \(description)."))
                 }
                 
-                if let recipientName = list.recipient?.displayName {
+                if AuthModel.shared.currentUser == list.owner {
+                    Text(list.owner.displayName)
+                        .lineLimit(1)
+                        .accessibilityLabel(Text("Owner: \(list.owner.displayName)."))
+                        .foregroundStyle(.secondary)
+                } else if let recipientName = list.recipient?.displayName {
                     Text(recipientName)
                         .lineLimit(1)
                         .accessibilityLabel(Text("Recipient: \(recipientName)."))

@@ -17,8 +17,10 @@ protocol TextFieldProtocol {
 @Observable
 /// A authModel representing providing everything to manage users account, profile, and authentication
 final class AuthModel: @unchecked Sendable {
-    var userSession: FirebaseAuth.User?
-    var currentUser: User?
+    static let shared = AuthModel()
+    
+    private(set) var userSession: FirebaseAuth.User?
+    private(set) var currentUser: User?
     
     var isSignedIn: Bool {
         userSession != nil
@@ -119,7 +121,8 @@ final class AuthModel: @unchecked Sendable {
         }
         
         // Delete their lists
-        let listsids = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self).id }
+        let listRef = FieldPath(["owner", "id"])
+        let listsids = try await Firestore.firestore().collection("lists").whereField(listRef, isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self).id }
         
         for id in listsids {
             let docRef = Firestore.firestore().collection("lists").document(id)

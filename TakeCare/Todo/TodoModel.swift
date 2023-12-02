@@ -45,6 +45,7 @@ import UserNotifications
     }
     
     func fetchLists(animated: Bool = true, isInitialFetch: Bool = false) async {
+        defer { didFetchLists = true }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
@@ -58,13 +59,11 @@ import UserNotifications
                 
                 if isInitialFetch {
                     try await updateDailyTasksCompletion()
-                    didFetchLists = true
                     correctLocalNotificationsIfNeeded()
                 }
             }
         } catch {
             print(error.localizedDescription)
-            didFetchLists = true
         }
     }
     
@@ -168,7 +167,7 @@ import UserNotifications
         tasks[index] = updatedTask
         
         let updatedList = TakeCareList(
-            ownerID: list.ownerID,
+            owner: list.owner,
             name: list.name,
             description: list.description,
             recipient: list.recipient,
@@ -219,7 +218,7 @@ import UserNotifications
         guard let id = list.id else { return }
         
         let updatedList = TakeCareList(
-            ownerID: list.ownerID,
+            owner: list.owner,
             name: list.name,
             description: list.description,
             recipient: nil,

@@ -30,7 +30,12 @@ final class PreviewData {
     
     static let previewTakeCareList = TakeCareList(
         id: nil,
-        ownerID: "",
+        owner: User(
+            id: UUID().uuidString,
+            displayName: "Carson Gross",
+            email: "test@test.com",
+            photoURL: nil
+        ),
         name: "Carson's list",
         description: "This is the description for this list.",
         recipient: User(

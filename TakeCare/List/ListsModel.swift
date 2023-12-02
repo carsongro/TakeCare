@@ -14,6 +14,10 @@ import FirebaseFirestoreSwift
     var lists = [TakeCareList]()
     var searchText = ""
     var didFetchLists = false
+    
+    enum UserSearchError: Error {
+        case sameEmail
+    }
 
     init() {
         Task {
@@ -22,10 +26,12 @@ import FirebaseFirestoreSwift
     }
     
     func fetchLists(isInitialFetch: Bool = false) async {
+        defer { didFetchLists = true }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
-            let updatedLists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
+            let listRef = FieldPath(["owner", "id"])
+            let updatedLists = try await Firestore.firestore().collection("lists").whereField(listRef, isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
 
             Task { @MainActor in
                 withAnimation {
@@ -34,17 +40,15 @@ import FirebaseFirestoreSwift
                 
                 if isInitialFetch {
                     try await updateTasksCompletion()
-                    didFetchLists = true
                 }
             }
         } catch {
             print(error.localizedDescription)
-            didFetchLists = true
         }
     }
     
     func createList(name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: Image?) async throws {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let owner = AuthModel.shared.currentUser else { return }
         
         let docRef = Firestore.firestore().collection("lists").document()
         
@@ -63,7 +67,7 @@ import FirebaseFirestoreSwift
         }
         
         let list = TakeCareList(
-            ownerID: uid,
+            owner: owner,
             name: name,
             description: description,
             recipient: recipient,
@@ -92,7 +96,7 @@ import FirebaseFirestoreSwift
         sendInvites: Bool,
         shouldUpdateImage: Bool = true
     ) async throws {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        guard let owner = AuthModel.shared.currentUser else { return }
         
         let docRef = Firestore.firestore().collection("lists").document(id)
         
@@ -107,7 +111,7 @@ import FirebaseFirestoreSwift
         }
         
         let list = TakeCareList(
-            ownerID: uid,
+            owner: owner,
             name: name,
             description: description,
             recipient: recipient,

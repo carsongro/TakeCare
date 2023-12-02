@@ -197,14 +197,6 @@ extension View {
 }
 
 #Preview {
-    let authModel = AuthModel()
-    authModel.currentUser = User(
-        id: "",
-        displayName: "Carson Gross",
-        email: "example@example.com",
-        photoURL: nil
-    )
-    
     return ProfileNavigationStack()
-        .environment(authModel)
+        .environment(AuthModel())
 }

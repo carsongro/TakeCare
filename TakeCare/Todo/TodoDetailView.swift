@@ -54,9 +54,16 @@ struct TodoDetailView: View {
                 todoModel.refresh()
             }
             .toolbar {
-                Button("Remove", systemImage: "minus.circle") {
-                    showingRemoveAlert = true
+                Menu("Options", systemImage: "ellipsis.circle") {
+                    
+                    
+                    Divider()
+                    
+                    Button("Delete List", systemImage: "trash", role: .destructive) {
+                        showingRemoveAlert = true
+                    }
                 }
+                .accessibilityLabel(Text("More"))
             }
             .alert("Are you sure you want to remove this list from your to do?", isPresented: $showingRemoveAlert) {
                 Button("Cancel", role: .cancel) { }
