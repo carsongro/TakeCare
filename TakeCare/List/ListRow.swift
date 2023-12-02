@@ -45,14 +45,16 @@ struct ListRow: View {
                 }
                 
                 if AuthModel.shared.currentUser == list.owner {
+                    if let recipientName = list.recipient?.displayName {
+                        Text(recipientName)
+                            .lineLimit(1)
+                            .accessibilityLabel(Text("Recipient: \(recipientName)."))
+                            .foregroundStyle(.secondary)
+                    }
+                } else {
                     Text(list.owner.displayName)
                         .lineLimit(1)
                         .accessibilityLabel(Text("Owner: \(list.owner.displayName)."))
-                        .foregroundStyle(.secondary)
-                } else if let recipientName = list.recipient?.displayName {
-                    Text(recipientName)
-                        .lineLimit(1)
-                        .accessibilityLabel(Text("Recipient: \(recipientName)."))
                         .foregroundStyle(.secondary)
                 }
             }
