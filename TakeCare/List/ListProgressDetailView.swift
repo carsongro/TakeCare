@@ -60,6 +60,7 @@ struct ListProgressDetailView: View {
                         showingDeleteAlert = true
                     }
                 }
+                .accessibilityLabel(Text("More"))
             }
             .sheet(isPresented: $showingEditList) {
                 ListOwnerDetailView(mode: .edit, list: list)

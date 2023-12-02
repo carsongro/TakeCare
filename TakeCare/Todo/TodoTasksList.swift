@@ -21,7 +21,7 @@ struct TodoTasksList: View {
         case .todayNotCompleted:
             tasks = list.tasks.filter {
                 if let completionDate = $0.completionDate,
-                   ($0.repeatInterval == .daily ||
+                   (($0.repeatInterval == .daily && completionDate <= Date.now) ||
                     Calendar.current.isDateInToday(completionDate)) &&
                    !$0.isCompleted {
                     return true
@@ -32,7 +32,7 @@ struct TodoTasksList: View {
         case .other:
             tasks = list.tasks.filter {
                 if let completionDate = $0.completionDate {
-                    return !$0.isCompleted && !Calendar.current.isDateInToday(completionDate) && $0.repeatInterval == .never
+                    return (!$0.isCompleted && !Calendar.current.isDateInToday(completionDate) && $0.repeatInterval == .never) || ($0.repeatInterval == .daily && completionDate > Date.now)
                 } else {
                     return !$0.isCompleted
                 }
@@ -60,17 +60,31 @@ struct TodoTasksList: View {
     
     var body: some View {
         if !filteredTasks.isEmpty {
-            Section(taskFilter.rawValue) {
+            Section {
                 ForEach(filteredTasks, id: \.self) { task in
                     TodoTaskRow(
                         task: task,
                         isCompleted: task.isCompleted,
-                        interactionDisabled: !list.isActive || interactionDisabled
+                        interactionDisabled: interactionDisabled
                     ) { isCompleted in
                         tapHandler?(task, isCompleted)
                     }
                 }
+            } header: {
+                Text(taskFilter.rawValue)
+                    .accessibilityLabel(sectionHeaderAccessibilityLabel(taskFilter))
             }
+        }
+    }
+    
+    private func sectionHeaderAccessibilityLabel(_ taskFilter: TaskFilter) -> Text {
+        switch taskFilter {
+        case .todayNotCompleted:
+            return Text("Today's tasks not completed")
+        case .other:
+            return Text("Other tasks")
+        case .completed:
+            return Text("Completed tasks")
         }
     }
 }

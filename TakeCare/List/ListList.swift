@@ -15,36 +15,13 @@ struct ListList: View {
         @Bindable var listsModel = listsModel
         List {
             Section {
-                Button {
-                    showingCreateListForm = true
-                } label: {
-                    HStack {
-                        ZStack {
-                            Rectangle()
-                                .listRowImage()
-                                .foregroundStyle(Color(.secondarySystemBackground))
-                            
-                            Image(systemName: "plus")
-                                .resizable()
-                                .padding()
-                                .frame(width: 60, height: 60)
-                                .fontWeight(.light)
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundStyle(.accent)
-                        }
-                        
-                        Text("New List...")
-                    }
-                }
-                .listRowSeparator(.hidden, edges: .top)
+                newListButton
                 
                 if !listsModel.didFetchLists {
-                    Section {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
-                            .listRowSeparator(.hidden, edges: .bottom)
-                            .padding()
-                    }
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .listRowSeparator(.hidden, edges: .bottom)
+                        .padding()
                 } else {
                     ListSearchResults()
                 }
@@ -59,6 +36,32 @@ struct ListList: View {
             ListOwnerDetailView(mode: .create)
                 .environment(listsModel)
         }
+    }
+    
+    var newListButton: some View {
+        Button {
+            showingCreateListForm = true
+        } label: {
+            HStack {
+                ZStack {
+                    Rectangle()
+                        .listRowImage()
+                        .foregroundStyle(Color(.secondarySystemBackground))
+                    
+                    Image(systemName: "plus")
+                        .resizable()
+                        .padding()
+                        .frame(width: 60, height: 60)
+                        .fontWeight(.light)
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundStyle(.accent)
+                }
+                
+                Text("New List...")
+            }
+        }
+        .listRowSeparator(.hidden, edges: .top)
+        .accessibilityLabel(Text("New List"))
     }
 }
 

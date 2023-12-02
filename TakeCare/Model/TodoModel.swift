@@ -185,7 +185,7 @@ import UserNotifications
             case .never:
                 if isCompleted {
                     await localNotificationHelper.removePendingNotificationRequests(for: updatedTask)
-                } else if updatedTask.completionDate != nil {
+                } else if updatedTask.completionDate != nil && updatedList.isActive {
                     try await localNotificationHelper.scheduleTaskNotifications(for: updatedTask)
                 }
             case .daily: break

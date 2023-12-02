@@ -29,8 +29,10 @@ struct ListRow: View {
                             .foregroundStyle(.secondary)
                     }
                     .listRowImage()
+                    .accessibilityHidden(true)
                 }
                 .listRowImage()
+                .accessibilityHidden(true)
             
             VStack(alignment: .leading) {
                 Text(list.name)
@@ -39,13 +41,13 @@ struct ListRow: View {
                 if let description = list.description {
                     Text(description)
                         .lineLimit(1)
+                        .accessibilityLabel(Text("Description: \(description)."))
                 }
                 
                 if let recipientName = list.recipient?.displayName {
                     Text(recipientName)
                         .lineLimit(1)
-                        .accessibility(label: Text("Recipient: \(recipientName).",
-                                                   comment: "Accessibility label containing the recipient"))
+                        .accessibilityLabel(Text("Recipient: \(recipientName)."))
                         .foregroundStyle(.secondary)
                 }
             }
@@ -78,6 +80,7 @@ struct ListRow: View {
         }
         .font(.subheadline)
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
     
     struct ListIndicator: View {
@@ -90,6 +93,7 @@ struct ListRow: View {
                 .frame(width: 22, height: 22)
                 .padding(.leading, 8)
                 .foregroundStyle(isCompleted ? .green : .accentColor)
+                .accessibilityLabel(Text(isCompleted ? "All of today's tasks completed" : "Today's tasks not complete"))
         }
     }
 }

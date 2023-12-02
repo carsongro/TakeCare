@@ -35,6 +35,7 @@ struct ListDetailHeader: View {
                 .clipShape(imageClipShape)
                 .frame(maxWidth: .infinity)
                 .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
+                .accessibilityHidden(true)
             
             
             Text(list.isActive ? "Currently Active" : "Not Active")
@@ -42,10 +43,12 @@ struct ListDetailHeader: View {
                 .foregroundStyle(.secondary)
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity)
+                .accessibilityLabel(Text("List status: \(list.isActive ? "Currently Active" : "Not Active")"))
             
             Text(list.description ?? "")
                 .font(.callout)
                 .foregroundStyle(.secondary)
+                .accessibilityLabel(Text("Description: \(list.description ?? "No description provided")"))
         }
     }
 }

@@ -38,11 +38,13 @@ struct TodoTaskRow: View {
                     .resizable()
                     .frame(width: 25, height: 25)
                     .foregroundStyle(.accent)
+                    .accessibilityLabel(Text("Completed"))
             } else {
                 Image(systemName: "circle")
                     .resizable()
                     .frame(width: 25, height: 25)
                     .foregroundStyle(.accent)
+                    .accessibilityLabel(Text("Not complete"))
             }
         }
     }
@@ -53,6 +55,7 @@ struct TodoTaskRow: View {
             
             ListTaskRow(task: task)
         }
+        .accessibilityElement(children: .combine)
     }
 }
 
