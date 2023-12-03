@@ -49,8 +49,7 @@ import UserNotifications
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
-            let listRef = FieldPath(["recipient", "id"])
-            let updatedLists = try await Firestore.firestore().collection("lists").whereField(listRef, isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
+            let updatedLists = try await Firestore.firestore().collection("lists").whereField("recipientID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
             
             Task { @MainActor in
                 withAnimation(animated ? .default : .none) {
@@ -95,10 +94,10 @@ import UserNotifications
             let batch = db.batch()
             
             for (list, tasks) in listsToUpdate {
-                var updatedList = list
+                var updatedTasks = tasks
                 
                 for task in tasks {
-                    guard let index = updatedList.tasks.firstIndex(of: task) else { continue }
+                    guard let index = updatedTasks.firstIndex(of: task) else { continue }
                     
                     let updatedTask = ListTask(
                         id: task.id,
@@ -110,8 +109,20 @@ import UserNotifications
                         lastCompletionDate: task.lastCompletionDate
                     )
                     
-                    updatedList.tasks[index] = updatedTask
+                    updatedTasks[index] = updatedTask
                 }
+                
+                let updatedList = TakeCareList(
+                    id: list.id,
+                    ownerID: list.ownerID,
+                    ownerName: list.ownerName,
+                    name: list.name,
+                    description: list.description,
+                    recipientID: list.recipientID,
+                    tasks: updatedTasks,
+                    photoURL: list.photoURL,
+                    isActive: list.isActive
+                )
                 
                 guard let id = updatedList.id else { continue }
                 
@@ -166,10 +177,11 @@ import UserNotifications
         tasks[index] = updatedTask
         
         let updatedList = TakeCareList(
-            owner: list.owner,
+            ownerID: list.ownerID,
+            ownerName: list.ownerName,
             name: list.name,
             description: list.description,
-            recipient: list.recipient,
+            recipientID: list.recipientID,
             tasks: tasks,
             photoURL: list.photoURL,
             isActive: list.isActive
@@ -217,10 +229,11 @@ import UserNotifications
         guard let id = list.id else { return }
         
         let updatedList = TakeCareList(
-            owner: list.owner,
+            ownerID: list.ownerID,
+            ownerName: list.ownerName,
             name: list.name,
             description: list.description,
-            recipient: nil,
+            recipientID: nil,
             tasks: list.tasks,
             photoURL: list.photoURL,
             isActive: false

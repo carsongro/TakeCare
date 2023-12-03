@@ -170,7 +170,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                                             tasks: tasks,
                                             listImage: listImage,
                                             isActive: list?.isActive ?? false,
-                                            sendInvites: list?.recipient != recipient,
+                                            sendInvites: list?.recipientID != recipient?.id,
                                             shouldUpdateImage: didChangeImage
                                         )
                                     }
@@ -205,27 +205,27 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
         if let list = list {
             name = list.name
             description = list.description ?? ""
-            recipient = list.recipient ?? nil
-            tasks = list.tasks
-            if let url = URL(string: list.photoURL ?? "") {
-                KingfisherManager.shared.retrieveImage(with: url) { result in
-                    switch result {
-                    case .success(let image):
-                        if let cgImage = image.image.cgImage {
-                            listImage = Image(uiImage: UIImage(cgImage: cgImage))
-                        }
-                    case .failure(let error):
-                        print(error.localizedDescription)
+            Task {
+                do {
+                    if let url = URL(string: list.photoURL ?? "") {
+                        listImage = try await KingfisherManager.shared.retrieveImage(with: url)
                     }
+                } catch {
+                    
+                }
+                
+                if let recipientID = list.recipientID {
+                    recipient = await AuthModel.shared.fetchUser(id: recipientID)
                 }
             }
+            tasks = list.tasks
         }
     }
     
     private var didChangeList: Bool {
         name != list?.name ?? "" ||
         description != list?.description ?? "" ||
-        recipient != list?.recipient ||
+        recipient?.id != list?.recipientID ||
         tasks != list?.tasks ?? [] ||
         didChangeImage
     }

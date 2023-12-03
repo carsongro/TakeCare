@@ -17,17 +17,22 @@ struct ListDetailHeader: View {
     var proportionalWidth: CGFloat { width * (prefersTabNavigation ? 2/3 : 1/4) }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
             let imageClipShape = RoundedRectangle(cornerRadius: 10, style: .continuous)
             KFImage(URL(string: list.photoURL ?? ""))
                 .resizable()
                 .placeholder {
-                    Image(systemName: "list.bullet")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
+                    Rectangle()
+                        .foregroundStyle(Color(.secondarySystemBackground))
                         .frame(width: proportionalWidth, height: proportionalWidth)
-                        .padding()
-                        .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
+                        .clipShape(imageClipShape)
+                        .shadow(color: .black.opacity(0.3), radius: 5, y: 8)
+                        .overlay {
+                            Image(systemName: "list.bullet")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .padding()
+                        }
                 }
                 .aspectRatio(contentMode: .fill)
                 .frame(width: proportionalWidth, height: proportionalWidth)
@@ -37,13 +42,23 @@ struct ListDetailHeader: View {
                 .shadow(color: .black.opacity(0.3), radius: 6, y: 8)
                 .accessibilityHidden(true)
             
-            
-            Text(list.isActive ? "Currently Active" : "Not Active")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity)
-                .accessibilityLabel(Text("List status: \(list.isActive ? "Currently Active" : "Not Active")"))
+            VStack(spacing: 5) {
+                Text(list.name)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                
+                // TODO: Make this navigation to profile page
+                Text(list.ownerName)
+                    .font(.title3)
+                    .foregroundStyle(.accent)
+                
+                Text(list.isActive ? "Currently Active" : "Not Active")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fontWeight(.semibold)
+                    .accessibilityLabel(Text("List status: \(list.isActive ? "Currently Active" : "Not Active")"))
+            }
+            .frame(maxWidth: .infinity)
             
             Text(list.description ?? "")
                 .font(.callout)

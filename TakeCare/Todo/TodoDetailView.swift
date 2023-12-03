@@ -48,7 +48,6 @@ struct TodoDetailView: View {
                 }
             }
             .listStyle(.plain)
-            .navigationTitle(list.name)
             .navigationBarTitleDisplayMode(.inline)
             .refreshable {
                 todoModel.refresh()

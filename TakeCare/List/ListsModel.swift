@@ -30,8 +30,7 @@ import FirebaseFirestoreSwift
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
-            let listRef = FieldPath(["owner", "id"])
-            let updatedLists = try await Firestore.firestore().collection("lists").whereField(listRef, isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
+            let updatedLists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
 
             Task { @MainActor in
                 withAnimation {
@@ -48,7 +47,7 @@ import FirebaseFirestoreSwift
     }
     
     func createList(name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: Image?) async throws {
-        guard let owner = AuthModel.shared.currentUser else { return }
+        guard let ownerID = Auth.auth().currentUser?.uid else { return }
         
         let docRef = Firestore.firestore().collection("lists").document()
         
@@ -67,10 +66,11 @@ import FirebaseFirestoreSwift
         }
         
         let list = TakeCareList(
-            owner: owner,
+            ownerID: ownerID,
+            ownerName: AuthModel.shared.currentUser?.displayName ?? "",
             name: name,
             description: description,
-            recipient: recipient,
+            recipientID: recipient?.id,
             tasks: sortedTasks,
             photoURL: photoURL,
             isActive: false
@@ -96,7 +96,7 @@ import FirebaseFirestoreSwift
         sendInvites: Bool,
         shouldUpdateImage: Bool = true
     ) async throws {
-        guard let owner = AuthModel.shared.currentUser else { return }
+        guard let ownerID = Auth.auth().currentUser?.uid else { return }
         
         let docRef = Firestore.firestore().collection("lists").document(id)
         
@@ -111,10 +111,11 @@ import FirebaseFirestoreSwift
         }
         
         let list = TakeCareList(
-            owner: owner,
+            ownerID: ownerID,
+            ownerName: AuthModel.shared.currentUser?.displayName ?? "",
             name: name,
             description: description,
-            recipient: recipient,
+            recipientID: recipient?.id,
             tasks: tasks,
             photoURL: photoURL,
             isActive: recipient == nil ? false : isActive
@@ -180,10 +181,10 @@ import FirebaseFirestoreSwift
             let batch = db.batch()
             
             for (list, tasks) in listsToUpdate {
-                var updatedList = list
+                var updatedTasks = tasks
                 
                 for task in tasks {
-                    guard let index = updatedList.tasks.firstIndex(of: task) else { continue }
+                    guard let index = updatedTasks.firstIndex(of: task) else { continue }
                     
                     let updatedTask = ListTask(
                         id: task.id,
@@ -195,8 +196,20 @@ import FirebaseFirestoreSwift
                         lastCompletionDate: task.lastCompletionDate
                     )
                     
-                    updatedList.tasks[index] = updatedTask
+                    updatedTasks[index] = updatedTask
                 }
+                
+                let updatedList = TakeCareList(
+                    id: list.id,
+                    ownerID: list.ownerID,
+                    ownerName: list.ownerName,
+                    name: list.name,
+                    description: list.description,
+                    recipientID: list.recipientID,
+                    tasks: updatedTasks,
+                    photoURL: list.photoURL,
+                    isActive: list.isActive
+                )
                 
                 guard let id = updatedList.id else { continue }
                 

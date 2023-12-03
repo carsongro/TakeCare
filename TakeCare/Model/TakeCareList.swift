@@ -12,11 +12,12 @@ import Foundation
 
 struct TakeCareList: Codable, Hashable, Identifiable, @unchecked Sendable {
     @DocumentID var id: String?
-    let owner: User
+    let ownerID: String
+    let ownerName: String
     let name: String
     let description: String?
-    let recipient: User?
-    var tasks: [ListTask]
+    let recipientID: String?
+    let tasks: [ListTask]
     let photoURL: String?
     let isActive: Bool
     

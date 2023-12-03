@@ -29,21 +29,11 @@ final class PreviewData {
     )
     
     static let previewTakeCareList = TakeCareList(
-        id: nil,
-        owner: User(
-            id: UUID().uuidString,
-            displayName: "Carson Gross",
-            email: "test@test.com",
-            photoURL: nil
-        ),
+        ownerID: UUID().uuidString,
+        ownerName: "Owner Name",
         name: "Carson's list",
         description: "This is the description for this list.",
-        recipient: User(
-                id: UUID().uuidString,
-                displayName: "Carson Gross",
-                email: "test@test.com",
-                photoURL: nil
-            ),
+        recipientID: UUID().uuidString,
         tasks: [
             previewListTask,
             previewListTask2

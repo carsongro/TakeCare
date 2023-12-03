@@ -12,6 +12,7 @@ struct ListProgressDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     @Binding var list: TakeCareList
+    @State private var recipient: User?
     
     @State private var showingEditList = false
     @State private var showingErrorAlert = false
@@ -26,7 +27,7 @@ struct ListProgressDetailView: View {
                 .listRowSeparator(.hidden)
                 
                 Section("Recipient") {
-                    if let recipient = list.recipient {
+                    if let recipient {
                         ListRecipientRow(user: recipient)
                     }
                 }
@@ -42,11 +43,20 @@ struct ListProgressDetailView: View {
                 .padding(.bottom)
                 .listRowSeparator(.hidden)
             }
+            .onAppear {
+                Task {
+                    if let recipientID = list.recipientID {
+                        let recipient = await AuthModel.shared.fetchUser(id: recipientID)
+                        withAnimation {
+                            self.recipient = recipient
+                        }
+                    }
+                }
+            }
             .refreshable {
                 await listsModel.fetchLists()
             }
             .listStyle(.plain)
-            .navigationTitle(list.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 Menu("Edit", systemImage: "ellipsis.circle") {

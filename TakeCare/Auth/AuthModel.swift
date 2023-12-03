@@ -121,8 +121,7 @@ final class AuthModel: @unchecked Sendable {
         }
         
         // Delete their lists
-        let listRef = FieldPath(["owner", "id"])
-        let listsids = try await Firestore.firestore().collection("lists").whereField(listRef, isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self).id }
+        let listsids = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self).id }
         
         for id in listsids {
             let docRef = Firestore.firestore().collection("lists").document(id)
@@ -181,5 +180,15 @@ final class AuthModel: @unchecked Sendable {
         
         await fetchCurrentUser()
         
+    }
+    
+    func fetchUser(id: String) async -> User? {
+        guard !id.isEmpty else { return nil }
+        
+        do {
+            return try await Firestore.firestore().collection("users").document(id).getDocument().data(as: User.self)
+        } catch {
+            return nil
+        }
     }
 }
