@@ -147,8 +147,7 @@ import UserNotifications
     func updateListTask(
         list: TakeCareList,
         task: ListTask,
-        isCompleted: Bool,
-        lastCompletionDate: Date? = Date.now
+        isCompleted: Bool
     ) throws -> TakeCareList {
         guard let listID = list.id else { throw TodoError.listNotFound }
         
@@ -159,7 +158,7 @@ import UserNotifications
             completionDate: task.completionDate,
             repeatInterval: task.repeatInterval,
             isCompleted: isCompleted,
-            lastCompletionDate: lastCompletionDate
+            lastCompletionDate: Date.now
         )
         
         var tasks = list.tasks
