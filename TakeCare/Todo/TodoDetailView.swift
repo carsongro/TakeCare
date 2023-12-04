@@ -15,7 +15,8 @@ struct TodoDetailView: View {
     
     @State private var showingErrorAlert = false
     @State private var showingRemoveAlert = false
-    
+    @State private var selectedUserId: String? = nil
+    @State private var showUsersheet = false
     
     var body: some View {
         GeometryReader { proxy in

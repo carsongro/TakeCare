@@ -13,6 +13,8 @@ struct ListProgressDetailView: View {
     
     @Binding var list: TakeCareList
     @State private var recipient: User?
+    @State private var selectedUserID: String?
+    @State private var showUserSheet = false
     
     @State private var showingEditList = false
     @State private var showingErrorAlert = false
@@ -28,7 +30,12 @@ struct ListProgressDetailView: View {
                 
                 Section("Recipient") {
                     if let recipient {
-                        ListRecipientRow(user: recipient)
+                        Button {
+                            selectedUserID = recipient.id
+                        } label: {
+                            ListRecipientRow(user: recipient)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .listRowSeparator(.hidden)
@@ -75,6 +82,19 @@ struct ListProgressDetailView: View {
             .sheet(isPresented: $showingEditList) {
                 ListOwnerDetailView(mode: .edit, list: list)
                     .environment(listsModel)
+            }
+            .onChange(of: selectedUserID, { oldValue, newValue in
+                if newValue != nil {
+                    showUserSheet = true
+                }
+            })
+            .sheet(isPresented: $showUserSheet) {
+                selectedUserID = nil
+            } content: {
+                if let selectedUserID {
+                    UserProfileView(userID: selectedUserID)
+                        .presentationDetents([.medium, .large])
+                }
             }
             .alert(
                 "Are you sure you want to delete this list?",

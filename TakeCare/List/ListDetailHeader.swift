@@ -16,6 +16,9 @@ struct ListDetailHeader: View {
     
     var proportionalWidth: CGFloat { width * (prefersTabNavigation ? 2/3 : 1/4) }
     
+    @State private var selectedUserID: String?
+    @State private var showUserSheet = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             let imageClipShape = RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -47,10 +50,14 @@ struct ListDetailHeader: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                 
-                // TODO: Make this navigation to profile page
-                Text(list.ownerName)
-                    .font(.title3)
-                    .foregroundStyle(.accent)
+                
+                Button {
+                    selectedUserID = list.ownerID
+                } label: {
+                    Text(list.ownerName)
+                        .font(.title3)
+                        .foregroundStyle(.accent)
+                }
                 
                 Text(list.isActive ? "Currently Active" : "Not Active")
                     .font(.footnote)
@@ -64,6 +71,19 @@ struct ListDetailHeader: View {
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .accessibilityLabel(Text("Description: \(list.description ?? "No description provided")"))
+        }
+        .onChange(of: selectedUserID, { oldValue, newValue in
+            if newValue != nil {
+                showUserSheet = true
+            }
+        })
+        .sheet(isPresented: $showUserSheet) {
+            selectedUserID = nil
+        } content: {
+            if let selectedUserID {
+                UserProfileView(userID: selectedUserID)
+                    .presentationDetents([.medium, .large])
+            }
         }
     }
 }
