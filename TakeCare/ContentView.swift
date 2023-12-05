@@ -15,25 +15,24 @@ struct ContentView: View {
     var body: some View {
         @Bindable var navigator = Navigator.shared
         
-        Group {
-            if authModel.isSignedIn {
-                if prefersTabNavigation {
-                    AppTabView(selection: $navigator.selection)
-                        .environment(authModel)
-                } else {
-                    NavigationSplitView {
-                        AppSidebarList(selection: $navigator.selection)
-                    } detail: {
-                        AppDetailColumn(screen: navigator.selection)
-                    }
+        if authModel.isSignedIn {
+            if prefersTabNavigation {
+                AppTabView(selection: $navigator.selection)
                     .environment(authModel)
+                    .transition(.move(edge: .bottom))
+            } else {
+                NavigationSplitView {
+                    AppSidebarList(selection: $navigator.selection)
+                } detail: {
+                    AppDetailColumn(screen: navigator.selection)
                 }
+                .transition(.move(edge: .bottom))
+                .environment(authModel)
             }
-        }
-        .sheet(isPresented: .constant(!authModel.isSignedIn)) {
+        } else {
             AuthLoginView()
                 .environment(authModel)
-                .interactiveDismissDisabled()
+                .transition(.move(edge: .bottom))
         }
     }
 }
