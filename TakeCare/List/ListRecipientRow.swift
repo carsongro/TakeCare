@@ -43,7 +43,7 @@ struct RecipientRowImage: ViewModifier {
             .contentShape(Circle())
             .clipShape(Circle())
             .aspectRatio(contentMode: .fill)
-            .frame(width: 60, height: 60)
+            .frame(width: 50, height: 50)
             .accessibilityHidden(true)
     }
 }

@@ -168,6 +168,7 @@
 				B5BC6C9F2ACB7BF500D1F842 /* ProfileNavigationStack.swift */,
 				B55B80052AC7CB9200640173 /* UpdateEmailForm.swift */,
 				B55B80032AC7CAD100640173 /* DeleteAccountForm.swift */,
+				B812BB742B1D6160006AA5E5 /* UserProfileView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -215,7 +216,6 @@
 				B5BC6CA22ACB7CAC00D1F842 /* Todo */,
 				B584809D2AC76C24007A655D /* Profile */,
 				B578AB272AC635AE008CEAE1 /* Auth */,
-				B812BB732B1D6138006AA5E5 /* UserProfile */,
 				B8BEE29F2B118319005462C9 /* LocalNotifications */,
 				B88C29CB2B159BB200165276 /* Camera */,
 				B54552872ACA37CC006135E8 /* General */,
@@ -279,14 +279,6 @@
 				B5212A362ADDF9BE00FF4AD1 /* TodoTaskRow.swift */,
 			);
 			path = Todo;
-			sourceTree = "<group>";
-		};
-		B812BB732B1D6138006AA5E5 /* UserProfile */ = {
-			isa = PBXGroup;
-			children = (
-				B812BB742B1D6160006AA5E5 /* UserProfileView.swift */,
-			);
-			path = UserProfile;
 			sourceTree = "<group>";
 		};
 		B835D1172B1ED34700FBDEB3 /* Intents */ = {
