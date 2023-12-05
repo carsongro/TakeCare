@@ -22,7 +22,7 @@ extension AppScreen {
         case .lists:
             Label("Lists", systemImage: "list.bullet")
         case .todo:
-            Label("To Do", systemImage: "text.badge.checkmark")
+            Label("To Do", systemImage: "checklist")
         case .profile:
             Label("Profile", systemImage: "person")
         }

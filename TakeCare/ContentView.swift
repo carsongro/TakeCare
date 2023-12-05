@@ -9,21 +9,22 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var authModel = AuthModel.shared
-    @State private var selection: AppScreen? = .lists
     
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     var body: some View {
+        @Bindable var navigator = Navigator.shared
+        
         if authModel.isSignedIn {
             if prefersTabNavigation {
-                AppTabView(selection: $selection)
+                AppTabView(selection: $navigator.selection)
                     .environment(authModel)
                     .transition(.move(edge: .bottom))
             } else {
                 NavigationSplitView {
-                    AppSidebarList(selection: $selection)
+                    AppSidebarList(selection: $navigator.selection)
                 } detail: {
-                    AppDetailColumn(screen: selection)
+                    AppDetailColumn(screen: navigator.selection)
                 }
                 .transition(.move(edge: .bottom))
                 .environment(authModel)
