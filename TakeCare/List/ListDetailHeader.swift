@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Kingfisher
+import IoImage
 
 struct ListDetailHeader: View {
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
@@ -22,7 +22,7 @@ struct ListDetailHeader: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             let imageClipShape = RoundedRectangle(cornerRadius: 10, style: .continuous)
-            KFImage(URL(string: list.photoURL ?? ""))
+            IoImageView(url: URL(string: list.photoURL ?? ""))
                 .resizable()
                 .placeholder {
                     Rectangle()

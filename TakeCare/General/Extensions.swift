@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 #if canImport(UIKit)
 extension View {
@@ -55,22 +54,5 @@ extension Image {
     @MainActor
     func data(compressionQuality: Double = 0.7) async -> Data? {
         ImageRenderer(content: self).uiImage?.jpegData(compressionQuality: compressionQuality)
-    }
-}
-
-extension KingfisherManager {
-    public func retrieveImage(with url: URL) async throws -> Image {
-        try await withCheckedThrowingContinuation { continuation in
-            KingfisherManager.shared.retrieveImage(with: url) { result in
-                switch result {
-                case .success(let image):
-                    if let cgImage = image.image.cgImage {
-                        continuation.resume(returning: Image(uiImage: UIImage(cgImage: cgImage)))
-                    }
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
     }
 }

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Kingfisher
+import IoImage
 
 struct UserProfileView: View {
     var userID: String
@@ -18,7 +18,7 @@ struct UserProfileView: View {
             if let user {
                 List {
                     Section {
-                        KFImage(URL(string: user.photoURL ?? ""))
+                        IoImageView(url: URL(string: user.photoURL ?? ""))
                             .resizable()
                             .placeholder {
                                 Image(systemName: "person.circle.fill")

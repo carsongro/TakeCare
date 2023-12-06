@@ -82,12 +82,12 @@
       }
     },
     {
-      "identity" : "kingfisher",
+      "identity" : "ioimage",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/onevcat/Kingfisher",
+      "location" : "https://github.com/carsongro/IoImage",
       "state" : {
-        "revision" : "277f1ab2c6664b19b4a412e32b094b201e2d5757",
-        "version" : "7.10.0"
+        "revision" : "7c503aa4568d44ed7e4d4219d76dc05b8c7c35d0",
+        "version" : "2.7.1"
       }
     },
     {

@@ -60,7 +60,7 @@
 		B835D1192B1ED38400FBDEB3 /* OpenToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B835D1182B1ED38400FBDEB3 /* OpenToDo.swift */; };
 		B835D11B2B1ED42A00FBDEB3 /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B835D11A2B1ED42A00FBDEB3 /* Navigator.swift */; };
 		B835D11E2B1ED66200FBDEB3 /* TakeCareShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B835D11D2B1ED66200FBDEB3 /* TakeCareShortcuts.swift */; };
-		B88C29CA2B1595F000165276 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B88C29C92B1595F000165276 /* Kingfisher */; };
+		B865F4192B21153D0075690E /* IoImage in Frameworks */ = {isa = PBXBuildFile; productRef = B865F4182B21153D0075690E /* IoImage */; };
 		B88C29CF2B15A40C00165276 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88C29CE2B15A40C00165276 /* CameraView.swift */; };
 		B8A0A50B2AF06B5F008FC8F2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B8A0A50A2AF06B5F008FC8F2 /* GoogleService-Info.plist */; };
 		B8BEE2A12B118333005462C9 /* LocalNotificationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8BEE2A02B118333005462C9 /* LocalNotificationHelper.swift */; };
@@ -129,8 +129,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B88C29CA2B1595F000165276 /* Kingfisher in Frameworks */,
 				B5003D3A2AC875E400BB7BC5 /* FirebaseAuth in Frameworks */,
+				B865F4192B21153D0075690E /* IoImage in Frameworks */,
 				B5003D3C2AC875E400BB7BC5 /* FirebaseFirestore in Frameworks */,
 				B5003D402AC875E400BB7BC5 /* FirebaseStorage in Frameworks */,
 				B5003D3E2AC875E400BB7BC5 /* FirebaseFirestoreSwift in Frameworks */,
@@ -334,7 +334,7 @@
 				B5003D3B2AC875E400BB7BC5 /* FirebaseFirestore */,
 				B5003D3D2AC875E400BB7BC5 /* FirebaseFirestoreSwift */,
 				B5003D3F2AC875E400BB7BC5 /* FirebaseStorage */,
-				B88C29C92B1595F000165276 /* Kingfisher */,
+				B865F4182B21153D0075690E /* IoImage */,
 			);
 			productName = TakeCare;
 			productReference = B58A13FD2AC520A20045D191 /* TakeCare.app */;
@@ -366,7 +366,7 @@
 			mainGroup = B58A13F42AC520A20045D191;
 			packageReferences = (
 				B5003D382AC875E400BB7BC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				B88C29C82B1595EF00165276 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				B865F4172B21153D0075690E /* XCRemoteSwiftPackageReference "IoImage" */,
 			);
 			productRefGroup = B58A13FE2AC520A20045D191 /* Products */;
 			projectDirPath = "";
@@ -686,12 +686,12 @@
 				minimumVersion = 10.15.0;
 			};
 		};
-		B88C29C82B1595EF00165276 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+		B865F4172B21153D0075690E /* XCRemoteSwiftPackageReference "IoImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			repositoryURL = "https://github.com/carsongro/IoImage";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 7.10.0;
+				minimumVersion = 2.7.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -717,10 +717,10 @@
 			package = B5003D382AC875E400BB7BC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
 		};
-		B88C29C92B1595F000165276 /* Kingfisher */ = {
+		B865F4182B21153D0075690E /* IoImage */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B88C29C82B1595EF00165276 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
+			package = B865F4172B21153D0075690E /* XCRemoteSwiftPackageReference "IoImage" */;
+			productName = IoImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

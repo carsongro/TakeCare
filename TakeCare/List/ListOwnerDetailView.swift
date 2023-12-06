@@ -7,7 +7,7 @@
 
 import PhotosUI
 import SwiftUI
-import Kingfisher
+import IoImage
 
 struct ListOwnerDetailView: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
@@ -208,7 +208,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
             Task {
                 do {
                     if let url = URL(string: list.photoURL ?? "") {
-                        listImage = try await KingfisherManager.shared.retrieveImage(with: url)
+                        listImage = try await IoImageLoader.shared.Image(from: url)
                     }
                 } catch {
                     

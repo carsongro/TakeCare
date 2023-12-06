@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-import Kingfisher
+import IoImage
 
 struct ListRow: View {
     var list: TakeCareList
     
     var body: some View {
         HStack {
-            KFImage(URL(string: list.photoURL ?? ""))
+            IoImageView(url: URL(string: list.photoURL ?? ""))
                 .resizable()
                 .placeholder {
                     ZStack {
