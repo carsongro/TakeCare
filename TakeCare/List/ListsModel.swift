@@ -83,6 +83,8 @@ import FirebaseFirestoreSwift
         }
         
         await fetchLists()
+        
+        TakeCareShortcuts.updateAppShortcutParameters()
     }
     
     func updateList(
@@ -129,6 +131,8 @@ import FirebaseFirestoreSwift
         }
         
         await fetchLists(isInitialFetch: true)
+        
+        TakeCareShortcuts.updateAppShortcutParameters()
     }
     
     func deleteList(_ list: TakeCareList) async throws {
@@ -142,6 +146,8 @@ import FirebaseFirestoreSwift
         try await docRef.delete()
         
         await fetchLists()
+        
+        TakeCareShortcuts.updateAppShortcutParameters()
     }
     
     func searchUser(email: String) async throws -> [User] {

@@ -244,6 +244,8 @@ import UserNotifications
         await fetchLists()
         
         correctLocalNotificationsIfNeeded()
+        
+        TakeCareShortcuts.updateAppShortcutParameters()
     }
     
     private func correctLocalNotificationsIfNeeded() {

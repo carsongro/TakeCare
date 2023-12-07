@@ -11,7 +11,8 @@ struct TodoNavigationStack: View {
     @State private var todoModel = TodoModel()
     
     var body: some View {
-        NavigationStack {
+        @Bindable var navigator = Navigator.shared
+        NavigationStack(path: $navigator.todoPath) {
             TodoLists()
                 .environment(todoModel)
                 .navigationTitle("To Do")
