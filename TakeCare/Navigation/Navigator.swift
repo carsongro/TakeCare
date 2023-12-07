@@ -11,7 +11,7 @@ import SwiftUI
 final class Navigator: @unchecked Sendable {
     public static let shared = Navigator()
     
-    public var selection: AppScreen?
+    public var selection: AppScreen? = .lists
     
     public var todoPath = [TakeCareList]()
     

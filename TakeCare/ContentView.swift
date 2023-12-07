@@ -9,30 +9,34 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var authModel = AuthModel.shared
+    @State private var selection: AppScreen? = .lists
     
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     var body: some View {
-        @Bindable var navigator = Navigator.shared
-        
-        if authModel.isSignedIn {
-            if prefersTabNavigation {
-                AppTabView(selection: $navigator.selection)
+        Group {
+            if authModel.isSignedIn {
+                if prefersTabNavigation {
+                    AppTabView(selection: $selection)
+                        .environment(authModel)
+                        .transition(.move(edge: .bottom))
+                } else {
+                    NavigationSplitView {
+                        AppSidebarList(selection: $selection)
+                    } detail: {
+                        AppDetailColumn(screen: selection)
+                    }
+                    .transition(.move(edge: .bottom))
+                    .environment(authModel)
+                }
+            } else {
+                AuthLoginView()
                     .environment(authModel)
                     .transition(.move(edge: .bottom))
-            } else {
-                NavigationSplitView {
-                    AppSidebarList(selection: $navigator.selection)
-                } detail: {
-                    AppDetailColumn(screen: navigator.selection)
-                }
-                .transition(.move(edge: .bottom))
-                .environment(authModel)
             }
-        } else {
-            AuthLoginView()
-                .environment(authModel)
-                .transition(.move(edge: .bottom))
+        }
+        .onChange(of: Navigator.shared.selection) { oldValue, newValue in
+            selection = newValue
         }
     }
 }
