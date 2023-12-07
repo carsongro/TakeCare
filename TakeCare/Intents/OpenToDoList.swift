@@ -19,11 +19,11 @@ struct OpenToDoList: AppIntent {
     
     @MainActor
     func perform() async throws -> some IntentResult {
-        let listToOpen: TakeCareToDoListEntity
+        let selectedList: TakeCareToDoListEntity
         if let list = list {
-            listToOpen = list
+            selectedList = list
         } else {
-            listToOpen = try await $list.requestDisambiguation(
+            selectedList = try await $list.requestDisambiguation(
                 among: try await FirebaseManager.shared.userTodoLists().compactMap {
                     guard let id = $0.id else { return nil }
                     
@@ -37,7 +37,7 @@ struct OpenToDoList: AppIntent {
                 dialog: "Which list would you like to open?"
             )
         }
-        Navigator.shared.openList(listToOpen)
+        Navigator.shared.openList(selectedList)
         return .result()
     }
     
