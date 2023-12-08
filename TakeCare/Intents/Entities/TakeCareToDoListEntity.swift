@@ -13,14 +13,18 @@ struct TakeCareToDoListEntity: AppEntity {
     var id: String
     var listName: String
     var listDescription: String
-    var imageURL: String?
+    var imageData: Data?
     
     static var typeDisplayRepresentation = TypeDisplayRepresentation(
         stringLiteral: "List"
     )
     
     var displayRepresentation: DisplayRepresentation {
-        .init(stringLiteral: listName)
+        .init(
+            title: "\(listName)",
+            subtitle: "\(listDescription)",
+            image: image
+        )
     }
     
     var subtitle: DisplayRepresentation {
@@ -28,29 +32,12 @@ struct TakeCareToDoListEntity: AppEntity {
     }
     
     var image: DisplayRepresentation.Image {
-        if let url = imageURL {
-           return .init(url: image(url: url))
+        if let imageData {
+            return .init(data: imageData)
         } else {
             return .init(systemName: "list.bullet.circle.fill")
         }
     }
     
     static var defaultQuery = TakeCareTodoListQuery()
-    
-    private func hashedKey(forKey key: String) -> String {
-        let inputData = Data(key.utf8)
-        let hashed = SHA256.hash(data: inputData)
-        let hashString = hashed.compactMap { String(format: "%02x", $0) }.joined()
-        return hashString
-    }
-    
-    private func image(url: String) -> URL {
-        let hashedKey = hashedKey(forKey: url)
-        
-        let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("com.carsongro.Io.ImageCache", isDirectory: true)
-        
-        let filename = cachesDirectory.appendingPathComponent(hashedKey, isDirectory: false)
-        
-        return filename
-    }
 }

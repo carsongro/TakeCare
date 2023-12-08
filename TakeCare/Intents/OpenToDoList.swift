@@ -23,17 +23,22 @@ struct OpenToDoList: AppIntent {
         if let list = list {
             selectedList = list
         } else {
+            let lists = try await FirebaseManager.shared.userTodoLists()
+            let imageDataMap = await FirebaseManager.shared.imagesMap(from: lists)
+            
+            let listEntities: [TakeCareToDoListEntity] = lists.compactMap {
+                guard let id = $0.id else { return nil }
+                
+                return TakeCareToDoListEntity(
+                    id: id,
+                    listName: $0.name,
+                    listDescription: $0.description ?? "",
+                    imageData: imageDataMap[id, default: nil]
+                )
+            }
+            
             selectedList = try await $list.requestDisambiguation(
-                among: try await FirebaseManager.shared.userTodoLists().compactMap {
-                    guard let id = $0.id else { return nil }
-                    
-                    return TakeCareToDoListEntity(
-                        id: id,
-                        listName: $0.name,
-                        listDescription: $0.description ?? "",
-                        imageURL: $0.photoURL
-                    )
-                },
+                among: listEntities,
                 dialog: "Which list would you like to open?"
             )
         }

@@ -7,6 +7,7 @@
 
 import Foundation
 import Firebase
+import IoImage
 
 final class FirebaseManager: Sendable {
     static let shared = FirebaseManager()
@@ -40,5 +41,25 @@ extension FirebaseManager {
             .getDocuments()
             .documents
             .compactMap { try $0.data(as: TakeCareList.self) }
+    }
+    
+    func imagesMap(from lists: [TakeCareList]) async -> [String: Data?] {
+        let imagesMap = lists.reduce(into: [String: String?]()) { imagesMap, list in
+            imagesMap[list.id] = list.photoURL
+        }
+        
+        var imageDataMap = [String: Data?]()
+        for (id, url) in imagesMap {
+            guard let id else { continue }
+            
+            if let url = URL(string: url ?? "") {
+                let uiImage = try? await IoImageLoader.shared.loadImage(from: url)
+                imageDataMap[id] = uiImage?.jpegData(compressionQuality: 1)
+            } else {
+                imageDataMap[id] = nil
+            }
+        }
+        
+        return imageDataMap
     }
 }

@@ -8,6 +8,7 @@
 import AppIntents
 import SwiftUI
 import Firebase
+import IoImage
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -26,6 +27,7 @@ struct TakeCareApp: App {
     init() {
         AppDependencyManager.shared.add(dependency: FirebaseManager.shared)
         AppDependencyManager.shared.add(dependency: Navigator.shared)
+        AppDependencyManager.shared.add(dependency: IoImageLoader.shared)
                                             
         TakeCareShortcuts.updateAppShortcutParameters()
     }
