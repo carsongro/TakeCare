@@ -20,7 +20,11 @@ final class AuthModel: @unchecked Sendable {
     static let shared = AuthModel()
     
     private(set) var userSession: FirebaseAuth.User?
-    private(set) var currentUser: User?
+    private(set) var currentUser: User? {
+        didSet {
+            TakeCareShortcuts.updateAppShortcutParameters()
+        }
+    }
     
     var isSignedIn: Bool {
         userSession != nil

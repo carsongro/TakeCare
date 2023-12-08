@@ -35,7 +35,13 @@ final class FirebaseImageManager {
         path: ImagePath
     ) async throws -> String {
         
-        guard let data = await image.data(compressionQuality: 0.7) else { throw ImageError.jpegConversionError }
+        let data = if let squareData = await image.uiImage()?.croppedToSquare()?.jpegData(compressionQuality: 0.7) {
+            squareData
+        } else if let defaultData = await image.data(compressionQuality: 0.7) {
+            defaultData
+        } else {
+            throw ImageError.jpegConversionError
+        }
         
         let storageRef = Storage.storage().reference()
         let path = "\(path)/\(name).jpg"
