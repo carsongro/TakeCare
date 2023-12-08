@@ -18,7 +18,7 @@ struct OpenToDoList: AppIntent {
     static var openAppWhenRun: Bool = true
     
     @MainActor
-    func perform() async throws -> some IntentResult {
+    func perform() async throws -> some ProvidesDialog {
         let selectedList: TakeCareToDoListEntity
         if let list = list {
             selectedList = list
@@ -43,7 +43,7 @@ struct OpenToDoList: AppIntent {
             )
         }
         Navigator.shared.openList(selectedList)
-        return .result()
+        return .result(dialog: "Okay, opening the to-do list for \(selectedList.listName).")
     }
     
     static var parameterSummary: some ParameterSummary {
