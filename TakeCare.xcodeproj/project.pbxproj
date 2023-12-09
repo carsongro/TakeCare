@@ -220,7 +220,6 @@
 				B83ED9142B21540D00636DF3 /* APIClient */,
 				B835D11C2B1ED65100FBDEB3 /* Shortcuts */,
 				B835D1172B1ED34700FBDEB3 /* Intents */,
-				B835D1182B1ED38400FBDEB3 /* OpenToDo.swift */,
 				B5BC6C9A2ACB76F700D1F842 /* Navigation */,
 				B5BC6CA12ACB7CA700D1F842 /* List */,
 				B5BC6CA22ACB7CAC00D1F842 /* Todo */,
@@ -296,6 +295,7 @@
 			children = (
 				B83ED9172B21584300636DF3 /* OpenToDoList.swift */,
 				B83ED90F2B21510A00636DF3 /* Entities */,
+				B835D1182B1ED38400FBDEB3 /* OpenToDo.swift */,
 			);
 			path = Intents;
 			sourceTree = "<group>";
