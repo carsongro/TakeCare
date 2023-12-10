@@ -77,7 +77,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                         Text("Recipient")
                     } footer: {
                         if mode == .edit && list?.isActive ?? true {
-                            Text("If a recipient is removed or changed while the list is active, the recipient will continue to receive notifications for the tasks until the next time they open the app.")
+                            Text("If a recipient is removed or changed while the list is shared with them, the recipient will continue to receive notifications for the tasks until the next time they open the app.")
                         }
                     }
                     

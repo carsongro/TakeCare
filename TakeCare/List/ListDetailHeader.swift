@@ -60,12 +60,6 @@ struct ListDetailHeader: View {
                         .foregroundStyle(.accent)
                         .accessibilityLabel(Text("List owner: \(list.ownerName)"))
                 }
-                
-                Text(list.isActive ? "Currently Active" : "Not Active")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .fontWeight(.semibold)
-                    .accessibilityLabel(Text("List status: \(list.isActive ? "Currently Active" : "Not Active")"))
             }
             .frame(maxWidth: .infinity)
             

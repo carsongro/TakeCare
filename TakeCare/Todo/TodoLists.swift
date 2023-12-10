@@ -24,7 +24,7 @@ struct TodoLists: View {
                     ContentUnavailableView(
                         "No Todo's",
                         systemImage: "list.bullet",
-                        description: Text("You are not currently taking care of any todo lists.")
+                        description: Text("Any lists shared with you will appear here")
                     )
                     .listRowSeparator(.hidden)
                 } else {

@@ -42,11 +42,6 @@ struct TodoDetailView: View {
                         }
                     }
                 }
-                
-                Section {
-                    activeButton
-                        .listRowSeparator(.hidden)
-                }
             }
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
@@ -54,6 +49,12 @@ struct TodoDetailView: View {
                 todoModel.refresh()
             }
             .toolbar {
+                Button {
+                    todoModel.updateListActive(isActive: !list.isActive, list: list)
+                } label: {
+                    Label("Notifcations", systemImage: list.isActive ? "bell.fill" : "bell.slash.fill")
+                }
+                
                 Menu("Options", systemImage: "ellipsis.circle") {
                     
                     
@@ -80,27 +81,6 @@ struct TodoDetailView: View {
             }
             .alert("An error occured", isPresented: $showingErrorAlert) { }
         }
-    }
-    
-    @ViewBuilder
-    var activeButton: some View {
-        HStack {
-            if list.isActive {
-                Button("Make inactive") {
-                    todoModel.updateListActive(isActive: false, list: list)
-                }
-                .buttonStyle(.borderedProminent)
-            } else {
-                Button("Make active") {
-                    todoModel.updateListActive(isActive: true, list: list)
-                }
-                .buttonStyle(.borderedProminent)
-            }
-        }
-        .sensoryFeedback(.success, trigger: list.isActive)
-        .frame(maxWidth: .infinity)
-        .padding(.vertical)
-    
     }
 }
 
