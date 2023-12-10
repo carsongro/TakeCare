@@ -49,6 +49,7 @@ struct ListDetailHeader: View {
                 Text(list.name)
                     .font(.title3)
                     .fontWeight(.semibold)
+                    .accessibilityLabel(Text("List name: \(list.name)"))
                 
                 
                 Button {
@@ -57,6 +58,7 @@ struct ListDetailHeader: View {
                     Text(list.ownerName)
                         .font(.title3)
                         .foregroundStyle(.accent)
+                        .accessibilityLabel(Text("List owner: \(list.ownerName)"))
                 }
                 
                 Text(list.isActive ? "Currently Active" : "Not Active")
