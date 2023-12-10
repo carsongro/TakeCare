@@ -124,15 +124,34 @@ final class AuthModel: @unchecked Sendable {
             try await removeProfileImage()
         }
         
-        // Delete their lists
-        let listsids = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self).id }
+        let db = Firestore.firestore()
+        let batch = db.batch()
         
-        for id in listsids {
-            let docRef = Firestore.firestore().collection("lists").document(id)
-            try await docRef.delete()
+        // Delete their lists
+        let listIDs = try await db.collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self).id }
+        
+        for id in listIDs {
+            let docRef = db.collection("lists").document(id)
+            batch.deleteDocument(docRef)
         }
         
-        try? await Firestore.firestore().collection("users").document(uid).delete()
+        let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
+            batch.commit { error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(with: .success(true))
+                }
+            }
+        }
+        
+        for id in listIDs {
+            Task.detached {
+                try await FirebaseImageManager.shared.deleteImage(name: id, path: .list_images)
+            }
+        }
+        
+        try? await db.collection("users").document(uid).delete()
         try await Auth.auth().currentUser?.delete()
         
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()

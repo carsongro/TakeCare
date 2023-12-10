@@ -35,6 +35,7 @@ struct TakeCareApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         }
     }
 }
