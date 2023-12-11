@@ -20,7 +20,21 @@ import FirebaseFirestoreSwift
     }
 
     init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(userSignedIn), name: Notification.Name("UserSignedIn"), object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(userSignedIn),
+            name: Notification.Name("UserSignedIn"),
+            object: nil
+        )
+        Task { @MainActor in
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(willEnterForground),
+                name: UIApplication.willEnterForegroundNotification,
+                object: nil
+            )
+        }
+        
         Task {
             await fetchLists(isInitialFetch: true)
         }
@@ -28,6 +42,13 @@ import FirebaseFirestoreSwift
     
     @objc
     private func userSignedIn() {
+        Task {
+            await fetchLists(isInitialFetch: true)
+        }
+    }
+    
+    @objc
+    private func willEnterForground() {
         Task {
             await fetchLists(isInitialFetch: true)
         }
@@ -86,10 +107,6 @@ import FirebaseFirestoreSwift
         
         try docRef.setData(from: list)
         
-        if let recipient = recipient {
-            try await sendListInvite(to: recipient)
-        }
-        
         await fetchLists()
     }
     
@@ -131,11 +148,6 @@ import FirebaseFirestoreSwift
         
         try docRef.setData(from: list)
         
-        if let recipient = recipient,
-           sendInvites {
-            try await sendListInvite(to: recipient)
-        }
-        
         await fetchLists(isInitialFetch: true)
     }
     
@@ -158,87 +170,71 @@ import FirebaseFirestoreSwift
         return users
     }
     
-    private func sendListInvite(to recipient: User) async throws {
-        // TODO: Implement this
-    }
-    
     /// A function that resets the completion status of tasks that repeat daily
     private func updateTasksCompletion() async throws {
-        var shouldRefresh = false
-        var listsToUpdate = [TakeCareList: [ListTask]]()
+        var needsCommit = false
+        
+        let db = Firestore.firestore()
+        let batch = db.batch()
         
         for list in lists {
+            var updatedTasks = [ListTask]()
+            
             for task in list.tasks {
-                // If the task was marked completed on any day but today, set it to not completed
-                if let lastCompletionDate = task.lastCompletionDate,
-                   !Calendar.current.isDateInToday(lastCompletionDate),
-                   task.isCompleted {
-                    shouldRefresh = true
-                    
-                    if !listsToUpdate.keys.contains(list) {
-                        listsToUpdate[list] = [task]
-                    } else {
-                        listsToUpdate[list]?.append(task)
-                    }
+                var isCompleted = task.isCompleted
+                
+                if let lastCompletionDateCalendar = task.lastCompletionDate,
+                   !Calendar.current.isDateInToday(lastCompletionDateCalendar),
+                   task.repeatInterval == .daily {
+                    needsCommit = true
+                    isCompleted = false
+                }
+                
+                let updatedTask = ListTask(
+                    id: task.id,
+                    title: task.title,
+                    notes: task.notes,
+                    completionDate: task.completionDate,
+                    repeatInterval: task.repeatInterval,
+                    isCompleted: isCompleted,
+                    lastCompletionDate: task.lastCompletionDate
+                )
+                
+                updatedTasks.append(updatedTask)
+            }
+            
+            let updatedList = TakeCareList(
+                ownerID: list.ownerID,
+                ownerName: list.ownerName,
+                name: list.name,
+                description: list.description,
+                recipientID: list.recipientID,
+                tasks: updatedTasks,
+                photoURL: list.photoURL,
+                hasRecipientTaskNotifications: list.hasRecipientTaskNotifications
+            )
+            
+            guard let id = list.id else { continue }
+            
+            let listRef = db.collection("lists").document(id)
+            
+            try batch.setData(from: updatedList, forDocument: listRef)
+        }
+        
+        guard needsCommit else { return }
+        
+        let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
+            batch.commit { error in
+                if let error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(with: .success(true))
                 }
             }
         }
         
-        if shouldRefresh {
-            let db = Firestore.firestore()
-            let batch = db.batch()
-            
-            for (list, tasks) in listsToUpdate {
-                var updatedTasks = tasks
-                
-                for task in tasks {
-                    guard let index = updatedTasks.firstIndex(of: task) else { continue }
-                    
-                    let updatedTask = ListTask(
-                        id: task.id,
-                        title: task.title,
-                        notes: task.notes,
-                        completionDate: task.completionDate,
-                        repeatInterval: task.repeatInterval,
-                        isCompleted: false,
-                        lastCompletionDate: task.lastCompletionDate
-                    )
-                    
-                    updatedTasks[index] = updatedTask
-                }
-                
-                let updatedList = TakeCareList(
-                    id: list.id,
-                    ownerID: list.ownerID,
-                    ownerName: list.ownerName,
-                    name: list.name,
-                    description: list.description,
-                    recipientID: list.recipientID,
-                    tasks: updatedTasks,
-                    photoURL: list.photoURL,
-                    hasRecipientTaskNotifications: list.hasRecipientTaskNotifications
-                )
-                
-                guard let id = updatedList.id else { continue }
-                
-                let listRef = db.collection("lists").document(id)
-                
-                try batch.setData(from: updatedList, forDocument: listRef)
-            }
-            
-            let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
-                batch.commit { error in
-                    if let error {
-                        continuation.resume(throwing: error)
-                    } else {
-                        continuation.resume(with: .success(true))
-                    }
-                }
-            }
-            
-            if result {
-                await fetchLists()
-            }
+        if result {
+            await fetchLists()
         }
     }
 }
