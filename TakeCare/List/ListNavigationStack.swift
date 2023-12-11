@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct ListNavigationStack: View, @unchecked Sendable {
-    @State private var listsModel = ListsModel()
+    @Environment(ListsModel.self) private var listsModel
 
     var body: some View {
+        @Bindable var listsModel = listsModel
+        
         NavigationStack() {
             ListList()
                 .environment(listsModel)

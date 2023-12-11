@@ -10,18 +10,16 @@ import Foundation
 
 actor LocalNotificationHelper {
     
-    /// A method to remove local notifications if the logged in user has been removed from a list as a recipient or a list task is deleted by the list owner while the list is active
+    /// A method to remove local notifications if the logged in user has been removed from a list as a recipient, a list task is deleted by the list owner while the user is receiving notifications
+    /// or if they turned off notifications on another device
     /// - Parameter lists: The current todo lists
-    func removeLocalNotificationsForDeletedTasks(lists: [TakeCareList]) async {
+    func removeInvalidLocalNotifications(lists: [TakeCareList]) async {
         let allTodoTasksIDs = Set(lists.compactMap { $0.tasks.map(\.id) }.joined())
+        let invalidTaskIDs = Set(lists.filter { !$0.hasRecipientTaskNotifications }.compactMap { $0.tasks.map(\.id) }.joined())
+
         let requests = await getExistingRequestsIDs()
         
-        var idsToRemove = [String]()
-        for id in requests {
-            if !allTodoTasksIDs.contains(id) {
-                idsToRemove.append(id)
-            }
-        }
+        var idsToRemove = Array(requests.filter { !allTodoTasksIDs.contains($0) || invalidTaskIDs.contains($0) })
         
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: idsToRemove)
     }

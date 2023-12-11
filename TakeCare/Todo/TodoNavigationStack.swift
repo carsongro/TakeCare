@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct TodoNavigationStack: View {
-    @State private var todoModel = TodoModel()
+    @Environment(TodoModel.self) private var todoModel
     
     var body: some View {
         @Bindable var navigator = Navigator.shared
+        @Bindable var todoModel = todoModel
+        
         NavigationStack(path: $navigator.todoPath) {
             TodoLists()
                 .environment(todoModel)
@@ -28,4 +30,5 @@ struct TodoNavigationStack: View {
 
 #Preview {
     TodoNavigationStack()
+        .environment(TodoModel())
 }

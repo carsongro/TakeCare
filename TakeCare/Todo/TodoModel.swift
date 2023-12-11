@@ -31,11 +31,7 @@ import UserNotifications
     }
     
     @objc private func userSignedIn() {
-        Task {
-            if await localNotificationHelper.getNotificationAuthorization() {
-                correctLocalNotificationsIfNeeded()
-            }
-        }
+        getNotificationPermissionIfNotDetermined()
     }
     
     func refresh() {
@@ -58,9 +54,15 @@ import UserNotifications
                 
                 if isInitialFetch {
                     try await updateDailyTasksCompletion()
-                    correctLocalNotificationsIfNeeded()
+                }
+                correctLocalNotificationsIfNeeded()
+                
+                if !lists.isEmpty {
+                    // The user could get here if they delete the app without signing out then reinstalled it
+                    getNotificationPermissionIfNotDetermined()
                 }
             }
+            
         } catch {
             print(error.localizedDescription)
         }
@@ -251,12 +253,20 @@ import UserNotifications
     private func correctLocalNotificationsIfNeeded() {
         Task {
             guard await localNotificationHelper.isAuthorized() else { return }
-            await localNotificationHelper.removeLocalNotificationsForDeletedTasks(lists: lists)
+            await localNotificationHelper.removeInvalidLocalNotifications(lists: lists)
             
             do {
                 try await localNotificationHelper.addLocalNotificationsForNewTasks(lists: lists)
             } catch {
                 print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func getNotificationPermissionIfNotDetermined() {
+        Task {
+            if await localNotificationHelper.getNotificationAuthorization() {
+                correctLocalNotificationsIfNeeded()
             }
         }
     }

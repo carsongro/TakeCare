@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var authModel = AuthModel.shared
+    @State private var todoModel = TodoModel()
+    @State private var listsModel = ListsModel()
+    
     @State private var selection: AppScreen? = .lists
     
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
@@ -18,7 +21,6 @@ struct ContentView: View {
             if authModel.isSignedIn {
                 if prefersTabNavigation {
                     AppTabView(selection: $selection)
-                        .environment(authModel)
                         .transition(.move(edge: .bottom))
                 } else {
                     NavigationSplitView {
@@ -27,14 +29,15 @@ struct ContentView: View {
                         AppDetailColumn(screen: selection)
                     }
                     .transition(.move(edge: .bottom))
-                    .environment(authModel)
                 }
             } else {
                 AuthLoginView()
-                    .environment(authModel)
                     .transition(.move(edge: .bottom))
             }
         }
+        .environment(authModel)
+        .environment(todoModel)
+        .environment(listsModel)
         .onChange(of: Navigator.shared.selection) { oldValue, newValue in
             selection = newValue
         }
