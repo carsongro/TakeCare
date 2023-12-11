@@ -121,7 +121,7 @@ import UserNotifications
                     recipientID: list.recipientID,
                     tasks: updatedTasks,
                     photoURL: list.photoURL,
-                    isActive: list.isActive
+                    hasRecipientTaskNotifications: list.hasRecipientTaskNotifications
                 )
                 
                 guard let id = updatedList.id else { continue }
@@ -184,7 +184,7 @@ import UserNotifications
             recipientID: list.recipientID,
             tasks: tasks,
             photoURL: list.photoURL,
-            isActive: list.isActive
+            hasRecipientTaskNotifications: list.hasRecipientTaskNotifications
         )
         
         let docRef = Firestore.firestore().collection("lists").document(listID)
@@ -195,7 +195,7 @@ import UserNotifications
             case .never:
                 if isCompleted {
                     await localNotificationHelper.removePendingNotificationRequests(for: updatedTask)
-                } else if updatedTask.completionDate != nil && updatedList.isActive {
+                } else if updatedTask.completionDate != nil && updatedList.hasRecipientTaskNotifications {
                     try await localNotificationHelper.scheduleTaskNotifications(for: updatedTask)
                 }
             case .daily: break
@@ -205,14 +205,14 @@ import UserNotifications
         return updatedList
     }
     
-    func updateListActive(isActive: Bool, list: TakeCareList) {
+    func updateListActive(recipientNotifications: Bool, list: TakeCareList) {
         Task {
             guard let id = list.id else { return }
             
             do {
-                try await Firestore.firestore().collection("lists").document(id).updateData(["isActive" : isActive])
+                try await Firestore.firestore().collection("lists").document(id).updateData(["recipientNotifications" : recipientNotifications])
                 
-                if isActive {
+                if recipientNotifications {
                     await localNotificationHelper.handleListNotifications(list: list)
                 } else {
                     await localNotificationHelper.removeNotifications(for: list)
@@ -236,7 +236,7 @@ import UserNotifications
             recipientID: nil,
             tasks: list.tasks,
             photoURL: list.photoURL,
-            isActive: false
+            hasRecipientTaskNotifications: false
         )
         
         try Firestore.firestore().collection("lists").document(id).setData(from: updatedList)

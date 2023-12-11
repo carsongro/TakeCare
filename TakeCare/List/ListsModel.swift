@@ -73,7 +73,7 @@ import FirebaseFirestoreSwift
             recipientID: recipient?.id,
             tasks: sortedTasks,
             photoURL: photoURL,
-            isActive: false
+            hasRecipientTaskNotifications: false
         )
         
         try docRef.setData(from: list)
@@ -94,7 +94,7 @@ import FirebaseFirestoreSwift
         recipient: User?,
         tasks: [ListTask],
         listImage: Image?,
-        isActive: Bool,
+        recipientNotifications: Bool,
         sendInvites: Bool,
         shouldUpdateImage: Bool = true
     ) async throws {
@@ -120,7 +120,7 @@ import FirebaseFirestoreSwift
             recipientID: recipient?.id,
             tasks: tasks,
             photoURL: photoURL,
-            isActive: recipient == nil ? false : isActive
+            hasRecipientTaskNotifications: recipient == nil ? false : recipientNotifications
         )
         
         try docRef.setData(from: list)
@@ -214,7 +214,7 @@ import FirebaseFirestoreSwift
                     recipientID: list.recipientID,
                     tasks: updatedTasks,
                     photoURL: list.photoURL,
-                    isActive: list.isActive
+                    hasRecipientTaskNotifications: list.hasRecipientTaskNotifications
                 )
                 
                 guard let id = updatedList.id else { continue }

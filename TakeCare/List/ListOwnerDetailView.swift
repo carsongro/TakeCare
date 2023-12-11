@@ -76,7 +76,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                     } header: {
                         Text("Recipient")
                     } footer: {
-                        if mode == .edit && list?.isActive ?? true {
+                        if mode == .edit && list?.hasRecipientTaskNotifications ?? true {
                             Text("If a recipient is removed or changed while the list is shared with them, the recipient will continue to receive notifications for the tasks until the next time they open the app.")
                         }
                     }
@@ -96,7 +96,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                     } header: {
                         Text("Tasks")
                     } footer: {
-                        if mode == .edit && list?.isActive ?? true {
+                        if mode == .edit && list?.hasRecipientTaskNotifications ?? true {
                             Text("If a task is added, deleted, or modified, the recipient will not receive updated notifications until the next time they open the app.")
                         }
                     }
@@ -169,7 +169,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                                             recipient: recipient,
                                             tasks: tasks,
                                             listImage: listImage,
-                                            isActive: list?.isActive ?? false,
+                                            recipientNotifications: list?.hasRecipientTaskNotifications ?? false,
                                             sendInvites: list?.recipientID != recipient?.id,
                                             shouldUpdateImage: didChangeImage
                                         )

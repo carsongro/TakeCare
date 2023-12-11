@@ -50,9 +50,9 @@ struct TodoDetailView: View {
             }
             .toolbar {
                 Button {
-                    todoModel.updateListActive(isActive: !list.isActive, list: list)
+                    todoModel.updateListActive(recipientNotifications: !list.hasRecipientTaskNotifications, list: list)
                 } label: {
-                    Label("Notifcations", systemImage: list.isActive ? "bell.fill" : "bell.slash.fill")
+                    Label("Notifcations", systemImage: list.hasRecipientTaskNotifications ? "bell.fill" : "bell.slash.fill")
                 }
                 
                 Menu("Options", systemImage: "ellipsis.circle") {

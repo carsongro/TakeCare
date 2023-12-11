@@ -19,7 +19,7 @@ struct TakeCareList: Codable, Hashable, Identifiable, @unchecked Sendable {
     let recipientID: String?
     let tasks: [ListTask]
     let photoURL: String?
-    let isActive: Bool
+    let hasRecipientTaskNotifications: Bool
     
     static func == (lhs: TakeCareList, rhs: TakeCareList) -> Bool {
         lhs.id == rhs.id

@@ -28,7 +28,7 @@ actor LocalNotificationHelper {
     
     /// A method to add local notifications for tasks that have been added since accepting the list
     func addLocalNotificationsForNewTasks(lists: [TakeCareList]) async throws {
-        let allTodoTasks = lists.filter(\.isActive).map(\.tasks).joined()
+        let allTodoTasks = lists.filter(\.hasRecipientTaskNotifications).map(\.tasks).joined()
         let requests = await getExistingRequestsIDs()
         
         for task in allTodoTasks {

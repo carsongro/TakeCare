@@ -39,6 +39,6 @@ final class PreviewData {
             previewListTask2
         ],
         photoURL: nil,
-        isActive: true
+        hasRecipientTaskNotifications: true
     )
 }
