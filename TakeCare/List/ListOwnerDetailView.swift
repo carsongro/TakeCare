@@ -169,7 +169,7 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                                             recipient: recipient,
                                             tasks: tasks,
                                             listImage: listImage,
-                                            recipientNotifications: list?.hasRecipientTaskNotifications ?? false,
+                                            hasRecipientTaskNotifications: list?.hasRecipientTaskNotifications ?? false,
                                             sendInvites: list?.recipientID != recipient?.id,
                                             shouldUpdateImage: didChangeImage
                                         )

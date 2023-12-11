@@ -94,7 +94,7 @@ import FirebaseFirestoreSwift
         recipient: User?,
         tasks: [ListTask],
         listImage: Image?,
-        recipientNotifications: Bool,
+        hasRecipientTaskNotifications: Bool,
         sendInvites: Bool,
         shouldUpdateImage: Bool = true
     ) async throws {
@@ -120,7 +120,7 @@ import FirebaseFirestoreSwift
             recipientID: recipient?.id,
             tasks: tasks,
             photoURL: photoURL,
-            hasRecipientTaskNotifications: recipient == nil ? false : recipientNotifications
+            hasRecipientTaskNotifications: recipient == nil ? false : hasRecipientTaskNotifications
         )
         
         try docRef.setData(from: list)

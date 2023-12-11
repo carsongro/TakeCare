@@ -205,14 +205,14 @@ import UserNotifications
         return updatedList
     }
     
-    func updateListActive(recipientNotifications: Bool, list: TakeCareList) {
+    func updateListActive(hasRecipientTaskNotifications: Bool, list: TakeCareList) {
         Task {
             guard let id = list.id else { return }
             
             do {
-                try await Firestore.firestore().collection("lists").document(id).updateData(["recipientNotifications" : recipientNotifications])
+                try await Firestore.firestore().collection("lists").document(id).updateData(["hasRecipientTaskNotifications" : hasRecipientTaskNotifications])
                 
-                if recipientNotifications {
+                if hasRecipientTaskNotifications {
                     await localNotificationHelper.handleListNotifications(list: list)
                 } else {
                     await localNotificationHelper.removeNotifications(for: list)
