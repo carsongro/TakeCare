@@ -18,7 +18,6 @@ struct ListRow: View {
                 .placeholder {
                     ZStack {
                         Rectangle()
-                            .listRowImage()
                             .foregroundStyle(Color(.secondarySystemBackground))
                         
                         Image(systemName: "list.bullet")

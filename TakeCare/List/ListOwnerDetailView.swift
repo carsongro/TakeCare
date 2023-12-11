@@ -137,7 +137,11 @@ struct ListOwnerDetailView: View, @unchecked Sendable {
                                 dismiss()
                             }
                         }
-                        .confirmationDialog("Are you sure you want to discard your changes?", isPresented: $showingDismissDialog) {
+                        .confirmationDialog(
+                            "Are you sure you want to discard your changes?",
+                            isPresented: $showingDismissDialog,
+                            titleVisibility: .visible
+                        ) {
                             Button("Discard Changes", role: .destructive) {
                                 dismiss()
                             }

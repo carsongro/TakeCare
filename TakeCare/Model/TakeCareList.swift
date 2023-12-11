@@ -6,11 +6,11 @@
 //
 
 import Firebase
-import FirebaseFirestoreSwift
+@preconcurrency import FirebaseFirestoreSwift
 import Foundation
 
 
-struct TakeCareList: Codable, Hashable, Identifiable, @unchecked Sendable {
+struct TakeCareList: Codable, Hashable, Identifiable, Sendable, Equatable {
     @DocumentID var id: String?
     let ownerID: String
     let ownerName: String
@@ -22,7 +22,13 @@ struct TakeCareList: Codable, Hashable, Identifiable, @unchecked Sendable {
     let hasRecipientTaskNotifications: Bool
     
     static func == (lhs: TakeCareList, rhs: TakeCareList) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id &&
+        lhs.name == rhs.name &&
+        lhs.description == rhs.description &&
+        lhs.recipientID == rhs.recipientID &&
+        lhs.tasks == rhs.tasks &&
+        lhs.photoURL == rhs.photoURL &&
+        lhs.hasRecipientTaskNotifications == rhs.hasRecipientTaskNotifications
     }
 
     func hash(into hasher: inout Hasher) {

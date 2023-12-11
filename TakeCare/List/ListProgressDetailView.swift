@@ -18,7 +18,7 @@ struct ListProgressDetailView: View {
     
     @State private var showingEditList = false
     @State private var showingErrorAlert = false
-    @State private var showingDeleteAlert = false
+    @State private var showingDeleteConfirmation = false
     
     var body: some View {
         GeometryReader { proxy in
@@ -50,13 +50,15 @@ struct ListProgressDetailView: View {
                 .padding(.bottom)
                 .listRowSeparator(.hidden)
             }
-            .onAppear {
+            .task(id: list) {
                 Task {
                     if let recipientID = list.recipientID {
                         let recipient = await AuthModel.shared.fetchUser(id: recipientID)
                         withAnimation {
                             self.recipient = recipient
                         }
+                    } else {
+                        recipient = nil
                     }
                 }
             }
@@ -74,7 +76,7 @@ struct ListProgressDetailView: View {
                     Divider()
                     
                     Button("Delete List", systemImage: "trash", role: .destructive) {
-                        showingDeleteAlert = true
+                        showingDeleteConfirmation = true
                     }
                 }
                 .accessibilityLabel(Text("More"))
@@ -96,12 +98,13 @@ struct ListProgressDetailView: View {
                         .presentationDetents([.medium, .large])
                 }
             }
-            .alert(
+            .confirmationDialog(
                 "Are you sure you want to delete this list?",
-                isPresented: $showingDeleteAlert
+                isPresented: $showingDeleteConfirmation,
+                titleVisibility: .visible
             ) {
                 Button("Cancel", role: .cancel) { }
-                Button("Delete", role: .destructive) {
+                Button("Delete List", role: .destructive) {
                     Task {
                         do {
                             dismiss()

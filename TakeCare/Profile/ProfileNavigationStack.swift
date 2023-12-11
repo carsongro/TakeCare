@@ -56,7 +56,10 @@ struct ProfileNavigationStack: View {
                             }
                         }
                         .accessibilityLabel("Change profile image")
-                        .confirmationDialog("Profile Image", isPresented: $showingProfileImageConfirmation) {
+                        .confirmationDialog(
+                            "Profile Image",
+                            isPresented: $showingProfileImageConfirmation
+                        ) {
                             Button("Take Photo") {
                                 showingCamera = true
                             }

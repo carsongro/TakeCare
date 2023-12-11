@@ -61,6 +61,8 @@ import UserNotifications
                     // The user could get here if they delete the app without signing out then reinstalled it
                     getNotificationPermissionIfNotDetermined()
                 }
+                
+                TakeCareShortcuts.updateAppShortcutParameters()
             }
             
         } catch {
