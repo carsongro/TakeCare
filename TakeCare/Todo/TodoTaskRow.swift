@@ -10,8 +10,20 @@ import SwiftUI
 struct TodoTaskRow: View {
     
     var task: ListTask
-    @State var isCompleted: Bool
+    @State private var isCompleted: Bool
     let interactionDisabled: Bool // Provides a way to disable interaction without a visual indication of being disabled
+    
+    init(
+        task: ListTask,
+        isCompleted: Bool,
+        interactionDisabled: Bool,
+        tapHandler: ((Bool) -> Void)? = nil
+    ) {
+        self.task = task
+        _isCompleted = State(initialValue: isCompleted)
+        self.interactionDisabled = interactionDisabled
+        self.tapHandler = tapHandler
+    }
     
     var tapHandler: ((Bool) -> Void)?
     
@@ -33,19 +45,11 @@ struct TodoTaskRow: View {
         var isCompleted: Bool
         
         var body: some View {
-            if isCompleted {
-                Image(systemName: "checkmark.circle.fill")
-                    .resizable()
-                    .frame(width: 25, height: 25)
-                    .foregroundStyle(.accent)
-                    .accessibilityLabel(Text("Completed"))
-            } else {
-                Image(systemName: "circle")
-                    .resizable()
-                    .frame(width: 25, height: 25)
-                    .foregroundStyle(.accent)
-                    .accessibilityLabel(Text("Not complete"))
-            }
+            Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+                .resizable()
+                .frame(width: 25, height: 25)
+                .foregroundStyle(.accent)
+                .accessibilityLabel(Text(isCompleted ? "Completed" : "Not complete"))
         }
     }
     

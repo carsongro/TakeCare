@@ -20,8 +20,11 @@ struct TodoNavigationStack: View {
                 .navigationTitle("To Do")
                 .navigationDestination(for: TakeCareList.self) { takeCareList in
                     if let index = todoModel.lists.firstIndex(where: { $0.id == takeCareList.id }) {
-                        TodoDetailView(list: $todoModel.lists[index])
-                            .environment(todoModel)
+                        TodoDetailView(
+                            list: $todoModel.lists[index],
+                            hasRecipientTaskNotifications: todoModel.lists[index].hasRecipientTaskNotifications
+                        )
+                        .environment(todoModel)
                     }
                 }
         }

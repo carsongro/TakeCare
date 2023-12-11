@@ -17,6 +17,12 @@ struct TodoDetailView: View {
     @State private var showingRemoveAlert = false
     @State private var selectedUserId: String? = nil
     @State private var showUsersheet = false
+    @State private var hasRecipientTaskNotifications: Bool
+    
+    init(list: Binding<TakeCareList>, hasRecipientTaskNotifications: Bool) {
+        _list = list
+        _hasRecipientTaskNotifications = State(initialValue: hasRecipientTaskNotifications)
+    }
     
     var body: some View {
         GeometryReader { proxy in
@@ -43,6 +49,7 @@ struct TodoDetailView: View {
                     }
                 }
             }
+            .sensoryFeedback(.impact, trigger: hasRecipientTaskNotifications)
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
             .refreshable {
@@ -50,9 +57,10 @@ struct TodoDetailView: View {
             }
             .toolbar {
                 Button {
-                    todoModel.updateListActive(hasRecipientTaskNotifications: !list.hasRecipientTaskNotifications, list: list)
+                    hasRecipientTaskNotifications.toggle()
+                    todoModel.updateListActive(hasRecipientTaskNotifications: hasRecipientTaskNotifications, list: list)
                 } label: {
-                    Label("Notifcations", systemImage: list.hasRecipientTaskNotifications ? "bell.fill" : "bell.slash.fill")
+                    Label("Notifcations", systemImage: hasRecipientTaskNotifications ? "bell.fill" : "bell.slash.fill")
                 }
                 
                 Menu("Options", systemImage: "ellipsis.circle") {
@@ -86,7 +94,10 @@ struct TodoDetailView: View {
 
 #Preview {
     NavigationStack {
-        TodoDetailView(list: .constant(PreviewData.previewTakeCareList))
-            .environment(TodoModel())
+        TodoDetailView(
+            list: .constant(PreviewData.previewTakeCareList),
+            hasRecipientTaskNotifications: PreviewData.previewTakeCareList.hasRecipientTaskNotifications
+        )
+        .environment(TodoModel())
     }
 }
