@@ -31,7 +31,10 @@ import UserNotifications
     }
     
     @objc private func userSignedIn() {
-        getNotificationPermissionIfNotDetermined()
+        Task {
+            await fetchLists(animated: true, isInitialFetch: true)
+            getNotificationPermissionIfNotDetermined()
+        }
     }
     
     func refresh() {

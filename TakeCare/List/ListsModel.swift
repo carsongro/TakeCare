@@ -20,6 +20,14 @@ import FirebaseFirestoreSwift
     }
 
     init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(userSignedIn), name: Notification.Name("UserSignedIn"), object: nil)
+        Task {
+            await fetchLists(isInitialFetch: true)
+        }
+    }
+    
+    @objc
+    private func userSignedIn() {
         Task {
             await fetchLists(isInitialFetch: true)
         }
