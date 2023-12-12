@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Firebase
-import FirebaseFirestoreSwift
 import UserNotifications
 
 /// A model for todo lists
@@ -23,11 +22,24 @@ import UserNotifications
         case taskNotFound
     }
     
+    let db = Firestore.firestore()
+    
+    private var listsQuery: Query!
+    private var loadedDocuments = [QueryDocumentSnapshot]()
+    private let pageLimit = 25
+    var isPaginating = false
+    
     init() {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(userSignedIn),
             name: Notification.Name("UserSignedIn"),
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(userSignedOut),
+            name: Notification.Name("UserSignedOut"),
             object: nil
         )
         Task { @MainActor in
@@ -38,46 +50,53 @@ import UserNotifications
                 object: nil
             )
         }
+        
         Task {
-            await fetchLists(animated: true, isInitialFetch: true)
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            
+            listsQuery = db.collection("lists").whereField("recipientID", isEqualTo: uid).limit(to: pageLimit)
+            await fetchLists(animated: true)
         }
     }
     
     @objc private func userSignedIn() {
         Task {
-            await fetchLists(animated: true, isInitialFetch: true)
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            
+            listsQuery = db.collection("lists").whereField("recipientID", isEqualTo: uid).limit(to: pageLimit)
+            await fetchLists(animated: true)
+            
             getNotificationPermissionIfNotDetermined()
         }
+    }
+    
+    @objc private func userSignedOut() {
+        lists.removeAll()
+        loadedDocuments.removeAll()
     }
     
     @objc
     private func willEnterForground() {
         Task {
-            await fetchLists(isInitialFetch: true)
+            await refreshTodoLists()
         }
     }
     
-    func refresh() {
-        Task {
-            await fetchLists(isInitialFetch: true)
-        }
-    }
-    
-    func fetchLists(animated: Bool = true, isInitialFetch: Bool = false) async {
+    func fetchLists(animated: Bool = true) async {
         defer { didFetchLists = true }
-        guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
-            let updatedLists = try await Firestore.firestore().collection("lists").whereField("recipientID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
+            let queryDocuments = try await listsQuery.getDocuments().documents
+            loadedDocuments.append(contentsOf: queryDocuments)
+            
+            let updatedLists = try queryDocuments.compactMap { try $0.data(as: TakeCareList.self) }
             
             Task { @MainActor in
                 withAnimation(animated ? .default : .none) {
-                    self.lists = updatedLists
+                    self.lists.append(contentsOf: updatedLists)
                 }
                 
-                if isInitialFetch {
-                    try await updateDailyTasksCompletion()
-                }
+                try await updateDailyTasksCompletion()
                 correctLocalNotificationsIfNeeded()
                 
                 if !lists.isEmpty {
@@ -93,10 +112,46 @@ import UserNotifications
         }
     }
     
+    func paginate() async {
+        guard let last = loadedDocuments.last, !isPaginating, lists.count >= pageLimit, !lists.isEmpty else { return }
+        
+        isPaginating = true
+        defer { isPaginating = false }
+        
+        listsQuery = listsQuery.start(afterDocument: last)
+        await fetchLists(animated: true)
+    }
+    
+    func refreshTodoLists(animated: Bool = true, updatedDailyTasksCompletion: Bool = true) async {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        do {
+            let updatedLists = try await db.collection("lists")
+                .whereField("recipientID", isEqualTo: uid)
+                .limit(to: lists.count)
+                .getDocuments()
+                .documents
+                .compactMap { try $0.data(as: TakeCareList.self) }
+            
+            Task { @MainActor in
+                withAnimation(animated ? .default : .none) {
+                    self.lists = updatedLists
+                }
+                
+                if updatedDailyTasksCompletion {
+                    try await updateDailyTasksCompletion()
+                    correctLocalNotificationsIfNeeded()
+                }
+            }
+        } catch {
+            
+        }
+    }
+    
     /// A function that resets the completion status of tasks that repeat daily
     private func updateDailyTasksCompletion() async throws {
         try await FirebaseManager.shared.updateDailyTasksCompletion(lists: lists)
-        await fetchLists()
+        await refreshTodoLists(updatedDailyTasksCompletion: false)
     }
     
     /// A function for updating the completion status of a task
@@ -139,7 +194,7 @@ import UserNotifications
             hasRecipientTaskNotifications: list.hasRecipientTaskNotifications
         )
         
-        let docRef = Firestore.firestore().collection("lists").document(listID)
+        let docRef = db.collection("lists").document(listID)
         try docRef.setData(from: updatedList)
         
         Task {
@@ -162,7 +217,7 @@ import UserNotifications
             guard let id = list.id else { return }
             
             do {
-                try await Firestore.firestore().collection("lists").document(id).updateData(["hasRecipientTaskNotifications" : hasRecipientTaskNotifications])
+                try await db.collection("lists").document(id).updateData(["hasRecipientTaskNotifications" : hasRecipientTaskNotifications])
                 
                 if hasRecipientTaskNotifications {
                     await localNotificationHelper.handleListNotifications(list: list)
@@ -170,7 +225,7 @@ import UserNotifications
                     await localNotificationHelper.removeNotifications(for: list)
                 }
                 
-                await fetchLists(animated: false)
+                await refreshTodoLists(animated: false)
             } catch {
                 print(error.localizedDescription)
             }
@@ -191,9 +246,9 @@ import UserNotifications
             hasRecipientTaskNotifications: false
         )
         
-        try Firestore.firestore().collection("lists").document(id).setData(from: updatedList)
+        try db.collection("lists").document(id).setData(from: updatedList)
         
-        await fetchLists()
+        await refreshTodoLists()
         
         correctLocalNotificationsIfNeeded()
         

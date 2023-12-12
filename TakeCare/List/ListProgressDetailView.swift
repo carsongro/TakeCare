@@ -63,7 +63,7 @@ struct ListProgressDetailView: View {
                 }
             }
             .refreshable {
-                await listsModel.fetchLists()
+                await listsModel.refreshLists(updateTasksCompletion: true)
             }
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
@@ -80,6 +80,23 @@ struct ListProgressDetailView: View {
                     }
                 }
                 .accessibilityLabel(Text("More"))
+                .confirmationDialog(
+                    "Are you sure you want to delete this list?",
+                    isPresented: $showingDeleteConfirmation,
+                    titleVisibility: .visible
+                ) {
+                    Button("Cancel", role: .cancel) { }
+                    Button("Delete List", role: .destructive) {
+                        Task {
+                            do {
+                                dismiss()
+                                try await listsModel.deleteList(list)
+                            } catch {
+                                showingErrorAlert = true
+                            }
+                        }
+                    }
+                }
             }
             .sheet(isPresented: $showingEditList) {
                 ListOwnerDetailView(mode: .edit, list: list)
@@ -96,23 +113,6 @@ struct ListProgressDetailView: View {
                 if let selectedUserID {
                     UserProfileView(userID: selectedUserID)
                         .presentationDetents([.medium, .large])
-                }
-            }
-            .confirmationDialog(
-                "Are you sure you want to delete this list?",
-                isPresented: $showingDeleteConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button("Cancel", role: .cancel) { }
-                Button("Delete List", role: .destructive) {
-                    Task {
-                        do {
-                            dismiss()
-                            try await listsModel.deleteList(list)
-                        } catch {
-                            showingErrorAlert = true
-                        }
-                    }
                 }
             }
             .alert(

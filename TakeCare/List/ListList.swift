@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListList: View {
+struct ListList: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
     @State private var showingCreateListForm = false
     
@@ -24,11 +24,13 @@ struct ListList: View {
                         .padding()
                 } else {
                     ListSearchResults()
+                    
+                    paginationIndicator
                 }
             }
         }
         .refreshable {
-            await listsModel.fetchLists(isInitialFetch: true)
+            await listsModel.refreshLists(updateTasksCompletion: true)
         }
         .searchable(text: $listsModel.searchText)
         .listStyle(.plain)
@@ -62,6 +64,19 @@ struct ListList: View {
         }
         .listRowSeparator(.hidden, edges: .top)
         .accessibilityLabel(Text("New List"))
+    }
+    
+    @ViewBuilder
+    var paginationIndicator: some View {
+        LazyVStack {
+            Color.clear
+                .onAppear {
+                    Task {
+                        await listsModel.paginate()
+                    }
+                }
+        }
+        .listRowSeparator(.hidden, edges: .bottom)
     }
 }
 

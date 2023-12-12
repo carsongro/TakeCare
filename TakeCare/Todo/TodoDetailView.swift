@@ -53,7 +53,7 @@ struct TodoDetailView: View {
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
             .refreshable {
-                todoModel.refresh()
+                await todoModel.refreshTodoLists(animated: true)
             }
             .toolbar {
                 Button {
@@ -73,20 +73,20 @@ struct TodoDetailView: View {
                     }
                 }
                 .accessibilityLabel(Text("More"))
-            }
-            .confirmationDialog(
-                "Are you sure you want to delete this list from your To Do?",
-                isPresented: $showingRemoveConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button("Cancel", role: .cancel) { }
-                Button("Delete List", role: .destructive) {
-                    Task {
-                        do {
-                            try await todoModel.removeTodoList(list: list)
-                            dismiss()
-                        } catch {
-                            showingErrorAlert = true
+                .confirmationDialog(
+                    "Are you sure you want to delete this list from your To Do?",
+                    isPresented: $showingRemoveConfirmation,
+                    titleVisibility: .visible
+                ) {
+                    Button("Cancel", role: .cancel) { }
+                    Button("Delete List", role: .destructive) {
+                        Task {
+                            do {
+                                try await todoModel.removeTodoList(list: list)
+                                dismiss()
+                            } catch {
+                                showingErrorAlert = true
+                            }
                         }
                     }
                 }

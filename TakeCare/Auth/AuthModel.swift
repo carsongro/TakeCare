@@ -7,7 +7,6 @@
 
 import SwiftUI
 @preconcurrency import Firebase
-import FirebaseFirestoreSwift
 import UserNotifications
 
 protocol TextFieldProtocol {
@@ -75,6 +74,8 @@ final class AuthModel: @unchecked Sendable {
     
     func signOut() throws {
         try Auth.auth().signOut()
+        
+        NotificationCenter.default.post(name: Notification.Name("UserSignedOut"), object: nil)
         
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         
