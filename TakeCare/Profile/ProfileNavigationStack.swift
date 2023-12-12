@@ -23,7 +23,7 @@ struct ProfileNavigationStack: View {
     }
     @State private var showingErrorAlert = false
     @State private var showingSignOutConfirmation = false
-    @State private var showingRemoveImageConfirmation = false
+    @State private var showingDeleteImageConfirmation = false
     @State private var showingProfileImageConfirmation = false
     @State private var showingPhotosPicker = false
     @State private var isUploadingImage = false
@@ -55,7 +55,7 @@ struct ProfileNavigationStack: View {
                                 }
                             }
                         }
-                        .accessibilityLabel("Change profile image")
+                        .accessibilityLabel("Change profile photo")
                         .confirmationDialog(
                             "Profile Image",
                             isPresented: $showingProfileImageConfirmation
@@ -69,8 +69,34 @@ struct ProfileNavigationStack: View {
                             }
                             
                             if authModel.currentUser?.photoURL != nil {
-                                Button("Remove profile image") {
-                                    showingRemoveImageConfirmation = true
+                                Button("Delete Profile Photo") {
+                                    showingDeleteImageConfirmation = true
+                                }
+                            }
+                        }
+                        .confirmationDialog(
+                            "Are you sure you want to delete your profile photo?",
+                            isPresented: $showingDeleteImageConfirmation,
+                            titleVisibility: .visible
+                        ) {
+                            Button("Cancel", role: .cancel) { }
+                            Button("Delete Photo", role: .destructive) {
+                                Task {
+                                    defer {
+                                        withAnimation {
+                                            isUploadingImage = false
+                                        }
+                                    }
+                                    do {
+                                        withAnimation {
+                                            isUploadingImage = true
+                                        }
+                                        try await authModel.removeProfileImage()
+                                        profileImageItem = nil
+                                    } catch {
+                                        print(error.localizedDescription)
+                                        errorAlertText = "There was an error remove your profile image."
+                                    }
                                 }
                             }
                         }
@@ -151,28 +177,6 @@ struct ProfileNavigationStack: View {
                             try authModel.signOut()
                         } catch {
                             errorAlertText = "There was an error signing out."
-                        }
-                    }
-                }
-                .alert("Are you sure you want to remove your profile photo?", isPresented: $showingRemoveImageConfirmation) {
-                    Button("Cancel", role: .cancel) { }
-                    Button("Remove", role: .destructive) {
-                        Task {
-                            defer {
-                                withAnimation {
-                                    isUploadingImage = false
-                                }
-                            }
-                            do {
-                                withAnimation {
-                                    isUploadingImage = true
-                                }
-                                try await authModel.removeProfileImage()
-                                profileImageItem = nil
-                            } catch {
-                                print(error.localizedDescription)
-                                errorAlertText = "There was an error remove your profile image."
-                            }
                         }
                     }
                 }

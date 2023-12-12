@@ -35,6 +35,27 @@ struct ListSearchResults: View, @unchecked Sendable {
                             }
                         }
                     }
+                    .confirmationDialog(
+                        "Are you sure you want to delete this list?",
+                        isPresented: $showingRemoveConfirmation,
+                        titleVisibility: .visible,
+                        presenting: contextList
+                    ) { list in
+                        Button("Cancel", role: .cancel) {
+                            contextList = nil
+                        }
+                        Button("Delete List", role: .destructive) {
+                            Task {
+                                do {
+                                    try await listsModel.deleteList(list)
+                                    contextList = nil
+                                } catch {
+                                    showingErrorAlert = true
+                                    contextList = nil
+                                }
+                            }
+                        }
+                    }
             }
         }
         .onChange(of: contextList, { oldValue, newValue in
@@ -42,27 +63,6 @@ struct ListSearchResults: View, @unchecked Sendable {
                 showingRemoveConfirmation = true
             }
         })
-        .confirmationDialog(
-            "Are you sure you want to delete this list?",
-            isPresented: $showingRemoveConfirmation,
-            titleVisibility: .visible, 
-            presenting: contextList
-        ) { list in
-            Button("Cancel", role: .cancel) {
-                contextList = nil
-            }
-            Button("Delete List", role: .destructive) {
-                Task {
-                    do {
-                        try await listsModel.deleteList(list)
-                        contextList = nil
-                    } catch {
-                        showingErrorAlert = true
-                        contextList = nil
-                    }
-                }
-            }
-        }
         .alert("An error occured", isPresented: $showingErrorAlert) { }
         
         if listedLists.isEmpty && !listsModel.searchText.isEmpty {

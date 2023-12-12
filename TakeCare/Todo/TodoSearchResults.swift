@@ -33,6 +33,27 @@ struct TodoSearchResults: View {
                             contextList = list
                         }
                     }
+                    .confirmationDialog(
+                        "Are you sure you want to delete this list from your To Do?",
+                        isPresented: $showingRemoveConfirmation,
+                        titleVisibility: .visible,
+                        presenting: contextList
+                    ) { list in
+                        Button("Cancel", role: .cancel) {
+                            contextList = nil
+                        }
+                        Button("Delete List", role: .destructive) {
+                            Task {
+                                do {
+                                    try await todoModel.removeTodoList(list: list)
+                                    contextList = nil
+                                } catch {
+                                    showingErrorAlert = true
+                                    contextList = nil
+                                }
+                            }
+                        }
+                    }
             }
         }
         .onChange(of: contextList, { oldValue, newValue in
@@ -40,27 +61,6 @@ struct TodoSearchResults: View {
                 showingRemoveConfirmation = true
             }
         })
-        .confirmationDialog(
-            "Are you sure you want to delete this list from your To Do?",
-            isPresented: $showingRemoveConfirmation,
-            titleVisibility: .visible, 
-            presenting: contextList
-        ) { list in
-            Button("Cancel", role: .cancel) {
-                contextList = nil
-            }
-            Button("Delete List", role: .destructive) {
-                Task {
-                    do {
-                        try await todoModel.removeTodoList(list: list)
-                        contextList = nil
-                    } catch {
-                        showingErrorAlert = true
-                        contextList = nil
-                    }
-                }
-            }
-        }
         .alert("An error occured", isPresented: $showingErrorAlert) { }
         
         if listedLists.isEmpty && !todoModel.searchText.isEmpty {
