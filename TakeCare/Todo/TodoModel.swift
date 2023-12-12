@@ -209,7 +209,18 @@ import UserNotifications
             }
         }
         
-        await refreshTodoLists(animated: true)
+        if let newList = try await Firestore.firestore().collection("lists")
+            .whereField(FieldPath.documentID(), in: [listID])
+            .getDocuments()
+            .documents
+            .compactMap({ try $0.data(as: TakeCareList.self) }).first,
+           let idx = lists.firstIndex(where: { $0.id == listID }) {
+            withAnimation {
+                lists[idx] = newList
+            }
+        } else {
+            await refreshTodoLists(animated: true)
+        }
         
         return updatedList
     }
