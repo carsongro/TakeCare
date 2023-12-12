@@ -217,7 +217,7 @@
 				B58A14002AC520A20045D191 /* TakeCareApp.swift */,
 				B5E643C72AC7924B0056A111 /* ContentView.swift */,
 				B58A14072AC520A30045D191 /* Preview Content */,
-				B83ED9142B21540D00636DF3 /* APIClient */,
+				B83ED9142B21540D00636DF3 /* FirebaseManager */,
 				B835D11C2B1ED65100FBDEB3 /* Shortcuts */,
 				B835D1172B1ED34700FBDEB3 /* Intents */,
 				B5BC6C9A2ACB76F700D1F842 /* Navigation */,
@@ -317,12 +317,12 @@
 			path = Entities;
 			sourceTree = "<group>";
 		};
-		B83ED9142B21540D00636DF3 /* APIClient */ = {
+		B83ED9142B21540D00636DF3 /* FirebaseManager */ = {
 			isa = PBXGroup;
 			children = (
 				B83ED9152B21541E00636DF3 /* FirebaseManager.swift */,
 			);
-			path = APIClient;
+			path = FirebaseManager;
 			sourceTree = "<group>";
 		};
 		B88C29CB2B159BB200165276 /* Camera */ = {

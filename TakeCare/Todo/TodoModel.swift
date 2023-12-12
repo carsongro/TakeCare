@@ -95,70 +95,8 @@ import UserNotifications
     
     /// A function that resets the completion status of tasks that repeat daily
     private func updateDailyTasksCompletion() async throws {
-        var needsCommit = false
-        
-        let db = Firestore.firestore()
-        let batch = db.batch()
-        
-        for list in lists {
-            var updatedTasks = [ListTask]()
-            
-            for task in list.tasks {
-                var isCompleted = task.isCompleted
-                
-                if let lastCompletionDateCalendar = task.lastCompletionDate,
-                   !Calendar.current.isDateInToday(lastCompletionDateCalendar),
-                   task.repeatInterval == .daily {
-                    needsCommit = true
-                    isCompleted = false
-                }
-                
-                let updatedTask = ListTask(
-                    id: task.id,
-                    title: task.title,
-                    notes: task.notes,
-                    completionDate: task.completionDate,
-                    repeatInterval: task.repeatInterval,
-                    isCompleted: isCompleted,
-                    lastCompletionDate: task.lastCompletionDate
-                )
-                
-                updatedTasks.append(updatedTask)
-            }
-            
-            let updatedList = TakeCareList(
-                ownerID: list.ownerID,
-                ownerName: list.ownerName,
-                name: list.name,
-                description: list.description,
-                recipientID: list.recipientID,
-                tasks: updatedTasks,
-                photoURL: list.photoURL,
-                hasRecipientTaskNotifications: list.hasRecipientTaskNotifications
-            )
-            
-            guard let id = list.id else { continue }
-            
-            let listRef = db.collection("lists").document(id)
-            
-            try batch.setData(from: updatedList, forDocument: listRef)
-        }
-        
-        guard needsCommit else { return }
-        
-        let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
-            batch.commit { error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(with: .success(true))
-                }
-            }
-        }
-        
-        if result {
-            await fetchLists()
-        }
+        try await FirebaseManager.shared.updateDailyTasksCompletion(lists: lists)
+        await fetchLists()
     }
     
     /// A function for updating the completion status of a task
@@ -219,7 +157,7 @@ import UserNotifications
         return updatedList
     }
     
-    func updateListActive(hasRecipientTaskNotifications: Bool, list: TakeCareList) {
+    func updateListRecipientNotifications(hasRecipientTaskNotifications: Bool, list: TakeCareList) {
         Task {
             guard let id = list.id else { return }
             

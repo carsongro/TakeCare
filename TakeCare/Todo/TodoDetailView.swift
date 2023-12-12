@@ -58,7 +58,7 @@ struct TodoDetailView: View {
             .toolbar {
                 Button {
                     hasRecipientTaskNotifications.toggle()
-                    todoModel.updateListActive(hasRecipientTaskNotifications: hasRecipientTaskNotifications, list: list)
+                    todoModel.updateListRecipientNotifications(hasRecipientTaskNotifications: hasRecipientTaskNotifications, list: list)
                 } label: {
                     Label("Notifcations", systemImage: hasRecipientTaskNotifications ? "bell.fill" : "bell.slash.fill")
                 }

@@ -19,7 +19,7 @@ actor LocalNotificationHelper {
 
         let requests = await getExistingRequestsIDs()
         
-        var idsToRemove = Array(requests.filter { !allTodoTasksIDs.contains($0) || invalidTaskIDs.contains($0) })
+        let idsToRemove = Array(requests.filter { !allTodoTasksIDs.contains($0) || invalidTaskIDs.contains($0) })
         
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: idsToRemove)
     }
