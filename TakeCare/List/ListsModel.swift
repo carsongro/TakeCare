@@ -72,7 +72,7 @@ import FirebaseFirestoreSwift
     @objc
     private func willEnterForground() {
         Task {
-            await fetchLists()
+            await refreshLists(updateTasksCompletion: true)
         }
     }
     

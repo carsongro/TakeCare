@@ -78,7 +78,7 @@ import UserNotifications
     @objc
     private func willEnterForground() {
         Task {
-            await refreshTodoLists()
+            await refreshTodoLists(updatedDailyTasksCompletion: true)
         }
     }
     
