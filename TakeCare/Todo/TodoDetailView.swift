@@ -36,12 +36,11 @@ struct TodoDetailView: View {
                     TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
                         Task {
                             do {
-                                try todoModel.updateListTask(
+                                try await todoModel.updateListTask(
                                     list: list,
                                     task: task,
                                     isCompleted: isCompleted
                                 )
-                                await todoModel.fetchLists(animated: true)
                             } catch {
                                 showingErrorAlert = true
                             }

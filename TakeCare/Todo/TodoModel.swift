@@ -111,7 +111,7 @@ import UserNotifications
         list: TakeCareList,
         task: ListTask,
         isCompleted: Bool
-    ) throws -> TakeCareList {
+    ) async throws -> TakeCareList {
         guard let listID = list.id else { throw TodoError.listNotFound }
         
         let updatedTask = ListTask(
@@ -152,6 +152,19 @@ import UserNotifications
                 }
             case .daily: break
             }
+        }
+        
+        if let newList = try await Firestore.firestore().collection("lists")
+            .whereField(FieldPath.documentID(), in: [listID])
+            .getDocuments()
+            .documents
+            .compactMap({ try $0.data(as: TakeCareList.self) }).first,
+           let idx = lists.firstIndex(where: { $0.id == listID }) {
+            withAnimation {
+                lists[idx] = newList
+            }
+        } else {
+            await fetchLists(animated: true)
         }
         
         return updatedList
