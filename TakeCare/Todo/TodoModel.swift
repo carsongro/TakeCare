@@ -166,7 +166,7 @@ import UserNotifications
         list: TakeCareList,
         task: ListTask,
         isCompleted: Bool
-    ) throws -> TakeCareList {
+    ) async throws -> TakeCareList {
         guard let listID = list.id else { throw TodoError.listNotFound }
         
         let updatedTask = ListTask(
@@ -208,6 +208,8 @@ import UserNotifications
             case .daily: break
             }
         }
+        
+        await refreshTodoLists(animated: true)
         
         return updatedList
     }
