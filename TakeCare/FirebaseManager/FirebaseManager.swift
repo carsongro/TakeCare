@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Firebase
+@preconcurrency import Firebase
 import IoImage
 
 final class FirebaseManager: Sendable {
@@ -14,14 +14,17 @@ final class FirebaseManager: Sendable {
     
     private init() { }
     
+    private let db = Firestore.firestore()
+    
     func getList(for id: String) async throws -> TakeCareList {
-        try await Firestore.firestore().collection("lists").document(id).getDocument().data(as: TakeCareList.self)
+        try await db.collection("lists").document(id).getDocument().data(as: TakeCareList.self)
     }
     
-    func updateDailyTasksCompletion(lists: [TakeCareList]) async throws {
+    @discardableResult
+    func updateDailyTasksCompletion(lists: [TakeCareList]) async throws -> Bool {
         var needsCommit = false
         
-        let db = Firestore.firestore()
+        let db = db
         let batch = db.batch()
         
         for list in lists {
@@ -68,7 +71,7 @@ final class FirebaseManager: Sendable {
             try batch.setData(from: updatedList, forDocument: listRef)
         }
         
-        guard needsCommit else { return }
+        guard needsCommit else { return needsCommit }
         
         let _ = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
             batch.commit { error in
@@ -79,6 +82,8 @@ final class FirebaseManager: Sendable {
                 }
             }
         }
+        
+        return needsCommit
     }
 }
 
@@ -86,21 +91,32 @@ final class FirebaseManager: Sendable {
 
 extension FirebaseManager {
     func lists(for identifiers: [String]) async throws -> [TakeCareList] {
-        try await Firestore.firestore().collection("lists").whereField(FieldPath.documentID(), in: identifiers).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
+        try await db.collection("lists")
+            .whereField(FieldPath.documentID(), in: identifiers)
+            .limit(to: 20)
+            .getDocuments()
+            .documents
+            .compactMap { try $0.data(as: TakeCareList.self) }
     }
     
     func userTodoLists() async throws -> [TakeCareList] {
         guard let uid = Auth.auth().currentUser?.uid else { return [] }
         
-        return try await Firestore.firestore().collection("lists").whereField("recipientID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
+        return try await db.collection("lists")
+            .whereField("recipientID", isEqualTo: uid)
+            .limit(to: 20)
+            .getDocuments()
+            .documents
+            .compactMap { try $0.data(as: TakeCareList.self) }
     }
     
     func userTodoWithNameMatching(matching string: String) async throws -> [TakeCareList] {
         guard let uid = Auth.auth().currentUser?.uid else { return [] }
         
-        return try await Firestore.firestore().collection("lists")
+        return try await db.collection("lists")
             .whereField("recipientID", isEqualTo: uid)
             .whereField("name", arrayContains: string)
+            .limit(to: 20)
             .getDocuments()
             .documents
             .compactMap { try $0.data(as: TakeCareList.self) }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TodoLists: View {
+struct TodoLists: View, @unchecked Sendable {
     @Environment(TodoModel.self) private var todoModel
     
     var body: some View {
@@ -29,14 +29,28 @@ struct TodoLists: View {
                     .listRowSeparator(.hidden)
                 } else {
                     TodoSearchResults()
+                    paginationIndicator
                 }
             }
         }
         .searchable(text: $todoModel.searchText)
         .listStyle(.plain)
         .refreshable {
-            todoModel.refresh()
+            await todoModel.refreshTodoLists()
         }
+    }
+    
+    @ViewBuilder
+    var paginationIndicator: some View {
+        LazyVStack {
+            Color.clear
+                .onAppear {
+                    Task {
+                        await todoModel.paginate()
+                    }
+                }
+        }
+        .listRowSeparator(.hidden, edges: .bottom)
     }
 }
 

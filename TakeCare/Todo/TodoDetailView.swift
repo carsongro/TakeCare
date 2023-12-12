@@ -52,7 +52,7 @@ struct TodoDetailView: View {
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
             .refreshable {
-                todoModel.refresh()
+                await todoModel.refreshTodoLists(animated: true)
             }
             .toolbar {
                 Button {

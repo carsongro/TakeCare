@@ -15,6 +15,13 @@ import FirebaseFirestoreSwift
     var searchText = ""
     var didFetchLists = false
     
+    let db = Firestore.firestore()
+    
+    private var listsQuery: Query!
+    private var loadedDocuments = [QueryDocumentSnapshot]()
+    private let pageLimit = 25
+    var isPaginating = false
+    
     enum UserSearchError: Error {
         case sameEmail
     }
@@ -24,6 +31,12 @@ import FirebaseFirestoreSwift
             self,
             selector: #selector(userSignedIn),
             name: Notification.Name("UserSignedIn"),
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(userSignedOut),
+            name: Notification.Name("UserSignedOut"),
             object: nil
         )
         Task { @MainActor in
@@ -36,49 +49,101 @@ import FirebaseFirestoreSwift
         }
         
         Task {
-            await fetchLists(isInitialFetch: true)
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            
+            listsQuery = db.collection("lists").whereField("ownerID", isEqualTo: uid).limit(to: pageLimit)
+            await fetchLists()
         }
+        
     }
     
     @objc
     private func userSignedIn() {
         Task {
-            await fetchLists(isInitialFetch: true)
+            await fetchLists()
         }
+    }
+    
+    @objc private func userSignedOut() {
+        lists.removeAll()
+        loadedDocuments.removeAll()
     }
     
     @objc
     private func willEnterForground() {
         Task {
-            await fetchLists(isInitialFetch: true)
+            await refreshLists(updateTasksCompletion: true)
         }
     }
     
-    func fetchLists(isInitialFetch: Bool = false) async {
+    func fetchLists() async {
         defer { didFetchLists = true }
-        guard let uid = Auth.auth().currentUser?.uid else { return }
         
         do {
-            let updatedLists = try await Firestore.firestore().collection("lists").whereField("ownerID", isEqualTo: uid).getDocuments().documents.compactMap { try $0.data(as: TakeCareList.self) }
-
+            let queryDocuments = try await listsQuery.getDocuments().documents
+            loadedDocuments.append(contentsOf: queryDocuments)
+            
+            let updatedLists = try queryDocuments.compactMap { try $0.data(as: TakeCareList.self) }
+            
             Task { @MainActor in
                 withAnimation {
-                    self.lists = updatedLists
+                    self.lists.append(contentsOf: updatedLists)
                 }
                 
-                if isInitialFetch {
-                    try await updateTasksCompletion()
-                }
+                try await updateTasksCompletion()
             }
         } catch {
             print(error.localizedDescription)
         }
     }
     
-    func createList(name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: Image?) async throws {
-        guard let ownerID = Auth.auth().currentUser?.uid else { return }
+    func paginate() async {
+        guard let last = loadedDocuments.last, !isPaginating, lists.count >= pageLimit, !lists.isEmpty else { return }
         
-        let docRef = Firestore.firestore().collection("lists").document()
+        isPaginating = true
+        defer { isPaginating = false }
+        
+        listsQuery = listsQuery.start(afterDocument: last)
+        await fetchLists()
+    }
+    
+    func refreshLists(updateTasksCompletion: Bool = true, didAddNewList: Bool = false) async {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        do {
+            let refreshQuery = db.collection("lists")
+                .whereField("ownerID", isEqualTo: uid)
+                .limit(to: lists.count + (didAddNewList ? 1 : 0))
+            
+            let queryDocuments = try await refreshQuery.getDocuments().documents
+            
+            if didAddNewList {
+                loadedDocuments.append(contentsOf: queryDocuments)
+            }
+            
+            let updatedLists = try await refreshQuery
+                .getDocuments()
+                .documents
+                .compactMap { try $0.data(as: TakeCareList.self) }
+            
+            Task { @MainActor in
+                withAnimation {
+                    self.lists = updatedLists
+                }
+                
+                if updateTasksCompletion {
+                    try await self.updateTasksCompletion()
+                }
+            }
+        } catch {
+            
+        }
+    }
+    
+    func createList(name: String, description: String?, recipient: User?, tasks: [ListTask], listImage: Image?) async throws {
+        guard let ownerID = Auth.auth().currentUser?.uid, tasks.count <= 50 else { return }
+        
+        let docRef = db.collection("lists").document()
         
         var photoURL: String? = nil
         if let image = listImage {
@@ -107,7 +172,7 @@ import FirebaseFirestoreSwift
         
         try docRef.setData(from: list)
         
-        await fetchLists()
+        await refreshLists(didAddNewList: true)
     }
     
     func updateList(
@@ -123,7 +188,7 @@ import FirebaseFirestoreSwift
     ) async throws {
         guard let ownerID = Auth.auth().currentUser?.uid else { return }
         
-        let docRef = Firestore.firestore().collection("lists").document(id)
+        let docRef = db.collection("lists").document(id)
         
         var photoURL: String? = if let originalPhotoURL = lists.first(where: { $0.id == id })?.photoURL {
             originalPhotoURL
@@ -148,7 +213,7 @@ import FirebaseFirestoreSwift
         
         try docRef.setData(from: list)
         
-        await fetchLists(isInitialFetch: true)
+        await refreshLists()
     }
     
     func deleteList(_ list: TakeCareList) async throws {
@@ -158,21 +223,22 @@ import FirebaseFirestoreSwift
             try await FirebaseImageManager.shared.deleteImage(name: id, path: .list_images)
         }
         
-        let docRef = Firestore.firestore().collection("lists").document(id)
+        let docRef = db.collection("lists").document(id)
         try await docRef.delete()
         
-        await fetchLists()
+        await refreshLists()
     }
     
     func searchUser(email: String) async throws -> [User] {
         guard email != Auth.auth().currentUser?.email else { throw UserSearchError.sameEmail }
-        let users = try await Firestore.firestore().collection("users").whereField("email", isEqualTo: email.lowercased()).getDocuments().documents.compactMap { try $0.data(as: User.self) }
+        let users = try await db.collection("users").whereField("email", isEqualTo: email.lowercased()).getDocuments().documents.compactMap { try $0.data(as: User.self) }
         return users
     }
     
     /// A function that resets the completion status of tasks that repeat daily
     private func updateTasksCompletion() async throws {
-        try await FirebaseManager.shared.updateDailyTasksCompletion(lists: lists)
-        await fetchLists()
+        if try await FirebaseManager.shared.updateDailyTasksCompletion(lists: lists) {
+            await refreshLists(updateTasksCompletion: false)
+        }
     }
 }

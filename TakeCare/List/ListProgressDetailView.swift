@@ -63,7 +63,7 @@ struct ListProgressDetailView: View {
                 }
             }
             .refreshable {
-                await listsModel.fetchLists()
+                await listsModel.refreshLists(updateTasksCompletion: true)
             }
             .listStyle(.plain)
             .navigationBarTitleDisplayMode(.inline)
