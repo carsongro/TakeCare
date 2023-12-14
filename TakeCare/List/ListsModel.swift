@@ -118,7 +118,7 @@ import FirebaseFirestoreSwift
             let queryDocuments = try await refreshQuery.getDocuments().documents
             
             if didAddNewList {
-                loadedDocuments.append(contentsOf: queryDocuments)
+                loadedDocuments = queryDocuments
             }
             
             let updatedLists = try await refreshQuery
