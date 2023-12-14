@@ -25,7 +25,7 @@ import FirebaseFirestoreSwift
     enum UserSearchError: Error {
         case sameEmail
     }
-
+    
     init() {
         NotificationCenter.default.addObserver(
             self,
@@ -98,7 +98,12 @@ import FirebaseFirestoreSwift
     }
     
     func paginate() async {
-        guard let last = loadedDocuments.last, !isPaginating, lists.count >= pageLimit, !lists.isEmpty else { return }
+        guard let last = loadedDocuments.last,
+              !isPaginating,
+              lists.count >= pageLimit,
+              !lists.isEmpty else {
+            return
+        }
         
         isPaginating = true
         defer { isPaginating = false }
