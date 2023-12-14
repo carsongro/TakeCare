@@ -38,7 +38,7 @@ struct ContentView: View {
         .environment(authModel)
         .environment(todoModel)
         .environment(listsModel)
-        .onChange(of: Navigator.shared.selection) { oldValue, newValue in
+        .onChange(of: Navigator.shared.selection) { _, newValue in
             selection = newValue
         }
     }

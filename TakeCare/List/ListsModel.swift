@@ -60,6 +60,8 @@ import FirebaseFirestoreSwift
     @objc
     private func userSignedIn() {
         Task {
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            listsQuery = db.collection("lists").whereField("ownerID", isEqualTo: uid).limit(to: pageLimit)
             await fetchLists()
         }
     }
