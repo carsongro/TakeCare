@@ -46,7 +46,7 @@ final class FirebaseImageManager {
         let storageRef = Storage.storage().reference()
         let path = "\(path)/\(name).jpg"
         let fileRef = storageRef.child(path)
-        let _ = try await fileRef.putDataAsync(data)
+        _ = try await fileRef.putDataAsync(data)
         
         let urlString = try await fileRef.downloadURL().absoluteString
         

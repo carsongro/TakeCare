@@ -73,7 +73,7 @@ final class FirebaseManager: Sendable {
         
         guard needsCommit else { return needsCommit }
         
-        let _ = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
+        _ = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
             batch.commit { error in
                 if let error {
                     continuation.resume(throwing: error)

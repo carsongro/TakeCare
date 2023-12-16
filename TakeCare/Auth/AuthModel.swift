@@ -136,7 +136,7 @@ final class AuthModel: @unchecked Sendable {
             batch.deleteDocument(docRef)
         }
         
-        let _ = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
+        _ = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
             batch.commit { error in
                 if let error {
                     continuation.resume(throwing: error)
