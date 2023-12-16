@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import Firebase
-import FirebaseFirestoreSwift
+@preconcurrency import Firebase
 
 /// A model for lists
 @Observable final class ListsModel: @unchecked Sendable {
@@ -78,8 +77,11 @@ import FirebaseFirestoreSwift
         }
     }
     
+    @MainActor
     func fetchLists() async {
-        defer { didFetchLists = true }
+        defer {
+            didFetchLists = true
+        }
         
         do {
             let queryDocuments = try await listsQuery.getDocuments().documents
@@ -87,18 +89,17 @@ import FirebaseFirestoreSwift
             
             let updatedLists = try queryDocuments.compactMap { try $0.data(as: TakeCareList.self) }
             
-            Task { @MainActor in
-                withAnimation {
-                    self.lists.append(contentsOf: updatedLists)
-                }
-                
-                try await updateTasksCompletion()
+            withAnimation {
+                self.lists.append(contentsOf: updatedLists)
             }
+            
+            try await updateTasksCompletion()
         } catch {
             print(error.localizedDescription)
         }
     }
     
+    @MainActor
     func paginate() async {
         guard let last = loadedDocuments.last,
               !isPaginating,
@@ -114,6 +115,7 @@ import FirebaseFirestoreSwift
         await fetchLists()
     }
     
+    @MainActor
     func refreshLists(updateTasksCompletion: Bool = true, didAddNewList: Bool = false) async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -133,14 +135,12 @@ import FirebaseFirestoreSwift
                 .documents
                 .compactMap { try $0.data(as: TakeCareList.self) }
             
-            Task { @MainActor in
-                withAnimation {
-                    self.lists = updatedLists
-                }
-                
-                if updateTasksCompletion {
-                    try await self.updateTasksCompletion()
-                }
+            withAnimation {
+                self.lists = updatedLists
+            }
+            
+            if updateTasksCompletion {
+                try await self.updateTasksCompletion()
             }
         } catch {
             
@@ -220,7 +220,16 @@ import FirebaseFirestoreSwift
         
         try docRef.setData(from: list)
         
-        await refreshLists()
+        if let newList = try await Firestore.firestore().collection("lists")
+            .whereField(FieldPath.documentID(), in: [id])
+            .getDocuments()
+            .documents
+            .compactMap({ try $0.data(as: TakeCareList.self) }).first,
+           let idx = lists.firstIndex(where: { $0.id == id}) {
+            lists[idx] = newList
+        } else {
+            await refreshLists()
+        }
     }
     
     func deleteList(_ list: TakeCareList) async throws {
@@ -233,7 +242,13 @@ import FirebaseFirestoreSwift
         let docRef = db.collection("lists").document(id)
         try await docRef.delete()
         
-        await refreshLists()
+        if let idx = lists.firstIndex(where: { $0.id == id }) {
+            withAnimation {
+                lists.remove(at: idx)
+            }
+        } else {
+            await refreshLists()
+        }
     }
     
     func searchUser(email: String) async throws -> [User] {

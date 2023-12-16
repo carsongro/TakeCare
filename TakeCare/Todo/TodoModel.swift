@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Firebase
+@preconcurrency import Firebase
 import UserNotifications
 
 /// A model for todo lists
@@ -82,8 +82,11 @@ import UserNotifications
         }
     }
     
+    @MainActor
     func fetchLists(animated: Bool = true) async {
-        defer { didFetchLists = true }
+        defer {
+            didFetchLists = true
+        }
         
         do {
             let queryDocuments = try await listsQuery.getDocuments().documents
@@ -91,27 +94,26 @@ import UserNotifications
             
             let updatedLists = try queryDocuments.compactMap { try $0.data(as: TakeCareList.self) }
             
-            Task { @MainActor in
-                withAnimation(animated ? .default : .none) {
-                    self.lists.append(contentsOf: updatedLists)
-                }
-                
-                try await updateDailyTasksCompletion()
-                correctLocalNotificationsIfNeeded()
-                
-                if !lists.isEmpty {
-                    // The user could get here if they delete the app without signing out then reinstalled it
-                    getNotificationPermissionIfNotDetermined()
-                }
-                
-                TakeCareShortcuts.updateAppShortcutParameters()
+            withAnimation(animated ? .default : .none) {
+                self.lists.append(contentsOf: updatedLists)
             }
+            
+            try await updateDailyTasksCompletion()
+            correctLocalNotificationsIfNeeded()
+            
+            if !lists.isEmpty {
+                // The user could get here if they delete the app without signing out then reinstalled it
+                getNotificationPermissionIfNotDetermined()
+            }
+            
+            TakeCareShortcuts.updateAppShortcutParameters()
             
         } catch {
             print(error.localizedDescription)
         }
     }
     
+    @MainActor
     func paginate() async {
         guard let last = loadedDocuments.last, !isPaginating, lists.count >= pageLimit, !lists.isEmpty else { return }
         
@@ -122,6 +124,7 @@ import UserNotifications
         await fetchLists(animated: true)
     }
     
+    @MainActor
     func refreshTodoLists(animated: Bool = true, updatedDailyTasksCompletion: Bool = true) async {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -133,15 +136,13 @@ import UserNotifications
                 .documents
                 .compactMap { try $0.data(as: TakeCareList.self) }
             
-            Task { @MainActor in
-                withAnimation(animated ? .default : .none) {
-                    self.lists = updatedLists
-                }
-                
-                if updatedDailyTasksCompletion {
-                    try await updateDailyTasksCompletion()
-                    correctLocalNotificationsIfNeeded()
-                }
+            withAnimation(animated ? .default : .none) {
+                self.lists = updatedLists
+            }
+            
+            if updatedDailyTasksCompletion {
+                try await updateDailyTasksCompletion()
+                correctLocalNotificationsIfNeeded()
             }
         } catch {
             
@@ -261,8 +262,13 @@ import UserNotifications
         
         try db.collection("lists").document(id).setData(from: updatedList)
         
-        await refreshTodoLists()
-        
+        if let idx = lists.firstIndex(where: { $0.id == id }) {
+            withAnimation {
+                lists.remove(at: idx)
+            }
+        } else {
+            await refreshTodoLists()
+        }
         correctLocalNotificationsIfNeeded()
         
         TakeCareShortcuts.updateAppShortcutParameters()
