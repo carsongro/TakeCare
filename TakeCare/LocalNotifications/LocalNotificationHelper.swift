@@ -106,7 +106,7 @@ actor LocalNotificationHelper {
         switch task.repeatInterval {
         case .never: guard completionDate > Date.now else { return }
         case .daily:
-            if completionDate.comparableTime < Date.now.comparableTime {
+            if completionDate.comparableTime < Date.now.comparableTime || task.isCompleted {
                 guard let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date()),
                       let newDate = Calendar.current.date(
                         bySettingHour: hour,
