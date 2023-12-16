@@ -60,6 +60,8 @@ struct ListTaskDetailView: View {
                         )
                         .datePickerStyle(.graphical)
                     }
+                } footer: {
+                    Text("Date is in the current timezone.")
                 }
                 .onChange(of: showingDatePicker) { _, _ in
                     withAnimation {
