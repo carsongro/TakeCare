@@ -122,8 +122,8 @@ import SwiftUI
         do {
             let refreshQuery = db.collection("lists")
                 .whereField("ownerID", isEqualTo: uid)
-                .limit(to: lists.count + (didAddNewList ? 1 : 0))
-            
+                .limit(to: (lists.isEmpty ? pageLimit : lists.count) + (didAddNewList ? 1 : 0))
+
             let queryDocuments = try await refreshQuery.getDocuments().documents
             
             if didAddNewList {

@@ -24,7 +24,6 @@ final class FirebaseManager: Sendable {
     func updateDailyTasksCompletion(lists: [TakeCareList]) async throws -> Bool {
         var needsCommit = false
         
-        let db = db
         let batch = db.batch()
         
         for list in lists {

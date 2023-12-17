@@ -131,7 +131,7 @@ import UserNotifications
         do {
             let updatedLists = try await db.collection("lists")
                 .whereField("recipientID", isEqualTo: uid)
-                .limit(to: lists.count)
+                .limit(to: lists.isEmpty ? pageLimit : lists.count)
                 .getDocuments()
                 .documents
                 .compactMap { try $0.data(as: TakeCareList.self) }
