@@ -186,7 +186,6 @@ import UserNotifications
         
         let updatedList = TakeCareList(
             ownerID: list.ownerID,
-            ownerName: list.ownerName,
             name: list.name,
             description: list.description,
             recipientID: list.recipientID,
@@ -251,7 +250,6 @@ import UserNotifications
         
         let updatedList = TakeCareList(
             ownerID: list.ownerID,
-            ownerName: list.ownerName,
             name: list.name,
             description: list.description,
             recipientID: nil,

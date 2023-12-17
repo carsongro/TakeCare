@@ -20,7 +20,6 @@
 		B52D1CBF2ACE3B1C0024F6A7 /* ListTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52D1CBE2ACE3B1C0024F6A7 /* ListTask.swift */; };
 		B52D1CC12ACE5FE60024F6A7 /* ListOwnerDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52D1CC02ACE5FE60024F6A7 /* ListOwnerDetailView.swift */; };
 		B52D1CC32ACE60510024F6A7 /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52D1CC22ACE60510024F6A7 /* ListRow.swift */; };
-		B52D1CC52ACE63850024F6A7 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52D1CC42ACE63850024F6A7 /* ListView.swift */; };
 		B53DA6A42ADB5C0A008094D7 /* TodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53DA6A32ADB5C0A008094D7 /* TodoModel.swift */; };
 		B53DA6A62ADB5DAA008094D7 /* TodoLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53DA6A52ADB5DAA008094D7 /* TodoLists.swift */; };
 		B53DA6A82ADB709A008094D7 /* TodoSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53DA6A72ADB709A008094D7 /* TodoSearchResults.swift */; };
@@ -81,7 +80,6 @@
 		B52D1CBE2ACE3B1C0024F6A7 /* ListTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTask.swift; sourceTree = "<group>"; };
 		B52D1CC02ACE5FE60024F6A7 /* ListOwnerDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOwnerDetailView.swift; sourceTree = "<group>"; };
 		B52D1CC22ACE60510024F6A7 /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
-		B52D1CC42ACE63850024F6A7 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		B53DA6A32ADB5C0A008094D7 /* TodoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoModel.swift; sourceTree = "<group>"; };
 		B53DA6A52ADB5DAA008094D7 /* TodoLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoLists.swift; sourceTree = "<group>"; };
 		B53DA6A72ADB709A008094D7 /* TodoSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoSearchResults.swift; sourceTree = "<group>"; };
@@ -258,20 +256,19 @@
 			children = (
 				B52D1CBA2ACE38E40024F6A7 /* ListsModel.swift */,
 				B5BC6CA32ACB7CBF00D1F842 /* ListNavigationStack.swift */,
-				B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */,
 				B564B0AC2AD49C9F00E5D994 /* ListList.swift */,
 				B564B0AA2AD49A4C00E5D994 /* ListSearchResults.swift */,
+				B52D1CC22ACE60510024F6A7 /* ListRow.swift */,
+				B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */,
+				B8237F172AE4B04E00AF9A2C /* ListProgressDetailView.swift */,
+				B595D6EE2AD0C70000B022E0 /* ListRecipientRow.swift */,
+				B595D6E82AD0B67100B022E0 /* ListTaskRow.swift */,
 				B52D1CC02ACE5FE60024F6A7 /* ListOwnerDetailView.swift */,
 				B595D6EA2AD0BF0900B022E0 /* ListUpdateRecipientButton.swift */,
 				B595D6EC2AD0BF7800B022E0 /* ListUpdateRecipientForm.swift */,
 				B595D6E62AD0B47000B022E0 /* ListAddTasksButton.swift */,
-				B595D6EE2AD0C70000B022E0 /* ListRecipientRow.swift */,
 				B595D6E42AD0B3D300B022E0 /* ListChooseListImageView.swift */,
 				B595D6E22AD0B18400B022E0 /* ListTaskDetailView.swift */,
-				B595D6E82AD0B67100B022E0 /* ListTaskRow.swift */,
-				B52D1CC22ACE60510024F6A7 /* ListRow.swift */,
-				B52D1CC42ACE63850024F6A7 /* ListView.swift */,
-				B8237F172AE4B04E00AF9A2C /* ListProgressDetailView.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -433,7 +430,6 @@
 				B52D1CC32ACE60510024F6A7 /* ListRow.swift in Sources */,
 				B58480972AC76625007A655D /* AuthLoginView.swift in Sources */,
 				B595D6ED2AD0BF7800B022E0 /* ListUpdateRecipientForm.swift in Sources */,
-				B52D1CC52ACE63850024F6A7 /* ListView.swift in Sources */,
 				B83ED9112B21511500636DF3 /* TakeCareToDoListEntity.swift in Sources */,
 				B5BC6CAC2ACB7E1000D1F842 /* AppSidebarList.swift in Sources */,
 				B53DA6A62ADB5DAA008094D7 /* TodoLists.swift in Sources */,

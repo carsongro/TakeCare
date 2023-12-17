@@ -11,13 +11,12 @@ import IoImage
 struct ListDetailHeader: View {
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     @Binding var list: TakeCareList
-    
+    var listOwner: User?
     var width: CGFloat
     
     var proportionalWidth: CGFloat { width * (prefersTabNavigation ? 2/3 : 1/4) }
     
-    @State private var selectedUserID: String?
-    @State private var showUserSheet = false
+    @State private var selectedUser: User?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -52,13 +51,15 @@ struct ListDetailHeader: View {
                     .accessibilityLabel(Text("List name: \(list.name)"))
                 
                 
-                Button {
-                    selectedUserID = list.ownerID
-                } label: {
-                    Text(list.ownerName)
-                        .font(.title3)
-                        .foregroundStyle(.accent)
-                        .accessibilityLabel(Text("List owner: \(list.ownerName)"))
+                if let listOwnerName = listOwner?.displayName {
+                    Button {
+                        selectedUser = listOwner
+                    } label: {
+                        Text(listOwnerName)
+                            .font(.title3)
+                            .foregroundStyle(.accent)
+                            .accessibilityLabel(Text("List owner: \(listOwnerName)"))
+                    }
                 }
             }
             .frame(maxWidth: .infinity)
@@ -68,22 +69,24 @@ struct ListDetailHeader: View {
                 .foregroundStyle(.secondary)
                 .accessibilityLabel(Text("Description: \(list.description ?? "No description provided")"))
         }
-        .onChange(of: selectedUserID, { oldValue, newValue in
-            if newValue != nil {
-                showUserSheet = true
-            }
-        })
-        .sheet(isPresented: $showUserSheet) {
-            selectedUserID = nil
-        } content: {
-            if let selectedUserID {
-                UserProfileView(userID: selectedUserID)
-                    .presentationDetents([.medium, .large])
-            }
+        .sheet(item: $selectedUser) {
+            selectedUser = nil
+        } content: { selectedUser in
+            UserProfileView(user: selectedUser)
+                .presentationDetents([.medium, .large])
         }
     }
 }
 
 #Preview {
-    ListDetailHeader(list: .constant(PreviewData.previewTakeCareList), width: 300)
+    ListDetailHeader(
+        list: .constant(PreviewData.previewTakeCareList),
+        listOwner: User(
+            id: "",
+            displayName: "",
+            email: "",
+            photoURL: nil
+        ),
+        width: 300
+    )
 }

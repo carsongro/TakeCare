@@ -95,6 +95,7 @@ struct UpdateEmailForm: View {
                         }
                     }
                     .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
                     .disabled(!textFieldsAreValid)
                     .listRowBackground(Color(.systemGroupedBackground))
                     .frame(maxWidth: .infinity)

@@ -40,6 +40,7 @@ struct PasswordResetForm: View, @unchecked Sendable {
                         action: sendResetLink
                     )
                     .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
                     .disabled(!textFieldsAreValid)
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color(.systemGroupedBackground))

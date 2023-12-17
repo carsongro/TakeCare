@@ -63,6 +63,7 @@ struct AuthLoginView: View, @unchecked Sendable {
                         action: login
                     )
                     .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
                     .disabled(!textFieldsAreValid)
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color(.systemGroupedBackground))

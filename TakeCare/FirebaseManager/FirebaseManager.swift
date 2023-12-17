@@ -54,7 +54,6 @@ final class FirebaseManager: Sendable {
             
             let updatedList = TakeCareList(
                 ownerID: list.ownerID,
-                ownerName: list.ownerName,
                 name: list.name,
                 description: list.description,
                 recipientID: list.recipientID,

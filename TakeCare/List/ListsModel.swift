@@ -168,7 +168,6 @@ import SwiftUI
         
         let list = TakeCareList(
             ownerID: ownerID,
-            ownerName: AuthModel.shared.currentUser?.displayName ?? "",
             name: name,
             description: description,
             recipientID: recipient?.id,
@@ -209,7 +208,6 @@ import SwiftUI
         
         let list = TakeCareList(
             ownerID: ownerID,
-            ownerName: AuthModel.shared.currentUser?.displayName ?? "",
             name: name,
             description: description,
             recipientID: recipient?.id,

@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct ListProgressDetailView: View {
+struct ListProgressDetailView: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
     @Environment(\.dismiss) private var dismiss
     
     @Binding var list: TakeCareList
     @State private var recipient: User?
-    @State private var selectedUserID: String?
-    @State private var showUserSheet = false
+    @State private var listOwner: User?
+    @State private var selectedUser: User?
     
     @State private var showingEditList = false
     @State private var showingErrorAlert = false
@@ -22,43 +22,88 @@ struct ListProgressDetailView: View {
     
     var body: some View {
         GeometryReader { proxy in
-            List {
-                Section {
-                    ListDetailHeader(list: $list, width: proxy.size.width)
-                }
-                .listRowSeparator(.hidden)
-                
-                Section("Recipient") {
-                    if let recipient {
-                        Button {
-                            selectedUserID = recipient.id
-                        } label: {
-                            ListRecipientRow(user: recipient)
+            Group {
+                if finishedFetchingData {
+                    List {
+                        Section {
+                            ListDetailHeader(
+                                list: $list,
+                                listOwner: listOwner,
+                                width: proxy.size.width
+                            )
                         }
-                        .buttonStyle(.plain)
+                        .listRowSeparator(.hidden)
+                        
+                        Section("Recipient") {
+                            Group {
+                                if let recipient {
+                                    Button {
+                                        selectedUser = recipient
+                                    } label: {
+                                        ListRecipientRow(user: recipient)
+                                    }
+                                    .buttonStyle(.plain)
+                                } else {
+                                    if list.recipientID == nil {
+                                        Button(
+                                            "Add Recipient",
+                                            systemImage: "plus"
+                                        ) {
+                                            showingEditList = true
+                                        }
+                                    }
+                                }
+                            }
+                            .padding(.bottom)
+                        }
+                        .listRowSeparator(.hidden)
+                        
+                        Section {
+                            ProgressView(
+                                value: CGFloat(list.tasks.filter {
+                                    $0.isCompleted && $0.repeatInterval == .daily
+                                }.count),
+                                total: CGFloat(list.tasks.filter {
+                                    $0.repeatInterval == .daily
+                                }.count)
+                            ) {
+                                Text("Daily Tasks Progress")
+                            } currentValueLabel: {
+                                Text("\(list.tasks.filter(\.isCompleted).count) / \(list.tasks.count) daily tasks completed")
+                            }
+                        }
+                        .listRowSeparator(.hidden)
+                        
+                        ForEach(TaskFilter.allCases, id: \.self) { filter in
+                            TodoTasksList(list: $list, taskFilter: filter, interactionDisabled: true)
+                        }
+                        
+                        Section {
+                            Color.clear
+                        }
+                        .padding(.bottom)
+                        .listRowSeparator(.hidden)
                     }
-                }
-                .listRowSeparator(.hidden)
-                
-                ForEach(TaskFilter.allCases, id: \.self) { filter in
-                    TodoTasksList(list: $list, taskFilter: filter, interactionDisabled: true)
-                }
-                
-                Section {
+                } else {
+                    // If this isn't head the task modifier never gets called
                     Color.clear
                 }
-                .padding(.bottom)
-                .listRowSeparator(.hidden)
             }
             .task(id: list) {
                 Task {
                     if let recipientID = list.recipientID {
-                        let recipient = await AuthModel.shared.fetchUser(id: recipientID)
+                        async let recipient = AuthModel.shared.fetchUser(id: recipientID)
+                        async let listOwner = AuthModel.shared.fetchUser(id: list.ownerID)
+                        let associatedUsers = (await listOwner, await recipient)
+                        
                         withAnimation {
-                            self.recipient = recipient
+                            self.listOwner = associatedUsers.0
+                            self.recipient = associatedUsers.1
                         }
                     } else {
-                        recipient = nil
+                        withAnimation {
+                            recipient = nil
+                        }
                     }
                 }
             }
@@ -102,24 +147,21 @@ struct ListProgressDetailView: View {
                 ListOwnerDetailView(mode: .edit, list: list)
                     .environment(listsModel)
             }
-            .onChange(of: selectedUserID, { oldValue, newValue in
-                if newValue != nil {
-                    showUserSheet = true
-                }
-            })
-            .sheet(isPresented: $showUserSheet) {
-                selectedUserID = nil
-            } content: {
-                if let selectedUserID {
-                    UserProfileView(userID: selectedUserID)
-                        .presentationDetents([.medium, .large])
-                }
+            .sheet(item: $selectedUser) {
+                selectedUser = nil
+            } content: { selectedUser in
+                UserProfileView(user: selectedUser)
+                    .presentationDetents([.medium, .large])
             }
             .alert(
                 "There was an error deleting the list",
                 isPresented: $showingErrorAlert
             ) { }
         }
+    }
+    
+    private var finishedFetchingData: Bool {
+        (listOwner != nil && (list.recipientID != nil && recipient != nil) || list.recipientID == nil)
     }
 }
 

@@ -30,7 +30,6 @@ final class PreviewData {
     
     static let previewTakeCareList = TakeCareList(
         ownerID: UUID().uuidString,
-        ownerName: "Owner Name",
         name: "Carson's list",
         description: "This is the description for this list.",
         recipientID: UUID().uuidString,

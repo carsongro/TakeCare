@@ -13,6 +13,15 @@ struct UserProfileView: View {
     
     @State private var user: User?
     
+    init(userID: String) {
+        self.userID = userID
+    }
+    
+    init(user: User) {
+        _user = State(initialValue: user)
+        userID = user.id
+    }
+    
     var body: some View {
         Group {
             if let user {
@@ -40,6 +49,8 @@ struct UserProfileView: View {
             }
         }
         .onAppear {
+            guard user == nil else { return }
+            
             Task {
                 let user = await AuthModel.shared.fetchUser(id: userID)
                 withAnimation {

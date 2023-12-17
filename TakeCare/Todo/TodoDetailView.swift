@@ -18,6 +18,7 @@ struct TodoDetailView: View {
     @State private var selectedUserId: String? = nil
     @State private var showUsersheet = false
     @State private var hasRecipientTaskNotifications: Bool
+    @State private var listOwner: User?
     
     init(list: Binding<TakeCareList>, hasRecipientTaskNotifications: Bool) {
         _list = list
@@ -26,25 +27,44 @@ struct TodoDetailView: View {
     
     var body: some View {
         GeometryReader { proxy in
-            List {
-                Section {
-                    ListDetailHeader(list: $list, width: proxy.size.width)
-                }
-                .listRowSeparator(.hidden)
-                
-                ForEach(TaskFilter.allCases, id: \.self) { filter in
-                    TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
-                        Task {
-                            do {
-                                try await todoModel.updateListTask(
-                                    list: list,
-                                    task: task,
-                                    isCompleted: isCompleted
-                                )
-                            } catch {
-                                showingErrorAlert = true
+            Group {
+                if let listOwner {
+                    List {
+                        Section {
+                            ListDetailHeader(
+                                list: $list,
+                                listOwner: listOwner,
+                                width: proxy.size.width
+                            )
+                        }
+                        .listRowSeparator(.hidden)
+                        
+                        ForEach(TaskFilter.allCases, id: \.self) { filter in
+                            TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
+                                Task {
+                                    do {
+                                        try await todoModel.updateListTask(
+                                            list: list,
+                                            task: task,
+                                            isCompleted: isCompleted
+                                        )
+                                    } catch {
+                                        showingErrorAlert = true
+                                    }
+                                }
                             }
                         }
+                    }
+                } else {
+                    // This must be here for the task to get called
+                    Color.clear
+                }
+            }
+            .task(id: list) {
+                Task {
+                    let listOwner = await AuthModel.shared.fetchUser(id: list.ownerID)
+                    withAnimation {
+                        self.listOwner = listOwner
                     }
                 }
             }

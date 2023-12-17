@@ -13,7 +13,6 @@ import Foundation
 struct TakeCareList: Codable, Hashable, Identifiable, Sendable, Equatable {
     @DocumentID var id: String?
     let ownerID: String
-    let ownerName: String
     let name: String
     let description: String?
     let recipientID: String?
