@@ -46,27 +46,7 @@ struct ListRow: View {
             
             Spacer(minLength: 0)
             
-            ListIndicator(isCompleted: list.tasks.filter {
-                if let completionDate = $0.completionDate,
-                   (completionDate <= Date.now ||
-                    Calendar.current.isDateInToday(completionDate)) {
-                    return true
-                } else if $0.completionDate == nil {
-                    return true
-                } else {
-                    return false
-                }
-            }.allSatisfy { $0.isCompleted } && !list.tasks.filter {
-                if let completionDate = $0.completionDate,
-                   (completionDate <= Date.now ||
-                    Calendar.current.isDateInToday(completionDate)) {
-                    return true
-                } else if $0.completionDate == nil {
-                    return true
-                } else {
-                    return false
-                }
-            }.isEmpty)
+            ListIndicator(isCompleted: list.dailyTasksCompletedCount == list.dailyTasksCount)
         }
         .font(.subheadline)
         .contentShape(Rectangle())
