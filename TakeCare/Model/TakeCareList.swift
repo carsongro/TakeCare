@@ -35,6 +35,14 @@ struct TakeCareList: Codable, Hashable, Identifiable, Sendable, Equatable {
     }
 }
 
+// MARK: Task Filtering
+
+extension TakeCareList {
+    // TODO: Implement computed properties for categorizing tasks into different buckets
+}
+
+// MARK: Search
+
 extension TakeCareList {
     func matches(_ string: String) -> Bool {
         string.isEmpty ||
