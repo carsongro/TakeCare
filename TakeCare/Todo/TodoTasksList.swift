@@ -19,28 +19,11 @@ struct TodoTasksList: View {
         
         switch taskFilter {
         case .todayNotCompleted:
-            tasks = list.tasks.filter {
-                if let completionDate = $0.completionDate,
-                   (($0.repeatInterval == .daily && completionDate <= Date.now) ||
-                    Calendar.current.isDateInToday(completionDate)) &&
-                    !$0.isCompleted {
-                    return true
-                } else if $0.completionDate == nil && $0.repeatInterval == .daily && !$0.isCompleted {
-                    return true
-                } else {
-                    return false
-                }
-            }
+            tasks = list.tasksTodayNotCompleted
         case .other:
-            tasks = list.tasks.filter {
-                if let completionDate = $0.completionDate {
-                    return !$0.isCompleted && ((!Calendar.current.isDateInToday(completionDate) && $0.repeatInterval == .never) || ($0.repeatInterval == .daily && completionDate > Date.now && !Calendar.current.isDateInToday(completionDate)))
-                } else {
-                    return !$0.isCompleted && $0.repeatInterval != .daily
-                }
-            }
+            tasks = list.otherTasks
         case .completed:
-            tasks = list.tasks.filter { $0.isCompleted }
+            tasks = list.completedTasks
         }
         
         return tasks.sorted {
@@ -89,12 +72,6 @@ struct TodoTasksList: View {
             return Text("Completed tasks")
         }
     }
-}
-
-enum TaskFilter: String, CaseIterable {
-    case todayNotCompleted = "Today"
-    case other = "Other"
-    case completed = "Completed"
 }
 
 #Preview {

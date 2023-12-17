@@ -60,16 +60,12 @@ struct ListProgressDetailView: View, @unchecked Sendable {
                         
                         Section {
                             ProgressView(
-                                value: CGFloat(list.tasks.filter {
-                                    $0.isCompleted && $0.repeatInterval == .daily
-                                }.count),
-                                total: CGFloat(list.tasks.filter {
-                                    $0.repeatInterval == .daily
-                                }.count)
+                                value: CGFloat(list.dailyTasksCompletedCount),
+                                total: CGFloat(list.dailyTasksCount)
                             ) {
                                 Text("Daily Tasks Progress")
                             } currentValueLabel: {
-                                Text("\(list.tasks.filter(\.isCompleted).count) / \(list.tasks.count) daily tasks completed")
+                                Text((list.dailyTasksCompletedCount == list.dailyTasksCount ? "All" : "\(list.dailyTasksCompletedCount) / \(list.dailyTasksCount)") + " daily tasks completed")
                             }
                         }
                         .listRowSeparator(.hidden)

@@ -38,7 +38,64 @@ struct TakeCareList: Codable, Hashable, Identifiable, Sendable, Equatable {
 // MARK: Task Filtering
 
 extension TakeCareList {
-    // TODO: Implement computed properties for categorizing tasks into different buckets
+    
+    var dailyTasksCompletedCount: Int {
+        tasksToday.count - tasksTodayNotCompleted.count
+    }
+    
+    var dailyTasksCount: Int {
+        tasksToday.count
+    }
+    
+    /// Tasks today that are either completed or not
+    var tasksToday: [ListTask] {
+        tasks.filter {
+            if let completionDate = $0.completionDate,
+               (($0.repeatInterval == .daily && completionDate <= Date.now) ||
+                Calendar.current.isDateInToday(completionDate)) {
+                return true
+            } else if $0.completionDate == nil && $0.repeatInterval == .daily {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+    var tasksTodayNotCompleted: [ListTask] {
+        tasks.filter {
+            if let completionDate = $0.completionDate,
+               (($0.repeatInterval == .daily && completionDate <= Date.now) ||
+                Calendar.current.isDateInToday(completionDate)) &&
+                !$0.isCompleted {
+                return true
+            } else if $0.completionDate == nil && $0.repeatInterval == .daily && !$0.isCompleted {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+    
+    var otherTasks: [ListTask] {
+        tasks.filter {
+            if let completionDate = $0.completionDate {
+                return !$0.isCompleted && ((!Calendar.current.isDateInToday(completionDate) && $0.repeatInterval == .never) || ($0.repeatInterval == .daily && completionDate > Date.now && !Calendar.current.isDateInToday(completionDate)))
+            } else {
+                return !$0.isCompleted && $0.repeatInterval != .daily
+            }
+        }
+    }
+    
+    var completedTasks: [ListTask] {
+        tasks.filter { $0.isCompleted }
+    }
+}
+
+enum TaskFilter: String, CaseIterable {
+    case todayNotCompleted = "Today"
+    case other = "Other"
+    case completed = "Completed"
 }
 
 // MARK: Search
