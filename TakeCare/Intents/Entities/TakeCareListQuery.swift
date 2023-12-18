@@ -1,16 +1,16 @@
 //
-//  TakeCareTodoListQuery.swift
+//  TakeCareListQuery.swift
 //  TakeCare
 //
-//  Created by Carson Gross on 12/6/23.
+//  Created by Carson Gross on 12/18/23.
 //
 
 import Foundation
 import Firebase
 import AppIntents
 
-struct TakeCareTodoListQuery: EntityQuery {
-    func entities(for identifiers: [String]) async throws -> [TakeCareToDoListEntity] {
+struct TakeCareListQuery: EntityQuery {
+    func entities(for identifiers: [String]) async throws -> [TakeCareListEntity] {
         let lists = try await FirebaseManager.shared.lists(for: identifiers)
         let imageDataMap = await FirebaseManager.shared.imagesMap(from: lists)
         
@@ -18,7 +18,7 @@ struct TakeCareTodoListQuery: EntityQuery {
         return lists.compactMap {
             guard let id = $0.id else { return nil }
             
-            return TakeCareToDoListEntity(
+            return TakeCareListEntity(
                 id: id,
                 listName: $0.name,
                 listDescription: $0.description ?? "",
@@ -27,15 +27,15 @@ struct TakeCareTodoListQuery: EntityQuery {
         }
     }
     
-    func suggestedEntities() async throws -> [TakeCareToDoListEntity] {
-        let lists = try await FirebaseManager.shared.userLists(isRecipient: true)
+    func suggestedEntities() async throws -> [TakeCareListEntity] {
+        let lists = try await FirebaseManager.shared.userLists(isRecipient: false)
         let imageDataMap = await FirebaseManager.shared.imagesMap(from: lists)
         
         
         return lists.compactMap {
             guard let id = $0.id else { return nil }
             
-            return TakeCareToDoListEntity(
+            return TakeCareListEntity(
                 id: id,
                 listName: $0.name,
                 listDescription: $0.description ?? "",
@@ -44,15 +44,15 @@ struct TakeCareTodoListQuery: EntityQuery {
         }
     }
     
-    func entities(matching string: String) async throws -> [TakeCareToDoListEntity] {
-        let lists = try await FirebaseManager.shared.userListsWithNameMatching(matching: string, isRecipient: true)
+    func entities(matching string: String) async throws -> [TakeCareListEntity] {
+        let lists = try await FirebaseManager.shared.userListsWithNameMatching(matching: string, isRecipient: false)
         let imageDataMap = await FirebaseManager.shared.imagesMap(from: lists)
         
         
         return lists.compactMap {
             guard let id = $0.id else { return nil }
             
-            return TakeCareToDoListEntity(
+            return TakeCareListEntity(
                 id: id,
                 listName: $0.name,
                 listDescription: $0.description ?? "",

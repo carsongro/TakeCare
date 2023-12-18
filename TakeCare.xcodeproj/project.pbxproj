@@ -52,6 +52,9 @@
 		B5BC6CAE2ACB7E6700D1F842 /* AppDetailColumn.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CAD2ACB7E6700D1F842 /* AppDetailColumn.swift */; };
 		B5E643C82AC7924B0056A111 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C72AC7924B0056A111 /* ContentView.swift */; };
 		B5E643CA2AC792ED0056A111 /* AppTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5E643C92AC792ED0056A111 /* AppTabView.swift */; };
+		B8011A462B30B1C80085663D /* TakeCareListEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8011A452B30B1C80085663D /* TakeCareListEntity.swift */; };
+		B8011A482B30B1D00085663D /* TakeCareListQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8011A472B30B1D00085663D /* TakeCareListQuery.swift */; };
+		B8011A4A2B30B2B00085663D /* OpenList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8011A492B30B2B00085663D /* OpenList.swift */; };
 		B812BB752B1D6160006AA5E5 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B812BB742B1D6160006AA5E5 /* UserProfileView.swift */; };
 		B8237F182AE4B04E00AF9A2C /* ListProgressDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F172AE4B04E00AF9A2C /* ListProgressDetailView.swift */; };
 		B8237F1E2AE4B41000AF9A2C /* ListDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */; };
@@ -114,6 +117,9 @@
 		B5BC6CAD2ACB7E6700D1F842 /* AppDetailColumn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailColumn.swift; sourceTree = "<group>"; };
 		B5E643C72AC7924B0056A111 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B5E643C92AC792ED0056A111 /* AppTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabView.swift; sourceTree = "<group>"; };
+		B8011A452B30B1C80085663D /* TakeCareListEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeCareListEntity.swift; sourceTree = "<group>"; };
+		B8011A472B30B1D00085663D /* TakeCareListQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeCareListQuery.swift; sourceTree = "<group>"; };
+		B8011A492B30B2B00085663D /* OpenList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenList.swift; sourceTree = "<group>"; };
 		B812BB742B1D6160006AA5E5 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		B8237F172AE4B04E00AF9A2C /* ListProgressDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListProgressDetailView.swift; sourceTree = "<group>"; };
 		B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailHeader.swift; sourceTree = "<group>"; };
@@ -291,6 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				B83ED9172B21584300636DF3 /* OpenToDoList.swift */,
+				B8011A492B30B2B00085663D /* OpenList.swift */,
 				B83ED90F2B21510A00636DF3 /* Entities */,
 				B835D1182B1ED38400FBDEB3 /* OpenToDo.swift */,
 			);
@@ -308,6 +315,8 @@
 		B83ED90F2B21510A00636DF3 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				B8011A452B30B1C80085663D /* TakeCareListEntity.swift */,
+				B8011A472B30B1D00085663D /* TakeCareListQuery.swift */,
 				B83ED9102B21511500636DF3 /* TakeCareToDoListEntity.swift */,
 				B83ED9122B21534F00636DF3 /* TakeCareTodoListQuery.swift */,
 			);
@@ -420,6 +429,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8011A4A2B30B2B00085663D /* OpenList.swift in Sources */,
 				B83ED9162B21541E00636DF3 /* FirebaseManager.swift in Sources */,
 				B5BC6CA42ACB7CBF00D1F842 /* ListNavigationStack.swift in Sources */,
 				B50341A52AC7952E0075FFF2 /* PasswordResetForm.swift in Sources */,
@@ -440,6 +450,7 @@
 				B50066ED2AC90514008826B7 /* FirebaseImageManager.swift in Sources */,
 				B5BC6CA82ACB7CFD00D1F842 /* TodoNavigationStack.swift in Sources */,
 				B55B80062AC7CB9200640173 /* UpdateEmailForm.swift in Sources */,
+				B8011A462B30B1C80085663D /* TakeCareListEntity.swift in Sources */,
 				B58480E32AC77608007A655D /* AuthModel.swift in Sources */,
 				B595D6EF2AD0C70000B022E0 /* ListRecipientRow.swift in Sources */,
 				B568B1AA2AD35CA900E389BD /* PreviewData.swift in Sources */,
@@ -450,6 +461,7 @@
 				B5212A372ADDF9BE00FF4AD1 /* TodoTaskRow.swift in Sources */,
 				B595D6E32AD0B18400B022E0 /* ListTaskDetailView.swift in Sources */,
 				B54552892ACA37D2006135E8 /* Extensions.swift in Sources */,
+				B8011A482B30B1D00085663D /* TakeCareListQuery.swift in Sources */,
 				B52D1CC12ACE5FE60024F6A7 /* ListOwnerDetailView.swift in Sources */,
 				B564B0AB2AD49A4C00E5D994 /* ListSearchResults.swift in Sources */,
 				B595D6EB2AD0BF0900B022E0 /* ListUpdateRecipientButton.swift in Sources */,

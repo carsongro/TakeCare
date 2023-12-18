@@ -13,22 +13,43 @@ final class Navigator: @unchecked Sendable {
     
     public var selection: AppScreen? = .lists
     
-    public var todoPath = [TakeCareList]()
+    public var todoPath = NavigationPath()
+    public var listsPath = NavigationPath()
     
     private init() { }
     
     public func openAppScreen(_ appScreen: AppScreen) {
-        todoPath.removeAll()
+        switch appScreen {
+        case .lists:
+            listsPath.removeLast(listsPath.count - 1)
+        case .todo:
+            todoPath.removeLast(listsPath.count - 1)
+        default:
+            break
+        }
         selection = appScreen
     }
     
-    public func openList(_ list: TakeCareToDoListEntity) {
+    public func openToDoList(_ list: TakeCareToDoListEntity) {
         selection = .todo
         
         Task {
             do {
                 let list = try await FirebaseManager.shared.getList(for: list.id)
                 todoPath.append(list)
+            } catch {
+                
+            }
+        }
+    }
+    
+    public func openList(_ list: TakeCareListEntity) {
+        selection = .lists
+        
+        Task {
+            do {
+                let list = try await FirebaseManager.shared.getList(for: list.id)
+                listsPath.append(list)
             } catch {
                 
             }

@@ -11,9 +11,10 @@ struct ListNavigationStack: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
 
     var body: some View {
+        @Bindable var navigator = Navigator.shared
         @Bindable var listsModel = listsModel
         
-        NavigationStack() {
+        NavigationStack(path: $navigator.listsPath) {
             ListList()
                 .environment(listsModel)
                 .navigationTitle("Lists")

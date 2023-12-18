@@ -1,14 +1,14 @@
 //
-//  TakeCareToDoListEntity.swift
+//  TakeCareListEntity.swift
 //  TakeCare
 //
-//  Created by Carson Gross on 12/6/23.
+//  Created by Carson Gross on 12/18/23.
 //
 
 import AppIntents
 import SwiftUI
 
-struct TakeCareToDoListEntity: AppEntity {
+struct TakeCareListEntity: AppEntity {
     var id: String
     var listName: String
     var listDescription: String
@@ -38,5 +38,5 @@ struct TakeCareToDoListEntity: AppEntity {
         }
     }
     
-    static var defaultQuery = TakeCareTodoListQuery()
+    static var defaultQuery = TakeCareListQuery()
 }

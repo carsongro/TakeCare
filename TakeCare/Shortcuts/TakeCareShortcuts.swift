@@ -25,11 +25,23 @@ class TakeCareShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: OpenToDoList(),
             phrases: [
-                "Open \(\.$list) list with \(.applicationName)",
-                "Open a \(.applicationName) list"
+                "Open \(\.$list) to do list with \(.applicationName)",
+                "Open a \(.applicationName) to do list"
             ],
             shortTitle: "Open To Do List",
             systemImageName: "list.bullet"
+        )
+        
+        AppShortcut(
+            intent: OpenList(),
+            phrases: [
+                "Open \(\.$list) list with \(.applicationName)",
+                "Open a \(.applicationName) list",
+                "Check progress for a \(.applicationName) list",
+                "Check progress for \(\.$list) list with \(.applicationName)"
+            ],
+            shortTitle: "Check List Progress",
+            systemImageName: "checklist.checked"
         )
     }
 }

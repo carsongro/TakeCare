@@ -97,22 +97,22 @@ extension FirebaseManager {
             .compactMap { try $0.data(as: TakeCareList.self) }
     }
     
-    func userTodoLists() async throws -> [TakeCareList] {
+    func userLists(isRecipient: Bool) async throws -> [TakeCareList] {
         guard let uid = Auth.auth().currentUser?.uid else { return [] }
         
         return try await db.collection("lists")
-            .whereField("recipientID", isEqualTo: uid)
+            .whereField(isRecipient ? "recipientID" : "ownerID", isEqualTo: uid)
             .limit(to: 20)
             .getDocuments()
             .documents
             .compactMap { try $0.data(as: TakeCareList.self) }
     }
     
-    func userTodoWithNameMatching(matching string: String) async throws -> [TakeCareList] {
+    func userListsWithNameMatching(matching string: String, isRecipient: Bool) async throws -> [TakeCareList] {
         guard let uid = Auth.auth().currentUser?.uid else { return [] }
         
         return try await db.collection("lists")
-            .whereField("recipientID", isEqualTo: uid)
+            .whereField(isRecipient ? "recipientID" : "ownerID", isEqualTo: uid)
             .whereField("name", arrayContains: string)
             .limit(to: 20)
             .getDocuments()

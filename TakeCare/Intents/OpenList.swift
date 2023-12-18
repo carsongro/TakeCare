@@ -1,35 +1,35 @@
 //
-//  OpenToDoList.swift
+//  OpenList.swift
 //  TakeCare
 //
-//  Created by Carson Gross on 12/6/23.
+//  Created by Carson Gross on 12/18/23.
 //
 
 import Foundation
 import AppIntents
 
-struct OpenToDoList: AppIntent {
+struct OpenList: AppIntent {
     
     @Parameter(title: "list")
-    var list: TakeCareToDoListEntity?
+    var list: TakeCareListEntity?
     
-    static var title: LocalizedStringResource = "Open To Do List"
+    static var title: LocalizedStringResource = "Check List Progress"
     
     static var openAppWhenRun: Bool = true
     
     @MainActor
     func perform() async throws -> some ProvidesDialog {
-        let selectedList: TakeCareToDoListEntity
+        let selectedList: TakeCareListEntity
         if let list = list {
             selectedList = list
         } else {
-            let lists = try await FirebaseManager.shared.userLists(isRecipient: true)
+            let lists = try await FirebaseManager.shared.userLists(isRecipient: false)
             let imageDataMap = await FirebaseManager.shared.imagesMap(from: lists)
             
-            let listEntities: [TakeCareToDoListEntity] = lists.compactMap {
+            let listEntities: [TakeCareListEntity] = lists.compactMap {
                 guard let id = $0.id else { return nil }
                 
-                return TakeCareToDoListEntity(
+                return TakeCareListEntity(
                     id: id,
                     listName: $0.name,
                     listDescription: $0.description ?? "",
@@ -42,8 +42,8 @@ struct OpenToDoList: AppIntent {
                 dialog: "Which list would you like to open?"
             )
         }
-        Navigator.shared.openToDoList(selectedList)
-        return .result(dialog: "Okay, opening the to-do list for \(selectedList.listName).")
+        Navigator.shared.openList(selectedList)
+        return .result(dialog: "Okay, opening the list for \(selectedList.listName).")
     }
     
     static var parameterSummary: some ParameterSummary {
@@ -52,7 +52,7 @@ struct OpenToDoList: AppIntent {
     
     init() {}
     
-    init(list: TakeCareToDoListEntity) {
+    init(list: TakeCareListEntity) {
         self.list = list
     }
 }
