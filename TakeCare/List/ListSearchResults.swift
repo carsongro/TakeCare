@@ -11,6 +11,8 @@ struct ListSearchResults: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
     
     @State private var contextList: TakeCareList?
+    @State private var listToEdit: TakeCareList?
+    
     @State private var showingRemoveConfirmation = false
     @State private var showingErrorAlert = false
     
@@ -25,6 +27,17 @@ struct ListSearchResults: View, @unchecked Sendable {
             NavigationLink(value: list) {
                 ListRow(list: list)
                     .contextMenu {
+                        Button(
+                            "Edit List",
+                            systemImage: "pencil"
+                        ) {
+                            withAnimation {
+                                listToEdit = list
+                            }
+                        }
+                        
+                        Divider()
+                        
                         Button(
                             "Delete List",
                             systemImage: "trash",
@@ -58,11 +71,15 @@ struct ListSearchResults: View, @unchecked Sendable {
                     }
             }
         }
-        .onChange(of: contextList, { oldValue, newValue in
+        .onChange(of: contextList, { _, newValue in
             if newValue != nil {
                 showingRemoveConfirmation = true
             }
         })
+        .sheet(item: $listToEdit) { list in
+            ListOwnerDetailView(mode: .edit, list: list)
+                .environment(listsModel)
+        }
         .alert("An error occured", isPresented: $showingErrorAlert) { }
         
         if listedLists.isEmpty && !listsModel.searchText.isEmpty {
