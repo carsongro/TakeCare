@@ -125,6 +125,7 @@ struct ProfileNavigationStack: View {
                         }
                     }
                     .navigationTitle("Profile")
+                    .navigationBarTitleDisplayMode(.inline)
                     .photosPicker(isPresented: $showingPhotosPicker, selection: $profileImageItem)
                     .onChange(of: profileImageItem) { _, _ in
                         Task {
