@@ -9,7 +9,10 @@ import SwiftUI
 
 struct ListNavigationStack: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
-
+    @Environment(\.prefersTabNavigation) private var prefersTabNavigation
+    
+    @State private var showingProfile = false
+    
     var body: some View {
         @Bindable var navigator = Navigator.shared
         @Bindable var listsModel = listsModel
@@ -23,6 +26,24 @@ struct ListNavigationStack: View, @unchecked Sendable {
                         ListProgressDetailView(list: $listsModel.lists[index])
                             .environment(listsModel)
                     }
+                }
+                .toolbar {
+                    if prefersTabNavigation {
+                        Button {
+                            showingProfile = true
+                        } label: {
+                            Image(systemName: "person.crop.circle")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 30, height: 30)
+                                .fontWeight(.semibold)
+                        }
+                        .accessibilityLabel(Text("View Profile"))
+                    }
+                }
+                .sheet(isPresented: $showingProfile) {
+                    ProfileNavigationStack()
+                        .environment(AuthModel.shared)
                 }
         }
     }

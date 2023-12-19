@@ -9,6 +9,8 @@ import SwiftUI
 import IoImage
 
 struct UserProfileView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     var userID: String
     
     @State private var user: User?
@@ -23,38 +25,46 @@ struct UserProfileView: View {
     }
     
     var body: some View {
-        Group {
-            if let user {
-                List {
-                    Section {
-                        IoImageView(url: URL(string: user.photoURL ?? ""))
-                            .resizable()
-                            .placeholder {
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .accountImage()
-                                    .foregroundStyle(Color.secondary)
-                            }
-                            .accountImage()
+        NavigationStack {
+            Group {
+                if let user {
+                    List {
+                        Section {
+                            IoImageView(url: URL(string: user.photoURL ?? ""))
+                                .resizable()
+                                .placeholder {
+                                    Image(systemName: "person.crop.circle.fill")
+                                        .resizable()
+                                        .accountImage()
+                                        .foregroundStyle(Color.secondary)
+                                }
+                                .accountImage()
+                        }
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color(.systemGroupedBackground))
+                        
+                        Section {
+                            Text(user.displayName)
+                        }
                     }
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color(.systemGroupedBackground))
-                    
-                    Section {
-                        Text(user.displayName)
-                    }
+                } else {
+                    ProgressView()
                 }
-            } else {
-                ProgressView()
             }
-        }
-        .onAppear {
-            guard user == nil else { return }
-            
-            Task {
-                let user = await AuthModel.shared.fetchUser(id: userID)
-                withAnimation {
-                    self.user = user
+            .toolbar {
+                Button("Done") {
+                    dismiss()
+                }
+                .fontWeight(.semibold)
+            }
+            .onAppear {
+                guard user == nil else { return }
+                
+                Task {
+                    let user = await AuthModel.shared.fetchUser(id: userID)
+                    withAnimation {
+                        self.user = user
+                    }
                 }
             }
         }

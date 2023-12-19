@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var authModel = AuthModel.shared
     @State private var todoModel = TodoModel()
     @State private var listsModel = ListsModel()
     
@@ -18,15 +17,15 @@ struct ContentView: View {
     
     var body: some View {
         Group {
-            if authModel.isSignedIn {
+            if AuthModel.shared.isSignedIn {
                 if prefersTabNavigation {
-                    AppTabView(selection: $selection)
+                    AppTabView()
                         .transition(.move(edge: .bottom))
                 } else {
                     NavigationSplitView {
-                        AppSidebarList(selection: $selection)
+                        AppSidebarList()
                     } detail: {
-                        AppDetailColumn(screen: selection)
+                        AppDetailColumn(screen: Navigator.shared.selection)
                     }
                     .transition(.move(edge: .bottom))
                 }
@@ -35,12 +34,10 @@ struct ContentView: View {
                     .transition(.move(edge: .bottom))
             }
         }
-        .environment(authModel)
+        .environment(Navigator.shared)
+        .environment(AuthModel.shared)
         .environment(todoModel)
         .environment(listsModel)
-        .onChange(of: Navigator.shared.selection) { _, newValue in
-            selection = newValue
-        }
     }
 }
 

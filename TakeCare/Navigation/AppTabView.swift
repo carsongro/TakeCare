@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct AppTabView: View {
-    @Binding var selection: AppScreen?
+    @Environment(Navigator.self) private var navigator
     @Environment(AuthModel.self) private var authModel
     
     var body: some View {
-        TabView(selection: $selection) {
+        @Bindable var navigator = navigator
+        
+        TabView(selection: $navigator.selection) {
             ForEach(AppScreen.allCases) { screen in
                 screen.destination
                     .tag(screen as AppScreen?)
@@ -24,6 +26,7 @@ struct AppTabView: View {
 }
 
 #Preview {
-    AppTabView(selection: .constant(.lists))
+    AppTabView()
         .environment(AuthModel())
+        .environment(Navigator.shared)
 }

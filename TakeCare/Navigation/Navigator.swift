@@ -13,8 +13,8 @@ final class Navigator: @unchecked Sendable {
     
     public var selection: AppScreen? = .lists
     
-    public var todoPath = NavigationPath()
-    public var listsPath = NavigationPath()
+    public var todoPath = [TakeCareList]()
+    public var listsPath = [TakeCareList]()
     
     private init() { }
     
@@ -24,8 +24,6 @@ final class Navigator: @unchecked Sendable {
             listsPath.removeLast(listsPath.count - 1)
         case .todo:
             todoPath.removeLast(listsPath.count - 1)
-        default:
-            break
         }
         selection = appScreen
     }

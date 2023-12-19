@@ -16,7 +16,7 @@ struct ListRecipientRow: View {
             IoImageView(url: URL(string: user.photoURL ?? ""))
                 .resizable()
                 .placeholder {
-                    Image(systemName: "person.circle.fill")
+                    Image(systemName: "person.crop.circle.fill")
                         .resizable()
                         .recipientRowImage()
                         .foregroundStyle(.secondary)

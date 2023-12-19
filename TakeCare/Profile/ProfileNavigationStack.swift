@@ -10,6 +10,7 @@ import PhotosUI
 import IoImage
 
 struct ProfileNavigationStack: View {
+    @Environment(\.dismiss) private var dismiss
     @Environment(AuthModel.self) private var authModel
     
     @State private var profileImageItem: PhotosPickerItem?
@@ -31,57 +32,104 @@ struct ProfileNavigationStack: View {
     
     var body: some View {
         NavigationStack {
-            if let user = authModel.currentUser {
-                List {
-                    Section {
-                        Button {
-                            showingProfileImageConfirmation = true
-                        } label: {
-                            ZStack {
-                                IoImageView(url: URL(string: authModel.currentUser?.photoURL ?? ""))
-                                    .resizable()
-                                    .placeholder {
-                                        Image(systemName: "person.circle.fill")
-                                            .resizable()
-                                            .accountImage()
-                                            .foregroundStyle(Color.secondary)
+            Group {
+                if let user = authModel.currentUser {
+                    List {
+                        Section {
+                            Button {
+                                showingProfileImageConfirmation = true
+                            } label: {
+                                ZStack {
+                                    IoImageView(url: URL(string: authModel.currentUser?.photoURL ?? ""))
+                                        .resizable()
+                                        .placeholder {
+                                            Image(systemName: "person.crop.circle.fill")
+                                                .resizable()
+                                                .accountImage()
+                                                .foregroundStyle(Color.secondary)
+                                        }
+                                        .accountImage()
+                                        .blur(radius: isUploadingImage ? 4 : 0)
+                                        .opacity(isUploadingImage ? 0.6 : 1)
+                                    
+                                    if isUploadingImage {
+                                        ProgressView()
                                     }
-                                    .accountImage()
-                                    .blur(radius: isUploadingImage ? 4 : 0)
-                                    .opacity(isUploadingImage ? 0.6 : 1)
+                                }
+                            }
+                            .accessibilityLabel("Change profile photo")
+                            .confirmationDialog(
+                                "Profile Image",
+                                isPresented: $showingProfileImageConfirmation
+                            ) {
+                                Button("Take Photo") {
+                                    showingCamera = true
+                                }
                                 
-                                if isUploadingImage {
-                                    ProgressView()
+                                Button("Choose Photo") {
+                                    showingPhotosPicker = true
+                                }
+                                
+                                if authModel.currentUser?.photoURL != nil {
+                                    Button("Delete Profile Photo") {
+                                        showingDeleteImageConfirmation = true
+                                    }
+                                }
+                            }
+                            .confirmationDialog(
+                                "Are you sure you want to delete your profile photo?",
+                                isPresented: $showingDeleteImageConfirmation,
+                                titleVisibility: .visible
+                            ) {
+                                Button("Cancel", role: .cancel) { }
+                                Button("Delete Photo", role: .destructive) {
+                                    Task {
+                                        defer {
+                                            withAnimation {
+                                                isUploadingImage = false
+                                            }
+                                        }
+                                        do {
+                                            withAnimation {
+                                                isUploadingImage = true
+                                            }
+                                            try await authModel.removeProfileImage()
+                                            profileImageItem = nil
+                                        } catch {
+                                            print(error.localizedDescription)
+                                            errorAlertText = "There was an error remove your profile image."
+                                        }
+                                    }
                                 }
                             }
                         }
-                        .accessibilityLabel("Change profile photo")
-                        .confirmationDialog(
-                            "Profile Image",
-                            isPresented: $showingProfileImageConfirmation
-                        ) {
-                            Button("Take Photo") {
-                                showingCamera = true
-                            }
+                        .listRowBackground(Color(.systemGroupedBackground))
+                        
+                        Section("Details") {
+                            Text(user.displayName)
                             
-                            Button("Choose Photo") {
-                                showingPhotosPicker = true
-                            }
-                            
-                            if authModel.currentUser?.photoURL != nil {
-                                Button("Delete Profile Photo") {
-                                    showingDeleteImageConfirmation = true
-                                }
+                            Text(user.email)
+                        }
+                        
+                        Section {
+                            Button("Sign out") {
+                                showingSignOutConfirmation = true
                             }
                         }
-                        .confirmationDialog(
-                            "Are you sure you want to delete your profile photo?",
-                            isPresented: $showingDeleteImageConfirmation,
-                            titleVisibility: .visible
-                        ) {
-                            Button("Cancel", role: .cancel) { }
-                            Button("Delete Photo", role: .destructive) {
-                                Task {
+                        
+                        Section {
+                            Button("Delete Account") {
+                                presentingDeleteAccountSheet = true
+                            }
+                            .foregroundStyle(.red)
+                        }
+                    }
+                    .navigationTitle("Profile")
+                    .photosPicker(isPresented: $showingPhotosPicker, selection: $profileImageItem)
+                    .onChange(of: profileImageItem) { _, _ in
+                        Task {
+                            if let data = try? await profileImageItem?.loadTransferable(type: Data.self) {
+                                if let image = Image(data: data) {
                                     defer {
                                         withAnimation {
                                             isUploadingImage = false
@@ -91,43 +139,18 @@ struct ProfileNavigationStack: View {
                                         withAnimation {
                                             isUploadingImage = true
                                         }
-                                        try await authModel.removeProfileImage()
+                                        try await authModel.updateProfileImage(image: image)
                                         profileImageItem = nil
                                     } catch {
-                                        print(error.localizedDescription)
-                                        errorAlertText = "There was an error remove your profile image."
+                                        errorAlertText = "There was an error updating your profile image"
                                     }
                                 }
                             }
                         }
                     }
-                    .listRowBackground(Color(.systemGroupedBackground))
-                    
-                    Section("Details") {
-                        Text(user.displayName)
-                        
-                        Text(user.email)
-                    }
-                    
-                    Section {
-                        Button("Sign out") {
-                            showingSignOutConfirmation = true
-                        }
-                    }
-                    
-                    Section {
-                        Button("Delete Account") {
-                            presentingDeleteAccountSheet = true
-                        }
-                        .foregroundStyle(.red)
-                    }
-                }
-                .navigationTitle("Profile")
-                .photosPicker(isPresented: $showingPhotosPicker, selection: $profileImageItem)
-                .onChange(of: profileImageItem) { _, _ in
-                    Task {
-                        if let data = try? await profileImageItem?.loadTransferable(type: Data.self) {
-                            if let image = Image(data: data) {
+                    .fullScreenCover(isPresented: $showingCamera) {
+                        CameraView() { image in
+                            Task {
                                 defer {
                                     withAnimation {
                                         isUploadingImage = false
@@ -138,50 +161,36 @@ struct ProfileNavigationStack: View {
                                         isUploadingImage = true
                                     }
                                     try await authModel.updateProfileImage(image: image)
-                                    profileImageItem = nil
                                 } catch {
                                     errorAlertText = "There was an error updating your profile image"
                                 }
                             }
                         }
+                        .ignoresSafeArea()
                     }
-                }
-                .fullScreenCover(isPresented: $showingCamera) {
-                    CameraView() { image in
-                        Task {
-                            defer {
-                                withAnimation {
-                                    isUploadingImage = false
-                                }
-                            }
+                    .sheet(isPresented: $presentingDeleteAccountSheet) {
+                        DeleteAccountForm()
+                    }
+                    .alert(errorAlertText, isPresented: $showingErrorAlert) { }
+                    .alert("Are you sure you want to sign out?", isPresented: $showingSignOutConfirmation) {
+                        Button("Cancel", role: .cancel) { }
+                        Button("Sign Out") {
                             do {
-                                withAnimation {
-                                    isUploadingImage = true
-                                }
-                                try await authModel.updateProfileImage(image: image)
+                                try authModel.signOut()
                             } catch {
-                                errorAlertText = "There was an error updating your profile image"
+                                errorAlertText = "There was an error signing out."
                             }
                         }
                     }
-                    .ignoresSafeArea()
+                } else {
+                    ProgressView()
                 }
-                .sheet(isPresented: $presentingDeleteAccountSheet) {
-                    DeleteAccountForm()
+            }
+            .toolbar {
+                Button("Done") {
+                    dismiss()
                 }
-                .alert(errorAlertText, isPresented: $showingErrorAlert) { }
-                .alert("Are you sure you want to sign out?", isPresented: $showingSignOutConfirmation) {
-                    Button("Cancel", role: .cancel) { }
-                    Button("Sign Out") {
-                        do {
-                            try authModel.signOut()
-                        } catch {
-                            errorAlertText = "There was an error signing out."
-                        }
-                    }
-                }
-            } else {
-                ProgressView()
+                .fontWeight(.semibold)
             }
         }
     }

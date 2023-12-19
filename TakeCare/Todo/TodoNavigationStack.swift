@@ -9,6 +9,9 @@ import SwiftUI
 
 struct TodoNavigationStack: View {
     @Environment(TodoModel.self) private var todoModel
+    @Environment(\.prefersTabNavigation) private var prefersTabNavigation
+    
+    @State private var showingProfile = false
     
     var body: some View {
         @Bindable var navigator = Navigator.shared
@@ -26,6 +29,24 @@ struct TodoNavigationStack: View {
                         )
                         .environment(todoModel)
                     }
+                }
+                .toolbar {
+                    if prefersTabNavigation {
+                        Button {
+                            showingProfile = true
+                        } label: {
+                            Image(systemName: "person.crop.circle")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 30, height: 30)
+                                .fontWeight(.semibold)
+                        }
+                        .accessibilityLabel(Text("View Profile"))
+                    }
+                }
+                .sheet(isPresented: $showingProfile) {
+                    ProfileNavigationStack()
+                        .environment(AuthModel.shared)
                 }
         }
     }
