@@ -74,7 +74,8 @@ struct DeleteAccountForm: View {
                         showingDeleteAlert = true
                     }
                     .disabled(!textFieldsAreValid)
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
                     .listRowBackground(Color(.systemGroupedBackground))
                     .frame(maxWidth: .infinity)
                 }
@@ -104,6 +105,7 @@ struct DeleteAccountForm: View {
                             )
                             
                             try await authModel.deleteCurrentUser()
+                            
                         } catch {
                             showingErrorAlert = true
                         }
