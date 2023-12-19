@@ -45,7 +45,7 @@
 		B595D6ED2AD0BF7800B022E0 /* ListUpdateRecipientForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6EC2AD0BF7800B022E0 /* ListUpdateRecipientForm.swift */; };
 		B595D6EF2AD0C70000B022E0 /* ListRecipientRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595D6EE2AD0C70000B022E0 /* ListRecipientRow.swift */; };
 		B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9D2ACB772A00D1F842 /* AppScreen.swift */; };
-		B5BC6CA02ACB7BF500D1F842 /* ProfileNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9F2ACB7BF500D1F842 /* ProfileNavigationStack.swift */; };
+		B5BC6CA02ACB7BF500D1F842 /* AccountNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */; };
 		B5BC6CA42ACB7CBF00D1F842 /* ListNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CA32ACB7CBF00D1F842 /* ListNavigationStack.swift */; };
 		B5BC6CA82ACB7CFD00D1F842 /* TodoNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CA72ACB7CFD00D1F842 /* TodoNavigationStack.swift */; };
 		B5BC6CAC2ACB7E1000D1F842 /* AppSidebarList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BC6CAB2ACB7E1000D1F842 /* AppSidebarList.swift */; };
@@ -55,7 +55,7 @@
 		B8011A462B30B1C80085663D /* TakeCareListEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8011A452B30B1C80085663D /* TakeCareListEntity.swift */; };
 		B8011A482B30B1D00085663D /* TakeCareListQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8011A472B30B1D00085663D /* TakeCareListQuery.swift */; };
 		B8011A4A2B30B2B00085663D /* OpenList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8011A492B30B2B00085663D /* OpenList.swift */; };
-		B812BB752B1D6160006AA5E5 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B812BB742B1D6160006AA5E5 /* UserProfileView.swift */; };
+		B812BB752B1D6160006AA5E5 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B812BB742B1D6160006AA5E5 /* ProfileView.swift */; };
 		B8237F182AE4B04E00AF9A2C /* ListProgressDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F172AE4B04E00AF9A2C /* ListProgressDetailView.swift */; };
 		B8237F1E2AE4B41000AF9A2C /* ListDetailHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */; };
 		B82F5EB22AF873220050D3A9 /* ComparableTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82F5EB12AF873220050D3A9 /* ComparableTime.swift */; };
@@ -110,7 +110,7 @@
 		B595D6EC2AD0BF7800B022E0 /* ListUpdateRecipientForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListUpdateRecipientForm.swift; sourceTree = "<group>"; };
 		B595D6EE2AD0C70000B022E0 /* ListRecipientRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRecipientRow.swift; sourceTree = "<group>"; };
 		B5BC6C9D2ACB772A00D1F842 /* AppScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreen.swift; sourceTree = "<group>"; };
-		B5BC6C9F2ACB7BF500D1F842 /* ProfileNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNavigationStack.swift; sourceTree = "<group>"; };
+		B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountNavigationStack.swift; sourceTree = "<group>"; };
 		B5BC6CA32ACB7CBF00D1F842 /* ListNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListNavigationStack.swift; sourceTree = "<group>"; };
 		B5BC6CA72ACB7CFD00D1F842 /* TodoNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoNavigationStack.swift; sourceTree = "<group>"; };
 		B5BC6CAB2ACB7E1000D1F842 /* AppSidebarList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSidebarList.swift; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 		B8011A452B30B1C80085663D /* TakeCareListEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeCareListEntity.swift; sourceTree = "<group>"; };
 		B8011A472B30B1D00085663D /* TakeCareListQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeCareListQuery.swift; sourceTree = "<group>"; };
 		B8011A492B30B2B00085663D /* OpenList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenList.swift; sourceTree = "<group>"; };
-		B812BB742B1D6160006AA5E5 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		B812BB742B1D6160006AA5E5 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		B8237F172AE4B04E00AF9A2C /* ListProgressDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListProgressDetailView.swift; sourceTree = "<group>"; };
 		B8237F1D2AE4B41000AF9A2C /* ListDetailHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetailHeader.swift; sourceTree = "<group>"; };
 		B82F5EB12AF873220050D3A9 /* ComparableTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComparableTime.swift; sourceTree = "<group>"; };
@@ -177,10 +177,10 @@
 		B584809D2AC76C24007A655D /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				B5BC6C9F2ACB7BF500D1F842 /* ProfileNavigationStack.swift */,
+				B5BC6C9F2ACB7BF500D1F842 /* AccountNavigationStack.swift */,
 				B55B80052AC7CB9200640173 /* UpdateEmailForm.swift */,
 				B55B80032AC7CAD100640173 /* DeleteAccountForm.swift */,
-				B812BB742B1D6160006AA5E5 /* UserProfileView.swift */,
+				B812BB742B1D6160006AA5E5 /* ProfileView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -470,10 +470,10 @@
 				B5BC6C9E2ACB772A00D1F842 /* AppScreen.swift in Sources */,
 				B58A14012AC520A20045D191 /* TakeCareApp.swift in Sources */,
 				B58480A52AC76EED007A655D /* User.swift in Sources */,
-				B5BC6CA02ACB7BF500D1F842 /* ProfileNavigationStack.swift in Sources */,
+				B5BC6CA02ACB7BF500D1F842 /* AccountNavigationStack.swift in Sources */,
 				B52D1CBB2ACE38E40024F6A7 /* ListsModel.swift in Sources */,
 				B53DA6AA2ADB75D4008094D7 /* TodoDetailView.swift in Sources */,
-				B812BB752B1D6160006AA5E5 /* UserProfileView.swift in Sources */,
+				B812BB752B1D6160006AA5E5 /* ProfileView.swift in Sources */,
 				B83ED9182B21584300636DF3 /* OpenToDoList.swift in Sources */,
 				B8237F1E2AE4B41000AF9A2C /* ListDetailHeader.swift in Sources */,
 				B835D1192B1ED38400FBDEB3 /* OpenToDo.swift in Sources */,

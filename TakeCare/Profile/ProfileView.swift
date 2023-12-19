@@ -1,5 +1,5 @@
 //
-//  UserProfileView.swift
+//  ProfileView.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 12/3/23.
@@ -8,7 +8,7 @@
 import SwiftUI
 import IoImage
 
-struct UserProfileView: View {
+struct ProfileView: View {
     @Environment(\.dismiss) private var dismiss
     
     var userID: String
@@ -72,5 +72,5 @@ struct UserProfileView: View {
 }
 
 #Preview {
-    UserProfileView(userID: "")
+    ProfileView(userID: "")
 }

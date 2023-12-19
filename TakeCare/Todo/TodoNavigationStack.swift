@@ -45,7 +45,7 @@ struct TodoNavigationStack: View {
                     }
                 }
                 .sheet(isPresented: $showingProfile) {
-                    ProfileNavigationStack()
+                    AccountNavigationStack()
                         .environment(AuthModel.shared)
                 }
         }

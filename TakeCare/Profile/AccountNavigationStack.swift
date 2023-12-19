@@ -1,5 +1,5 @@
 //
-//  ProfileNavigationStack.swift
+//  AccountNavigationStack.swift
 //  TakeCare
 //
 //  Created by Carson Gross on 10/2/23.
@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 import IoImage
 
-struct ProfileNavigationStack: View {
+struct AccountNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AuthModel.self) private var authModel
     
@@ -124,7 +124,7 @@ struct ProfileNavigationStack: View {
                             .foregroundStyle(.red)
                         }
                     }
-                    .navigationTitle("Profile")
+                    .navigationTitle("Account")
                     .navigationBarTitleDisplayMode(.inline)
                     .photosPicker(isPresented: $showingPhotosPicker, selection: $profileImageItem)
                     .onChange(of: profileImageItem) { _, _ in
@@ -214,6 +214,6 @@ extension View {
 }
 
 #Preview {
-    return ProfileNavigationStack()
+    return AccountNavigationStack()
         .environment(AuthModel())
 }

@@ -42,7 +42,7 @@ struct ListNavigationStack: View, @unchecked Sendable {
                     }
                 }
                 .sheet(isPresented: $showingProfile) {
-                    ProfileNavigationStack()
+                    AccountNavigationStack()
                         .environment(AuthModel.shared)
                 }
         }

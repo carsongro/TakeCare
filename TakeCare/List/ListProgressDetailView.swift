@@ -146,7 +146,7 @@ struct ListProgressDetailView: View, @unchecked Sendable {
             .sheet(item: $selectedUser) {
                 selectedUser = nil
             } content: { selectedUser in
-                UserProfileView(user: selectedUser)
+                ProfileView(user: selectedUser)
                     .presentationDetents([.medium, .large])
             }
             .alert(

@@ -33,7 +33,7 @@ struct AppSidebarList: View {
             .accessibilityLabel(Text("View Profile"))
         }
         .sheet(isPresented: $showingProfile) {
-            ProfileNavigationStack()
+            AccountNavigationStack()
                 .environment(authModel)
         }
     }
