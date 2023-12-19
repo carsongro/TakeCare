@@ -9,12 +9,13 @@ import SwiftUI
 
 struct TodoNavigationStack: View {
     @Environment(TodoModel.self) private var todoModel
+    @Environment(Navigator.self) private var navigator
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     @State private var showingProfile = false
     
     var body: some View {
-        @Bindable var navigator = Navigator.shared
+        @Bindable var navigator = navigator
         @Bindable var todoModel = todoModel
         
         NavigationStack(path: $navigator.todoPath) {

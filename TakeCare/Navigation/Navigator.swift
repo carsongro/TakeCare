@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 @Observable
 final class Navigator: @unchecked Sendable {
     public static let shared = Navigator()

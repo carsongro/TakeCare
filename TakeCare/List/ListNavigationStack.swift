@@ -9,12 +9,13 @@ import SwiftUI
 
 struct ListNavigationStack: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
+    @Environment(Navigator.self) private var navigator
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     @State private var showingProfile = false
     
     var body: some View {
-        @Bindable var navigator = Navigator.shared
+        @Bindable var navigator = navigator
         @Bindable var listsModel = listsModel
         
         NavigationStack(path: $navigator.listsPath) {

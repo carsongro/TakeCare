@@ -11,8 +11,6 @@ struct ContentView: View {
     @State private var todoModel = TodoModel()
     @State private var listsModel = ListsModel()
     
-    @State private var selection: AppScreen? = .lists
-    
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
     
     var body: some View {
