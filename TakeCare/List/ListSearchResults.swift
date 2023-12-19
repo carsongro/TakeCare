@@ -28,7 +28,7 @@ struct ListSearchResults: View, @unchecked Sendable {
                 ListRow(list: list)
                     .contextMenu {
                         Button(
-                            "Edit List",
+                            "Edit",
                             systemImage: "pencil"
                         ) {
                             withAnimation {
