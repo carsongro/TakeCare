@@ -10,7 +10,7 @@ import IoImage
 
 struct ListDetailHeader: View {
     @Environment(\.prefersTabNavigation) private var prefersTabNavigation
-    @Binding var list: TakeCareList
+    var list: TakeCareList
     var listOwner: User?
     var width: CGFloat
     
@@ -80,7 +80,7 @@ struct ListDetailHeader: View {
 
 #Preview {
     ListDetailHeader(
-        list: .constant(PreviewData.previewTakeCareList),
+        list: PreviewData.previewTakeCareList,
         listOwner: User(
             id: "",
             displayName: "",

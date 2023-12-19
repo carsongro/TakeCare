@@ -219,12 +219,14 @@ import SwiftUI
         try docRef.setData(from: list)
         
         if let newList = try await Firestore.firestore().collection("lists")
-            .whereField(FieldPath.documentID(), in: [id])
+            .whereField(FieldPath.documentID(), isEqualTo: id)
             .getDocuments()
             .documents
             .compactMap({ try $0.data(as: TakeCareList.self) }).first,
            let idx = lists.firstIndex(where: { $0.id == id}) {
-            lists[idx] = newList
+            withAnimation {
+                lists[idx] = newList
+            }
         } else {
             await refreshLists()
         }

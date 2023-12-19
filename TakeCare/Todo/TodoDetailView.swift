@@ -11,7 +11,7 @@ struct TodoDetailView: View {
     @Environment(TodoModel.self) private var todoModel
     @Environment(\.dismiss) private var dismiss
     
-    @Binding var list: TakeCareList
+    var list: TakeCareList
     
     @State private var showingErrorAlert = false
     @State private var showingRemoveConfirmation = false
@@ -20,8 +20,8 @@ struct TodoDetailView: View {
     @State private var hasRecipientTaskNotifications: Bool
     @State private var listOwner: User?
     
-    init(list: Binding<TakeCareList>, hasRecipientTaskNotifications: Bool) {
-        _list = list
+    init(list: TakeCareList, hasRecipientTaskNotifications: Bool) {
+        self.list = list
         _hasRecipientTaskNotifications = State(initialValue: hasRecipientTaskNotifications)
     }
     
@@ -32,7 +32,7 @@ struct TodoDetailView: View {
                     List {
                         Section {
                             ListDetailHeader(
-                                list: $list,
+                                list: list,
                                 listOwner: listOwner,
                                 width: proxy.size.width
                             )
@@ -40,7 +40,7 @@ struct TodoDetailView: View {
                         .listRowSeparator(.hidden)
                         
                         ForEach(TaskFilter.allCases, id: \.self) { filter in
-                            TodoTasksList(list: $list, taskFilter: filter) { task, isCompleted in
+                            TodoTasksList(list: list, taskFilter: filter) { task, isCompleted in
                                 Task {
                                     do {
                                         try await todoModel.updateListTask(
@@ -118,7 +118,7 @@ struct TodoDetailView: View {
 #Preview {
     NavigationStack {
         TodoDetailView(
-            list: .constant(PreviewData.previewTakeCareList),
+            list: PreviewData.previewTakeCareList,
             hasRecipientTaskNotifications: PreviewData.previewTakeCareList.hasRecipientTaskNotifications
         )
         .environment(TodoModel())

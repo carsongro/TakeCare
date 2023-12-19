@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TodoTasksList: View {
-    @Binding var list: TakeCareList
+    var list: TakeCareList
     
     var taskFilter: TaskFilter
     var interactionDisabled: Bool = false
@@ -75,5 +75,5 @@ struct TodoTasksList: View {
 }
 
 #Preview {
-    TodoTasksList(list: .constant(PreviewData.previewTakeCareList), taskFilter: .completed)
+    TodoTasksList(list: PreviewData.previewTakeCareList, taskFilter: .completed)
 }

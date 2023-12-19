@@ -11,7 +11,7 @@ struct ListProgressDetailView: View, @unchecked Sendable {
     @Environment(ListsModel.self) private var listsModel
     @Environment(\.dismiss) private var dismiss
     
-    @Binding var list: TakeCareList
+    var list: TakeCareList
     @State private var recipient: User?
     @State private var listOwner: User?
     @State private var selectedUser: User?
@@ -27,7 +27,7 @@ struct ListProgressDetailView: View, @unchecked Sendable {
                     List {
                         Section {
                             ListDetailHeader(
-                                list: $list,
+                                list: list,
                                 listOwner: listOwner,
                                 width: proxy.size.width
                             )
@@ -71,7 +71,7 @@ struct ListProgressDetailView: View, @unchecked Sendable {
                         .listRowSeparator(.hidden)
                         
                         ForEach(TaskFilter.allCases, id: \.self) { filter in
-                            TodoTasksList(list: $list, taskFilter: filter, interactionDisabled: true)
+                            TodoTasksList(list: list, taskFilter: filter, interactionDisabled: true)
                         }
                         
                         Section {
@@ -81,7 +81,7 @@ struct ListProgressDetailView: View, @unchecked Sendable {
                         .listRowSeparator(.hidden)
                     }
                 } else {
-                    // If this isn't head the task modifier never gets called
+                    // If this isn't hear the task modifier never gets called
                     Color.clear
                 }
             }
@@ -163,7 +163,7 @@ struct ListProgressDetailView: View, @unchecked Sendable {
 
 #Preview {
     NavigationStack {
-        ListProgressDetailView(list: .constant(PreviewData.previewTakeCareList))
+        ListProgressDetailView(list: PreviewData.previewTakeCareList)
             .environment(ListsModel())
     }
 }
