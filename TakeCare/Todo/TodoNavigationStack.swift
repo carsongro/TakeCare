@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import IoImage
 
 struct TodoNavigationStack: View {
     @Environment(TodoModel.self) private var todoModel
@@ -36,11 +37,18 @@ struct TodoNavigationStack: View {
                         Button {
                             showingProfile = true
                         } label: {
-                            Image(systemName: "person.crop.circle")
+                            IoImageView(url: URL(string: AuthModel.shared.currentUser?.photoURL ?? ""))
                                 .resizable()
+                                .placeholder {
+                                    Image(systemName: "person.crop.circle")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 35, height: 35)
+                                        .fontWeight(.semibold)
+                                }
+                                .clipShape(Circle())
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 30, height: 30)
-                                .fontWeight(.semibold)
+                                .frame(width: 35, height: 35)
                         }
                         .accessibilityLabel(Text("View Profile"))
                     }
