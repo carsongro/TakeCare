@@ -63,7 +63,7 @@ struct ListProgressDetailView: View, @unchecked Sendable {
                                 value: CGFloat(list.dailyTasksCompletedCount),
                                 total: CGFloat(list.dailyTasksCount)
                             ) {
-                                Text("Daily Tasks Progress")
+                                Text("Progress")
                             } currentValueLabel: {
                                 Text((list.dailyTasksCompletedCount == list.dailyTasksCount ? "All" : "\(list.dailyTasksCompletedCount) / \(list.dailyTasksCount)") + " daily tasks completed")
                             }
